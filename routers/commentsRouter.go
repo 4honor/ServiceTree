@@ -6,6 +6,111 @@ import (
 
 func init() {
 	
+	beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"],
+		beego.ControllerComments{
+			"Post",
+			`/`,
+			[]string{"post"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"],
+		beego.ControllerComments{
+			"GetOne",
+			`/:id`,
+			[]string{"get"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"],
+		beego.ControllerComments{
+			"GetAll",
+			`/`,
+			[]string{"get"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"],
+		beego.ControllerComments{
+			"Put",
+			`/:id`,
+			[]string{"put"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"],
+		beego.ControllerComments{
+			"Delete",
+			`/:id`,
+			[]string{"delete"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"],
+		beego.ControllerComments{
+			"Post",
+			`/`,
+			[]string{"post"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"],
+		beego.ControllerComments{
+			"GetOne",
+			`/:id`,
+			[]string{"get"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"],
+		beego.ControllerComments{
+			"GetAll",
+			`/`,
+			[]string{"get"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"],
+		beego.ControllerComments{
+			"Put",
+			`/:id`,
+			[]string{"put"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"],
+		beego.ControllerComments{
+			"Delete",
+			`/:id`,
+			[]string{"delete"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"],
+		beego.ControllerComments{
+			"Post",
+			`/`,
+			[]string{"post"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"],
+		beego.ControllerComments{
+			"GetOne",
+			`/:id`,
+			[]string{"get"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"],
+		beego.ControllerComments{
+			"GetAll",
+			`/`,
+			[]string{"get"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"],
+		beego.ControllerComments{
+			"Put",
+			`/:id`,
+			[]string{"put"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"],
+		beego.ControllerComments{
+			"Delete",
+			`/:id`,
+			[]string{"delete"},
+			nil})
+
 	beego.GlobalControllerRouter["ServiceTree/controllers:SubsysController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:SubsysController"],
 		beego.ControllerComments{
 			"Post",
@@ -76,70 +181,35 @@ func init() {
 			[]string{"delete"},
 			nil})
 
-	beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"],
+	beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"],
 		beego.ControllerComments{
 			"Post",
 			`/`,
 			[]string{"post"},
 			nil})
 
-	beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"],
+	beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"],
 		beego.ControllerComments{
 			"GetOne",
 			`/:id`,
 			[]string{"get"},
 			nil})
 
-	beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"],
+	beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"],
 		beego.ControllerComments{
 			"GetAll",
 			`/`,
 			[]string{"get"},
 			nil})
 
-	beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"],
+	beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"],
 		beego.ControllerComments{
 			"Put",
 			`/:id`,
 			[]string{"put"},
 			nil})
 
-	beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:ViewController"],
-		beego.ControllerComments{
-			"Delete",
-			`/:id`,
-			[]string{"delete"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"],
-		beego.ControllerComments{
-			"Post",
-			`/`,
-			[]string{"post"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"],
-		beego.ControllerComments{
-			"GetOne",
-			`/:id`,
-			[]string{"get"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"],
-		beego.ControllerComments{
-			"GetAll",
-			`/`,
-			[]string{"get"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"],
-		beego.ControllerComments{
-			"Put",
-			`/:id`,
-			[]string{"put"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:TagValueController"],
+	beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"],
 		beego.ControllerComments{
 			"Delete",
 			`/:id`,
@@ -210,111 +280,6 @@ func init() {
 			nil})
 
 	beego.GlobalControllerRouter["ServiceTree/controllers:UserController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:UserController"],
-		beego.ControllerComments{
-			"Delete",
-			`/:id`,
-			[]string{"delete"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"],
-		beego.ControllerComments{
-			"Post",
-			`/`,
-			[]string{"post"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"],
-		beego.ControllerComments{
-			"GetOne",
-			`/:id`,
-			[]string{"get"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"],
-		beego.ControllerComments{
-			"GetAll",
-			`/`,
-			[]string{"get"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"],
-		beego.ControllerComments{
-			"Put",
-			`/:id`,
-			[]string{"put"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:FavorController"],
-		beego.ControllerComments{
-			"Delete",
-			`/:id`,
-			[]string{"delete"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"],
-		beego.ControllerComments{
-			"Post",
-			`/`,
-			[]string{"post"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"],
-		beego.ControllerComments{
-			"GetOne",
-			`/:id`,
-			[]string{"get"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"],
-		beego.ControllerComments{
-			"GetAll",
-			`/`,
-			[]string{"get"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"],
-		beego.ControllerComments{
-			"Put",
-			`/:id`,
-			[]string{"put"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"],
-		beego.ControllerComments{
-			"Delete",
-			`/:id`,
-			[]string{"delete"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"],
-		beego.ControllerComments{
-			"Post",
-			`/`,
-			[]string{"post"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"],
-		beego.ControllerComments{
-			"GetOne",
-			`/:id`,
-			[]string{"get"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"],
-		beego.ControllerComments{
-			"GetAll",
-			`/`,
-			[]string{"get"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"],
-		beego.ControllerComments{
-			"Put",
-			`/:id`,
-			[]string{"put"},
-			nil})
-
-	beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:GroupController"],
 		beego.ControllerComments{
 			"Delete",
 			`/:id`,
@@ -333,6 +298,41 @@ func init() {
 			"Alloc",
 			`/:api`,
 			[]string{"get"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"],
+		beego.ControllerComments{
+			"Post",
+			`/`,
+			[]string{"post"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"],
+		beego.ControllerComments{
+			"GetOne",
+			`/:id`,
+			[]string{"get"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"],
+		beego.ControllerComments{
+			"GetAll",
+			`/`,
+			[]string{"get"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"],
+		beego.ControllerComments{
+			"Put",
+			`/:id`,
+			[]string{"put"},
+			nil})
+
+	beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"] = append(beego.GlobalControllerRouter["ServiceTree/controllers:MachineController"],
+		beego.ControllerComments{
+			"Delete",
+			`/:id`,
+			[]string{"delete"},
 			nil})
 
 }
