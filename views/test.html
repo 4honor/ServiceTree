@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+        <title>服务树</title>
+    
+        <!-- Bootstrap core CSS -->
+        <link href="../css/bootcss/css/bootstrap.css" rel="stylesheet">
+        <link href="../lib/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link href="../css/page.css" rel="stylesheet">
+        <link href="../css/forTree.css" rel="stylesheet">
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+        <style>
+			body,h2,h3,h4,h5,h6,p,a{
+				font-family:"Microsoft YaHei";}
+        </style>
+        <script data-main="../lib/main" src="../lib/require.js"></script>
+        
+  </head>
+  <body>
+        
+        <div class="navbar-wrapper">
+        	<div class="" style="background:none; padding-left:20px;">
+            	<img class="nav-img" src="../images/Odin.jpg" height="60">
+                <div class="left">
+                    <span class="left-word">滴滴打车</span>
+                    |
+                    <span class="right-word">业务监控平台</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cont_pad">
+           	<div class="mt20">
+                <ul class="nav nav-tabs">
+                    <li><a>监控系统</a></li>
+                    <li><a href="dashboard.html">仪表盘</a></li>
+                    <li><a href="http://10.231.145.240/index.php">MySQL监控</a></li>
+                    <li><a href="machine.html">机器管理</a></li>
+                    <li class="active"><a>服务树</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="cont_pad mt20" style="padding-bottom:5px; padding-top:5px;">
+            
+            <div class="tree_cont">
+            	<!--  内容区域  -->
+            	<div class="">
+                	111
+                </div>
+                
+            </div>
+            
+        </div>
+        
+        <!--<a class="btn_tree_open_close btn btn-default" id="tree_btn_falg">
+        	<span class="glyphicon glyphicon-th-list"></span>
+        </a>	
+        <div class="tree_menu">
+            <ul id="treeDemo" class="ztree"></ul>
+        </div>-->
+        
+        
+        <script type="text/ecmascript">
+			require.config({
+				paths: {
+					zTree: "zTree/js/jquery.ztree.core-3.5",
+					vtree: "../js/v-tree"
+				},
+				shim: {
+					"zTree": {
+						deps: ["jquery"],
+						exports: 'jQuery.fn.zTree'
+					}
+				}
+			});
+			
+			require(['jquery', 'zTree', 'milk', 'vtree'],function($, zTree, mlik, vtree){
+				$(document).ready(function(){
+					
+					vtree.init();
+					
+					mlk.ajax({
+						method: 'GET',
+						url: 'www.baidu.com',
+						data: null, 
+						callback: function(){}	
+					});
+					
+				});
+			
+			});
+			
+        </script>
+        
+  </body>
+  
+</html>
