@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+        <title>虚拟机平台</title>
+    
+        <!-- Bootstrap core CSS -->
+        <link href="../css/bootcss/css/bootstrap.css" rel="stylesheet">
+        <link href="../css/ihover.css" rel="stylesheet">
+        <link href="../css/page.css" rel="stylesheet">
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+        <style>
+			body,h2,h3,h4,h5,h6,p,a{
+				font-family:"Microsoft YaHei";}
+        </style>
+        <script data-main="../lib/main" src="../lib/require.js"></script>
+        
+  </head>
+  <body>
+        
+        <div class="navbar-wrapper">
+        	<div class="header">
+            	<img src="../images/vm_icon.png" height="60">
+                <div class="menu">
+                	<a class="this" href="/new/">新建</a>
+                    <a href="/adminauth/">管理</a>
+                </div>
+                <div class="user">
+                	<a id="userName"></a>
+                    |
+                    <a href="/logout/">退出</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cont_970">
+        	<h2>请选择一个模版</h2>
+            
+            <div class="blcok_outer" id="blcok_outer">
+                
+                <!--<div class="ih-item circle effect3 left_to_right left each_block" name="c">
+                    <a>
+                        <div class="img block_cont block_cont_c">
+                            <span>专车模版</span>
+                        </div>
+                        <div class="info">
+                            <h3>100GB DISK</h3>
+                            <p>1 CPU Core</p>
+                            <p>8GB Mem</p>
+                        </div>
+                    </a>
+                </div>-->
+                
+            </div>
+            
+            <div class="center" style="margin-top:50px;">
+                <input type="hidden" name="new_name" value="" id="new_name">
+                <!--<button class="btn_click in_blk btn_radius_all" type="submit" id="btn_sub">确定</button>-->
+                <button class="btn btn-primary in_blk btn_radius_all disabled" style="width:344px; height:50px;" type="submit" id="btn_sub">确定</button>
+            </div>
+            
+        </div>
+        
+        
+        
+  </body>
+  
+</html>
+<script>
+	
+	require(['jquery' , 'milk'],function($ , milk){
+		
+		$('#userName').text(localStorage.userName);
+		
+		$(document).on('click','#blcok_outer .ih-item',function(){
+			$(this).find('.img').addClass('this');
+			$(this).siblings('.ih-item').find('.img').removeClass('this');
+			var thisName = $(this).attr('name');
+			$('#new_name').val(thisName);
+			$('#btn_sub').removeClass('disabled');
+		});
+		
+		mlk.ajax({
+			method: 'POST',
+			url: '/add/',
+			data: null,
+			callback: function(da){
+				var myData = JSON.parse(da);
+				if(myData.errno == 0){
+					var allHtml = '';
+					console.log(myData.data.length);
+					for(var i = 0; i < myData.data.length; i++){
+						var className = '';
+						switch(i){
+							case 0:
+								className = 'block_cont_a';
+								break;
+							case 1:
+								className = 'block_cont_b';
+								break;
+							case 2:
+								className = 'block_cont_c';
+								break;
+							case 3:
+								className = 'block_cont_d';
+								break;
+							case 4:
+								className = 'block_cont_e';
+								break;
+							case 5:
+								className = 'block_cont_f';
+								break;	
+						}
+						var html = '<div class="ih-item circle effect3 left_to_right left each_block" name="' +myData.data[i].name + '"><a><div class="img block_cont ' + className + '"><span>' + myData.data[i].chinesename + '</span></div><div class="info"><h3>' + myData.data[i].disk + 'B DISK</h3><p>' + myData.data[i].cpu + ' CPU Core</p><p>' + myData.data[i].mem + 'B Mem</p></div></a></div>';
+						allHtml += html;
+					}
+					$('#blcok_outer').html(allHtml);	
+				}
+				else{
+					alert(myData.errmsg);
+				}	
+			}	
+		});
+		
+		$('#btn_sub').bind('click',function(){
+			if($('#new_name').val()){
+				var data = {tplname: $('#new_name').val()}
+				mlk.ajax({
+					method: 'POST',
+					url: '/enadd/',
+					data: data,
+					callback: function(da){
+						var myData = JSON.parse(da);
+						if(myData.errno == 0){
+							alert('提交成功~请耐心等待管理员审批！请到管理中查看~');
+						}
+						else if(myData.errno == 2){
+							alert('一分钟内不能重复提交!');
+						}
+						else{
+							alert('提交失败~请重试！');
+						}	
+					}
+				});
+			}
+			else{
+				alert('请选择一个模版!');	
+			}	
+		});
+		
+	});
+	
+</script>
