@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+        <title>虚拟机平台</title>
+    
+        <!-- Bootstrap core CSS -->
+        <link href="../css/bootcss/css/bootstrap.css" rel="stylesheet">
+        <link href="../lib/DataTables/media/css/jquery.dataTables.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link href="../css/page.css" rel="stylesheet">
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+        <style>
+			body,h2,h3,h4,h5,h6,p,a{
+				font-family:"Microsoft YaHei";}
+        </style>
+          
+        <script data-main="../lib/main" src="../lib/require.js"></script>
+       
+       
+  </head>
+  <body>
+        
+        <div class="navbar-wrapper">
+        	<div class="header">
+            	<img src="../images/vm_icon.png" height="60">
+                <div class="menu">
+                	<a href="/new/">新建</a>
+                    <a class="this" href="/adminauth/">管理</a>
+                </div>
+                <div class="user">
+                	<a id="userName"></a>
+                    |
+                    <a href="/logout/">退出</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cont_full">
+        	<ul class="nav nav-tabs" role="tablist" style="margin-bottom:20px;">
+                <li role="presentation"><a href="/adminauth/">状态</a></li>
+                <li role="presentation" class="active"><a href="/approval/">审批</a></li>
+            </ul>
+        
+        	<table class="table table-bordered table-striped" id="myTable">
+            	<thead>
+                	<tr>
+                        <th>申请人</th>
+                        <th>申请时间</th>
+                        <th>模版</th>
+                        <th>IP</th>
+                        <th>VM-Name</th>
+                        <th>VM-IP</th>
+                        <th>类型</th>
+                        <th>审评</th>
+                    </tr>
+                </thead>
+                <tbody id="table_inner">
+                	<!--<tr>
+                    	<td>xxx</td>
+                        <td>2015-09-09 10:00:00</td>
+                        <td class="edit">vm-rd-001</td>
+                        <td class="edit">10.10.8.1</td>
+                        <td class="edit">vm-rd-001</td>
+                        <td class="edit">10.10.8.1</td>
+                        <td>新建</td>
+                        <td>
+                            <a class="btn btn-primary">是</a>
+                            <a class="btn btn-default">否</a>
+                        </td>
+                    </tr>-->
+                </tbody>
+            </table>
+           
+        </div>
+        
+		<script type="text/ecmascript">
+		
+			require.config({
+				paths: {
+					WdatePicker: "My97DatePicker/WdatePicker",
+					vmachine: "../js/v-machine"
+				}
+			});
+		
+			require(['jquery', 'datatables', 'milk', 'vmachine', 'WdatePicker'],function($, datatables, mlik, vmachine, WdatePicker){
+				
+				$(document).ready(function(){
+					
+					$('#userName').text(localStorage.userName);
+					
+					vmachine.init();
+					
+					var listData = {
+							pagetype: 'audit',
+						};
+					mlk.ajax({//生成list
+						method: 'POST',
+						url: '/usermanage/',
+						data: listData,
+						callback: function(da){
+							var myData = JSON.parse(da);
+							if(myData.errno == 0){
+								var allHtml = '';
+								for(var i = 0; i < myData.data.length; i++){
+									var html = '<tr id="' + myData.data[i].id + '"><td>' + myData.data[i].vmowner + '</td><td>' + myData.data[i].submittime + '</td><td class="edit" name="changetpl">' + myData.data[i].tpl + '</td><td class="edit" name="changeip">' + myData.data[i].hostip + '</td><td>' + myData.data[i].vmname + '</td><td class="edit" name="changevmip">' + myData.data[i].vmip + '</td><td>' + myData.data[i].type + '</td><td><a class="btn btn-primary btn-approve btn-pass mr5">是</a><a class="btn btn-default btn-approve btn-fail">否</a></td></tr>';
+									allHtml += html;
+								}
+								$('#table_inner').html(allHtml);
+								
+								mlk.edit({//编辑
+									ele: '.edit',
+									func: function(obj){
+										var thisInputVal = obj.parents('td').find('.edit-input').val(),
+											thisTd = obj.parents('td');
+										//thisTd = obj.parents('td')[0].childNodes[0].nodeValue = '111'
+										editData = {
+											changefield: thisTd.attr('name'),
+											id: thisTd.parents('tr').attr('id'),
+											value: thisInputVal
+										}
+										mlk.ajax({
+											method: 'POST',
+											url: '/changefield/',
+											data: editData,
+											callback: function(da){
+												var myData = JSON.parse(da);
+												if(myData.errno == 0){
+													thisTd[0].childNodes[0].nodeValue = thisInputVal;
+												}
+												else{
+													alert(myData.errmsg);
+												}
+											}
+										});
+									}	
+								});	
+								
+								$('.table').dataTable();//dataTable
+							}	
+						}
+					});
+					
+						
+				});
+				
+			});
+		
+			
+					
+		</script>
+        
+  </body>
+  
+</html>
+
