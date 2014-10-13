@@ -10,7 +10,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// oprations for Group
+// 用户组接口
 type GroupController struct {
 	beego.Controller
 }

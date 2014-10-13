@@ -10,7 +10,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// oprations for Monitor
+// 监控管理接口
 type MonitorController struct {
 	beego.Controller
 }

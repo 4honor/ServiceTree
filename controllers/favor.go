@@ -10,7 +10,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// oprations for Favor
+// 用户收藏接口
 type FavorController struct {
 	beego.Controller
 }

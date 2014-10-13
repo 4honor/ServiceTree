@@ -10,7 +10,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// oprations for TagValue
+// tag value 操作接口
 type TagValueController struct {
 	beego.Controller
 }
@@ -24,8 +24,8 @@ func (this *TagValueController) URLMapping() {
 }
 
 // @Title Post
-// @Description create TagValue
-// @Param	body		body 	models.TagValue	true		"body for TagValue content"
+// @Description 新增Tag Value
+// @Param	body		body 	models.TagValue	true		"Tag Value 列表"
 // @Success 200 {int} models.TagValue.Id
 // @Failure 403 body is empty
 // @router / [post]

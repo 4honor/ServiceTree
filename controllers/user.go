@@ -10,7 +10,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// oprations for User
+// 用户管理接口
 type UserController struct {
 	beego.Controller
 }
@@ -21,6 +21,8 @@ func (this *UserController) URLMapping() {
 	this.Mapping("GetAll", this.GetAll)
 	this.Mapping("Put", this.Put)
 	this.Mapping("Delete", this.Delete)
+    this.Mapping("Login", this.Login)
+    this.Mapping("Logout",this.Logout)
 }
 
 // @Title Post
@@ -47,6 +49,42 @@ func (this *UserController) Post() {
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (this *UserController) GetOne() {
+	idStr := this.Ctx.Input.Params[":id"]
+	id, _ := strconv.Atoi(idStr)
+	v, err := models.GetUserById(id)
+	if err != nil {
+		this.Data["json"] = err.Error()
+	} else {
+		this.Data["json"] = v
+	}
+	this.ServeJson()
+}
+
+// @Title Get
+// @Description 用户登陆
+// @Param	username		query 	string	true		"登陆用户名"
+// @Param	password		query 	string	true		"登陆密码"
+// @Success 200 {object} models.User
+// @Failure 400 用户名密码不正确
+// @router /login [get]
+func (this *UserController) Login() {
+	idStr := this.Ctx.Input.Params[":id"]
+	id, _ := strconv.Atoi(idStr)
+	v, err := models.GetUserById(id)
+	if err != nil {
+		this.Data["json"] = err.Error()
+	} else {
+		this.Data["json"] = v
+	}
+	this.ServeJson()
+}
+
+// @Title Get
+// @Description 用户退出
+// @Success 200 {object} models.User
+// @Failure 500 系统故障无法正常退出
+// @router /logout [get]
+func (this *UserController) Logout() {
 	idStr := this.Ctx.Input.Params[":id"]
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetUserById(id)
@@ -142,9 +180,9 @@ func (this *UserController) Put() {
 
 // @Title Delete
 // @Description delete the User
-// @Param	id		path 	string	true		"The id you want to delete"
+// @Param	id		path 	string	true		"删除用户 id"
 // @Success 200 {string} delete success!
-// @Failure 403 id is empty
+// @Failure 403 用户 id 不存在
 // @router /:id [delete]
 func (this *UserController) Delete() {
 	idStr := this.Ctx.Input.Params[":id"]

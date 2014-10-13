@@ -10,7 +10,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// oprations for View
+// 用户树形层次结构描述接口
 type ViewController struct {
 	beego.Controller
 }

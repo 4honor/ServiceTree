@@ -10,7 +10,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// oprations for Subsys
+// 系统注册接口
 type SubsysController struct {
 	beego.Controller
 }
