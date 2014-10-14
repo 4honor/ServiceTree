@@ -11,7 +11,7 @@ import (
 
 type TagValue struct {
 	Id    int    `orm:"column(id);pk"`
-	KeyId uint64 `orm:"column(key_id)"`
+	KeyId int64 `orm:"column(key_id)"`
 	Value string `orm:"column(value);size(255)"`
 }
 
