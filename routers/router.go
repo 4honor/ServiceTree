@@ -15,6 +15,7 @@ import (
 
 func init() {
     beego.Router("/", &controllers.MainController{})
+    beego.Router("/subsys", &controllers.SubsysController{})
 	ns := beego.NewNamespace("/v1",
 
 		beego.NSNamespace("/favor",
