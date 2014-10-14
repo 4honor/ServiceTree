@@ -81,8 +81,8 @@
                                     <th>操作</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
+                            <tbody id="tag_table">
+                                <!--<tr>
                                     <td><input type="checkbox"></td>
                                     <td>web01.qq</td>
                                     <td>机器详情</td>
@@ -99,7 +99,7 @@
                                     <td>web03.qq</td>
                                     <td>机器详情</td>
                                     <td>机器改名</td>
-                                </tr>
+                                </tr>-->
                             </tbody>
                         </table>
                         
@@ -214,11 +214,19 @@
 					
 					mlk.ajax({//拉取table
 						method: 'GET',
-						url: 'http://127.0.0.1:8080/v1/view/1',
+						url: '/v1/tag_meta/',
 						data: null, 
 						isloading: true,
-						callback: function(){
-								
+						callback: function(da){
+							if(da){
+								var tbodHtml = '';
+								for(var i = 0; i < da.length; i++){
+									var html = '<tr id="' + da[i].id + '"><td><input type="checkbox"></td><td>' + da[i].tagkey + '</td><td><a class="btn_machine_mess">机器详情</a></td><td><a class="btn_machine_name">机器改名</a></td></tr>';	
+									tbodHtml += html;
+								}
+								$('#tag_table').html(tbodHtml);	
+								$('.table').dataTable();
+							}	
 						}	
 					});
 					
