@@ -408,5 +408,11 @@ textarea.form-control{
 	width:400px;
 	overflow:hidden;
 	clear:both;}	
-	
+.tree_new_tr{
+	animation: myfirst 3s;}	
+@keyframes myfirst
+{
+	from {background: #333;}
+	to {background: #fff;}
+}
 	

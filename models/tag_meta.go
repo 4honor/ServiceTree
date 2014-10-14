@@ -16,6 +16,7 @@ type TagMeta struct {
 	AllowEmpty int8   `orm:"column(allow_empty)"`
 	ExtraInfo  string `orm:"column(extra_info);size(128);null"`
 	Comment    string `orm:"column(comment);null"`
+    Values     string `orm:"-"`
 }
 
 func init() {

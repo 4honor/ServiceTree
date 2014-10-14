@@ -24,29 +24,33 @@
 		}	
 	}
 	
-	//{method: 'POST',url: 'www.baidu.com',data: data, callback: func}
+	//{method: 'POST',url: 'www.baidu.com',data: data, contentType:contentType,dataType:dataType, isloading:true callback: func}
 	//ajax提交方法
 	mlk.ajax = function(opts){
 		if(!opts){
 			return;	
 		}
+		if(opts.isloading){
+			var loadHtml = $('<div class="mlk-loading-outer"><div class="mlk-loading-inner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div></div>');	
+			$('body').append(loadHtml);
+			var hideTime = 9000,
+				timer = setTimeout(function(){
+					loadHtml.remove();	
+				},hideTime);
+		}
 		
-		var loadHtml = $('<div class="mlk-loading-outer"><div class="mlk-loading-inner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div></div>');	
-		$('body').append(loadHtml);
-		var hideTime = 9000,
-			timer = setTimeout(function(){
-				loadHtml.remove();	
-			},hideTime);
-		
-		var myData = opts.method === 'GET' ? null : opts.data;
 		$.ajax({
 			method: opts.method,
 			url: opts.url,
-			data: myData,
+			data: opts.data,
+			contentType: opts.contentType ? opts.contentType : '',
+			dataType: opts.dataType ? opts.dataType : '',
 			success: function(da){
-				clearTimeout(timer);
-				loadHtml.remove();
-				opts.callback(da);	
+				if(opts.isloading){
+					clearTimeout(timer);
+					loadHtml.remove();
+					opts.callback(da);
+				}
 			}
 		});
 	}
@@ -349,11 +353,11 @@
 	
 	//{dom:dom}
 	mlk.tableInverse = function(opts){
-		var selectAll = opts.dom.find('thead input[type=checkbox]').eq(0),
-			checkBox = opts.dom.find('tbody input[type=checkbox]');
+		var selectAll = opts.dom.find('thead input[type=checkbox]').eq(0);
 		selectAll.attr('checkFlag','false');
-
+		
 		selectAll.bind('click',function(){
+			var checkBox = opts.dom.find('tbody input[type=checkbox]');
 			if (selectAll.attr('checkFlag')=='false') {
 				checkBox.each(function(){
 					this.checked=true;
@@ -366,7 +370,8 @@
 				})   
 			}
 		});
-		checkBox.bind('click',function(){
+		opts.dom.find('tbody').on('click','input[type=checkbox]',function(){
+			var checkBox = opts.dom.find('tbody input[type=checkbox]');
 			checkBox.each(function(){
 				if (this.checked==false) { 
 					selectAll[0].checked=false;

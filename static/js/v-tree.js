@@ -65,9 +65,7 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 			func: function(obj){}	
 		});
 		
-		mlk.tableInverse({//启动table全选反选
-			dom: $('.table')	
-		});
+		
 		
 		$('#check_tab li').bind('click',function(){
 			var thisIndex = $(this).index();

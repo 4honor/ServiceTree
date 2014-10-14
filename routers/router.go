@@ -15,6 +15,7 @@ import (
 
 func init() {
     beego.Router("/", &controllers.MainController{})
+    beego.Router("/subsys", &controllers.SubsysController{})
 	ns := beego.NewNamespace("/v1",
 
 		beego.NSNamespace("/favor",
@@ -76,6 +77,17 @@ func init() {
 				&controllers.ViewController{},
 			),
 		),
+
+		beego.NSNamespace("/tag_key",
+			beego.NSInclude(
+				&controllers.TagKeyController{},
+			),
+		),
+        beego.NSNamespace("/tree",
+            beego.NSInclude(
+                &controllers.TreeController{}, 
+            ),
+        ),
 	)
 	beego.AddNamespace(ns)
 }

@@ -9,5 +9,5 @@ type MainController struct {
 }
 
 func (this *MainController) Get() {
-	this.TplNames = "tree-tag-manager.html"
+	this.TplNames = "service-tree/tree-tag-manager.html"
 }

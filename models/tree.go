@@ -9,41 +9,40 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type TagValue struct {
-	Id    int    `orm:"column(id);pk"`
-	KeyId int64 `orm:"column(key_id)"`
-	Value string `orm:"column(value);size(255)"`
+type Tree struct {
+	Id  int    `orm:"column(id);auto"`
+	Api string `orm:"column(api);size(11)"`
 }
 
 func init() {
-	orm.RegisterModel(new(TagValue))
+	orm.RegisterModel(new(Tree))
 }
 
-// AddTagValue insert a new TagValue into database and returns
+// AddTree insert a new Tree into database and returns
 // last inserted Id on success.
-func AddTagValue(m *TagValue) (id int64, err error) {
+func AddTree(m *Tree) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetTagValueById retrieves TagValue by Id. Returns error if
+// GetTreeById retrieves Tree by Id. Returns error if
 // Id doesn't exist
-func GetTagValueById(id int) (v *TagValue, err error) {
+func GetTreeById(id int) (v *Tree, err error) {
 	o := orm.NewOrm()
-	v = &TagValue{Id: id}
+	v = &Tree{Id: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllTagValue retrieves all TagValue matches certain condition. Returns empty list if
+// GetAllTree retrieves all Tree matches certain condition. Returns empty list if
 // no records exist
-func GetAllTagValue(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllTree(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(TagValue))
+	qs := o.QueryTable(new(Tree))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -89,7 +88,7 @@ func GetAllTagValue(query map[string]string, fields []string, sortby []string, o
 		}
 	}
 
-	var l []TagValue
+	var l []Tree
 	qs = qs.OrderBy(sortFields...)
 	if _, err := qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -112,11 +111,11 @@ func GetAllTagValue(query map[string]string, fields []string, sortby []string, o
 	return nil, err
 }
 
-// UpdateTagValue updates TagValue by Id and returns error if
+// UpdateTree updates Tree by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateTagValueById(m *TagValue) (err error) {
+func UpdateTreeById(m *Tree) (err error) {
 	o := orm.NewOrm()
-	v := TagValue{Id: m.Id}
+	v := Tree{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -127,15 +126,15 @@ func UpdateTagValueById(m *TagValue) (err error) {
 	return
 }
 
-// DeleteTagValue deletes TagValue by Id and returns error if
+// DeleteTree deletes Tree by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteTagValue(id int) (err error) {
+func DeleteTree(id int) (err error) {
 	o := orm.NewOrm()
-	v := TagValue{Id: id}
+	v := Tree{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&TagValue{Id: id}); err == nil {
+		if num, err = o.Delete(&Tree{Id: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}
