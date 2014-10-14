@@ -24,7 +24,7 @@
 		}	
 	}
 	
-	//{method: 'POST',url: 'www.baidu.com',data: data, isloading:true callback: func}
+	//{method: 'POST',url: 'www.baidu.com',data: data, contentType:contentType,dataType:dataType, isloading:true callback: func}
 	//ajax提交方法
 	mlk.ajax = function(opts){
 		if(!opts){
@@ -43,6 +43,8 @@
 			method: opts.method,
 			url: opts.url,
 			data: opts.data,
+			contentType: opts.contentType ? opts.contentType : '',
+			dataType: opts.dataType ? opts.dataType : '',
 			success: function(da){
 				if(opts.isloading){
 					clearTimeout(timer);
