@@ -353,11 +353,11 @@
 	
 	//{dom:dom}
 	mlk.tableInverse = function(opts){
-		var selectAll = opts.dom.find('thead input[type=checkbox]').eq(0),
-			checkBox = opts.dom.find('tbody input[type=checkbox]');
+		var selectAll = opts.dom.find('thead input[type=checkbox]').eq(0);
 		selectAll.attr('checkFlag','false');
-
+		
 		selectAll.bind('click',function(){
+			var checkBox = opts.dom.find('tbody input[type=checkbox]');
 			if (selectAll.attr('checkFlag')=='false') {
 				checkBox.each(function(){
 					this.checked=true;
@@ -370,7 +370,8 @@
 				})   
 			}
 		});
-		checkBox.bind('click',function(){
+		opts.dom.find('tbody').on('click','input[type=checkbox]',function(){
+			var checkBox = opts.dom.find('tbody input[type=checkbox]');
 			checkBox.each(function(){
 				if (this.checked==false) { 
 					selectAll[0].checked=false;
