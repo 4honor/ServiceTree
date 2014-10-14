@@ -210,6 +210,7 @@
 					
 					vtree.init();
 					
+					var myDatatable;//datatable对象
 					//拉取table
 					mlk.ajax({
 						method: 'GET',
@@ -220,11 +221,11 @@
 							if(da){
 								var tbodHtml = '';
 								for(var i = 0; i < da.length; i++){
-									var html = '<tr id="' + da[i].Id + '"><td><input type="checkbox"></td><td>' + da[i].TagKey + '</td><td><a class="btn_machine_mess">机器详情</a></td><td><a class="btn_machine_name">机器改名</a></td></tr>';	
+									var html = '<tr><td><input id="' + da[i].Id + '" type="checkbox"></td><td>' + da[i].TagKey + '</td><td><a class="btn_machine_mess">机器详情</a></td><td><a class="btn_machine_name">机器改名</a></td></tr>';	
 									tbodHtml += html;
 								}
 								$('#tag_table').html(tbodHtml);	
-								$('.table').dataTable();
+								myDatatable = $('.table').DataTable();
 								mlk.tableInverse({//启动table全选反选
 									dom: $('.table')	
 								});
@@ -240,7 +241,7 @@
 							html: alertHtml,
 							btnfunc: function(obj){
 								if($('#tag_name').val()){
-									var allowEmpty = $('#AllowEmpty').attr('checked') ? '1' : '0',
+									var allowEmpty = $('#is_allow')[0].checked ? '1' : '0',
 										myDta = {
 										TagKey: $('#tag_name').val(),
 										AliasName: $('#tag_chinese').val(),
@@ -256,7 +257,16 @@
 										dataType: "json", 
 										isloading: true,
 										callback: function(da){
-												
+											if(da){
+												//在datatable中新增一行
+												 myDatatable.row.add([
+													'<input type="checkbox" id="' + da.id + '">',
+													$('#tag_name').val(),
+													'<a class="btn_machine_mess">机器详情</a>',
+													'<a class="btn_machine_name">机器改名</a>'
+												]).draw();
+												 
+											}	
 										}	
 									});	
 								}	
