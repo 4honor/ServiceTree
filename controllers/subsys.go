@@ -21,6 +21,7 @@ func (this *SubsysController) URLMapping() {
 	this.Mapping("GetAll", this.GetAll)
 	this.Mapping("Put", this.Put)
 	this.Mapping("Delete", this.Delete)
+	this.Mapping("Get", this.Get)
 }
 
 // @Title Post
@@ -56,6 +57,16 @@ func (this *SubsysController) GetOne() {
 		this.Data["json"] = v
 	}
 	this.ServeJson()
+}
+
+// @Title Get
+// @Description get Subsys by id
+// @Param	id		path 	string	true		"The key for staticblock"
+// @Success 200 {object} models.Subsys
+// @Failure 403 :id is empty
+// @router / [get]
+func (this *SubsysController) Get() {
+	this.TplNames = "service-tree/tree-register.html"
 }
 
 // @Title Get All
