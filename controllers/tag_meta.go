@@ -37,12 +37,18 @@ func (this *TagMetaController) Post() {
 	json.Unmarshal(this.Ctx.Input.RequestBody, &v)
 	if id, err := models.AddTagMeta(&v); err == nil {
 		this.Data["json"] = map[string]int64{"id": id}
+        fmt.Println("tag values:", v.Values)
         if v.Values != "" {
-            tag_values = strings.Split(v.Values, ",")
+            tag_values = strings.Split(strings.TrimRight(v.Values, ","), ",")
             for _, value := range tag_values {
+                fmt.Println("insert tag value into db, value:", value)
                 value_model.KeyId = id
                 value_model.Value = value
-                models.AddTagValue(&value_model)
+                if id, err := models.AddTagValue(&value_model); err == nil {
+                    fmt.Println("insert into db successfully")
+                }else{
+                    fmt.Println("insert into db failed, err:", err, "id:", id)
+                }
             }
         }
 	} else {
