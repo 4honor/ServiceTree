@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"ServiceTree/models"
+    "ServiceTree/libs"
 	"encoding/json"
 	"strconv"
     "strings"
@@ -135,13 +136,17 @@ func (this *TagMetaController) Delete() {
     id_list := this.Ctx.Input.Params[":ids"]
     fmt.Println("id list is:", id_list)
     var delete_ids []string
+    var result libs.Result
+
     delete_ids = strings.Split(id_list, ",")
     for _, id_str := range delete_ids {
         fmt.Println("id string", id_str)
         id, _ := strconv.Atoi(id_str) 
         fmt.Println("start delete id:", id, "id string:", id_str)
         if err := models.DeleteTagMeta(id); err == nil {
-            this.Data["json"] = "OK"
+            result.Success = true
+            result.Msg = "OK"
+            this.Data["json"] = result
         } else {
             this.Data["json"] = err.Error()
         }
