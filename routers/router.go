@@ -76,6 +76,17 @@ func init() {
 				&controllers.ViewController{},
 			),
 		),
+
+		beego.NSNamespace("/tag_key",
+			beego.NSInclude(
+				&controllers.TagKeyController{},
+			),
+		),
+        beego.NSNamespace("/tree",
+            beego.NSInclude(
+                &controllers.TreeController{}, 
+            ),
+        ),
 	)
 	beego.AddNamespace(ns)
 }
