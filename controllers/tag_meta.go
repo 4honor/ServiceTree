@@ -68,8 +68,8 @@ func (this *TagMetaController) GetAll() {
 	var sortby []string
 	var order []string
 	var query map[string]string = make(map[string]string)
-	var limit int64 = 10
 	var offset int64 = 0
+	var limit int64 = 10
 
 	// limit: 10 (default is 10)
 	if v, err := this.GetInt("limit"); err == nil {
@@ -81,6 +81,8 @@ func (this *TagMetaController) GetAll() {
 	}
     sortby = append(sortby, "TagKey")
     order  = append(order, "asc")
+    fields = append(fields,"Id")
+    fields = append(fields,"TagKey")
 
 	l, err := models.GetAllTagMeta(query, fields, sortby, order, offset, limit)
 	if err != nil {
