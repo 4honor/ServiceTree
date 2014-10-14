@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+    "strconv"
 
 	"github.com/astaxie/beego/orm"
 )
 
 type TagValue struct {
 	Id    int    `orm:"column(id);pk"`
-	KeyId int64 `orm:"column(key_id)"`
+	KeyId int `orm:"column(key_id)"`
 	Value string `orm:"column(value);size(255)"`
 }
 
@@ -36,6 +37,32 @@ func GetTagValueById(id int) (v *TagValue, err error) {
 		return v, nil
 	}
 	return nil, err
+}
+
+// GetTagAllValueByKeyId 根据 tag key id 来获取对应的 tag value 列表
+// 如果不存在返回空字符
+func GetTagAllValueByKeyId(key_id int) string {
+    var values string
+    var fields []string
+    sortby := []string{"Value"}
+    order :=  []string{"asc"}
+    var offset  int64 = 0
+    var limit   int64 = 10
+    var query map[string]string = make(map[string]string)
+
+    query["KeyId"] = strconv.Itoa(key_id)
+    fmt.Println("query:",query,"fields:", fields,"sortby:", sortby, "order:",order, "offset:", offset,"limit:", limit)
+    tag_list, err := GetAllTagValue(query, fields, sortby, order, offset, limit)
+    fmt.Println("query tag value ", tag_list)
+    if  err == nil {
+        for _, value_model := range tag_list {
+            if tag , ok := value_model.(TagValue) ; ok {
+                values += tag.Value + ","
+            }
+        }
+        values = strings.TrimRight(values,",")
+    }
+    return values
 }
 
 // GetAllTagValue retrieves all TagValue matches certain condition. Returns empty list if
