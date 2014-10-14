@@ -24,29 +24,31 @@
 		}	
 	}
 	
-	//{method: 'POST',url: 'www.baidu.com',data: data, callback: func}
+	//{method: 'POST',url: 'www.baidu.com',data: data, isloading:true callback: func}
 	//ajax提交方法
 	mlk.ajax = function(opts){
 		if(!opts){
 			return;	
 		}
+		if(opts.isloading){
+			var loadHtml = $('<div class="mlk-loading-outer"><div class="mlk-loading-inner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div></div>');	
+			$('body').append(loadHtml);
+			var hideTime = 9000,
+				timer = setTimeout(function(){
+					loadHtml.remove();	
+				},hideTime);
+		}
 		
-		var loadHtml = $('<div class="mlk-loading-outer"><div class="mlk-loading-inner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div></div>');	
-		$('body').append(loadHtml);
-		var hideTime = 9000,
-			timer = setTimeout(function(){
-				loadHtml.remove();	
-			},hideTime);
-		
-		var myData = opts.method === 'GET' ? null : opts.data;
 		$.ajax({
 			method: opts.method,
 			url: opts.url,
-			data: myData,
+			data: opts.data,
 			success: function(da){
-				clearTimeout(timer);
-				loadHtml.remove();
-				opts.callback(da);	
+				if(opts.isloading){
+					clearTimeout(timer);
+					loadHtml.remove();
+					opts.callback(da);
+				}
 			}
 		});
 	}
