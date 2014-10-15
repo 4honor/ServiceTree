@@ -81,24 +81,6 @@
                                 </tr>
                             </thead>
                             <tbody id="tag_table">
-                                <!--<tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>web01.qq</td>
-                                    <td>机器详情</td>
-                                    <td>机器改名</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>web02.qq</td>
-                                    <td>机器详情</td>
-                                    <td>机器改名</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>web03.qq</td>
-                                    <td>机器详情</td>
-                                    <td>机器改名</td>
-                                </tr>-->
                             </tbody>
                         </table>
                         
@@ -273,40 +255,6 @@
 						});
 					});
 					
-					//删除tag
-					$('#remove_tag').bind('click',function(){
-						var tableEachTr = $('.table tbody tr input[type=checkbox]:checked'),
-							list = '';
-						if(tableEachTr.length > 0){//确保优选tag
-							tableEachTr.each(function(){
-							var thisId = $(this).parents('tr').attr('id');
-							list += thisId + ',';//拼接id	
-							});
-							list = list.substring(0,list.length-1);
-							mlk.ajax({
-								method: 'DELETE',
-								url: '/v1/tag_meta/' + list,
-								data: null,
-								isloading: true,
-								callback: function(da){
-									if(da.Success){
-										var domArray = [];
-										tableEachTr.each(function(){
-											var thisTr = $(this).parents('tr');
-											domArray.push(thisTr);	
-										});
-										mlk.removeDom({//删除dom
-											dom: domArray	
-										});	
-									}	
-								}
-							});
-						}
-						else{
-							alert('请选择需要删除的tag key！')	
-						}
-						
-					});
 					
 					//tag key详情
 					$('.table').on('click','.btn_machine_mess',function(){
