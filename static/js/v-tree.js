@@ -12,12 +12,20 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 				}
 			},
 			callback: {
-				onClick: function(){} 	
+				onClick: function(){
+					var treeObj = $.fn.zTree.getZTreeObj("tree_cont");
+					console.log(treeObj);
+					var sNodes = treeObj.getSelectedNodes();
+					if (sNodes.length > 0) {
+						var node = sNodes[0].getParentNode();
+						console.log(node);
+					}	
+				} 	
 			}
 		};
 
 		var zNodes =[
-			{ id:1, pId:0, name:"父节点1 - 展开", open:false, iconSkin:"pIcon01"},
+			{ id:1, pId:0, name:"父节点1 - 展开", open:false, iconSkin:"pIcon01", "ename":"nimei"},
 			{ id:11, pId:1, name:"父节点11 - 折叠", iconSkin:"pIcon01"},
 			{ id:111, pId:11, name:"叶子节点111", iconSkin:"icon01"},
 			{ id:112, pId:11, name:"叶子节点112", iconSkin:"icon01"},
@@ -66,7 +74,6 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 		});
 		
 		
-		
 		$('#check_tab li').bind('click',function(){
 			var thisIndex = $(this).index();
 			$(this).addClass('active').siblings().removeClass('active');
@@ -74,6 +81,51 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 			.attr('isshow','yes').siblings()
 			.hide().attr('isshow','no');	
 		});
+		
+		//批量删除table tr
+		function removeTableTr( url ){
+			var tableEachTr = $('.table tbody tr input[type=checkbox]:checked'),
+				list = '';
+			if(tableEachTr.length > 0){//确保优选tag
+				tableEachTr.each(function(){
+					var thisId = $(this).parents('tr').attr('id');
+					list += thisId + ',';//拼接id	
+				});
+				list = list.substring(0,list.length-1);
+				mlk.ajax({
+					method: 'DELETE',
+					url: url + list,
+					data: null,
+					isloading: true,
+					callback: function(da){
+						if(da.Success){
+							var domArray = [];
+							tableEachTr.each(function(){
+								var thisTr = $(this).parents('tr');
+								domArray.push(thisTr);	
+							});
+							mlk.removeDom({//删除dom
+								dom: domArray	
+							});	
+						}	
+					}
+				});
+			}
+			else{
+				alert('请选择需要删除的机器！')	
+			}	
+		}
+		
+		//tag 页批量删除
+		$(document).on('click','#remove_tag',function(){
+			removeTableTr('/v1/tag_meta/');
+		});
+		
+		//machine 页批量删除
+		$(document).on('click','#bulk_production',function(){
+			removeTableTr('/v1/machine/');
+		});
+			
 		
 	}
 	
