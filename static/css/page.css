@@ -362,8 +362,7 @@ table.dataTable tbody th, table.dataTable tbody td{
 	padding:0 4px;}
 .tree_cont_title{
 	font-size:14px;
-	line-height:50px;
-	overflow:hidden;}
+	line-height:50px;}
 .tree_cont_title div{
 	float:left;
 	margin-right:10px;}
