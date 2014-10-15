@@ -61,8 +61,7 @@ body{
 	width:970px;
 	margin:50px auto;}
 .cont_pad{
-	padding:0 25px; 
-	overflow:hidden; 
+	padding:0 25px;
 	clear:both;}
 
 /*login*/
@@ -362,7 +361,8 @@ table.dataTable tbody th, table.dataTable tbody td{
 	padding:0 4px;}
 .tree_cont_title{
 	font-size:14px;
-	line-height:50px;}
+	line-height:50px;
+	overflow:hidden;}
 .tree_cont_title div{
 	float:left;
 	margin-right:10px;}
