@@ -42,11 +42,11 @@ func (this *MachineController) Post() {
 }
 
 // @Title Get
-// @Description 通过机器 id 来获取机器信息
-// @Param	id		path 	string	true		"查询机器 id"
+// @Description 通过tag 命名空间(ns)来获取机器信息
+// @Param	ns		path 	string	true		"查询机器的命名空间(ns), eg: corp:xiaoju,depart:dache"
 // @Success 200 {object} models.Machine
 // @Failure 403 :id is empty
-// @router /:id [get]
+// @router /:id:int [get]
 func (this *MachineController) GetOne() {
 	idStr := this.Ctx.Input.Params[":id"]
 	id, _ := strconv.Atoi(idStr)
@@ -61,15 +61,10 @@ func (this *MachineController) GetOne() {
 
 // @Title Get All
 // @Description 批量获取机器信息
-// @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
-// @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
-// @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
-// @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
-// @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
-// @Param	offset	query	string	false	"Start position of result set. Must be an integer"
+// @Param	ns		path 	string	true		"查询机器的命名空间(ns), eg: corp:xiaoju,depart:dache"
 // @Success 200 {object} models.Machine
 // @Failure 403
-// @router / [get]
+// @router /:ns:string [get]
 func (this *MachineController) GetAll() {
 	var fields []string
 	var sortby []string
