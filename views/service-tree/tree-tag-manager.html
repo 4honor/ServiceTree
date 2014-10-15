@@ -38,18 +38,7 @@
             </div>
         </div>
         
-        <div class="cont_pad">
-           	<div class="mt20">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a>Tag管理</a></li>
-                    <li><a>系统注册</a></li>
-                    <li><a>机器管理</a></li>
-                    <li><a>监控系统</a></li>
-                    <li><a>上线系统</a></li>
-                    <li><a>虚拟机管理</a></li>
-                </ul>
-            </div>
-        </div>
+        {{template "menu" .}}
         
         <div class="cont_pad mt20" style="padding-bottom:5px; padding-top:5px;">
             
@@ -76,7 +65,7 @@
                             <thead>
                                 <tr class="active">
                                     <th width="5%"><input type="checkbox"></th>
-                                    <th>kagkey</th>
+                                    <th>Tagkey</th>
                                     <th>查询</th>
                                 </tr>
                             </thead>
