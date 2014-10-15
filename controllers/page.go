@@ -1,13 +1,18 @@
 package controllers
 
 import (
-    "fmt"
 	"github.com/astaxie/beego"
 )
 
 // id分配接口
 type PageController struct {
 	beego.Controller
+}
+
+type Menu struct {
+    Name          string
+    DisplayName   string
+    Status        string
 }
 
 func (this *PageController) URLMapping() {
@@ -20,17 +25,33 @@ func (this *PageController) URLMapping() {
 // @router /:subsys [get]
 func (this *PageController) Get() {
 	subsys := this.Ctx.Input.Params[":subsys"]
-    fmt.Println("subsys is:", subsys)
+    menus := [...]Menu{
+        {Name:"tag",DisplayName:"Tag 管理",Status:""},
+        {Name:"subsys",DisplayName:"系统注册",Status:""},
+        {Name:"machine",DisplayName:"机器管理",Status:""},
+        {Name:"monitor",DisplayName:"监控系统",Status:""},
+    }
+    this.TplNames =  "service-tree/menu.tpl"
     switch subsys {
-        case "subsys":
-            this.TplNames = "service-tree/tree-register.html"
-        case "machine":
-            this.TplNames = "service-tree/tree-machine-manager.html"
         case "tag":
-            this.TplNames = "service-tree/tree-tag-manager.html"
+            menus[0].Status = "active"
+            this.Data["Menus"] = menus
+            this.Layout = "service-tree/tree-tag-manager.html"
+        case "subsys":
+            menus[1].Status = "active"
+            this.Data["Menus"] = menus
+            this.Layout = "service-tree/tree-register.html"
+        case "machine":
+            menus[2].Status = "active"
+            this.Data["Menus"] = menus
+            this.Layout = "service-tree/tree-machine-manager.html"
         case "monitor":
-            this.TplNames = "service-tree/tree-monitoring-system.html"
+            menus[3].Status = "active"
+            this.Data["Menus"] = menus
+            this.Layout = "service-tree/tree-monitoring-system.html"
         default:
-            this.TplNames = "service-tree/tree-tag-manager.html"
+            menus[0].Status = "active"
+            this.Data["Menus"] = menus
+            this.Layout = "service-tree/tree-tag-manager.html"
     }
 }
