@@ -40,6 +40,8 @@ func (this *PageController) Get() {
         case "subsys":
             menus[1].Status = "active"
             this.Data["Menus"] = menus
+            this.Data["Hierarchy"] = "corp,depart"
+            this.Data["Title"] = "Test"
             this.Layout = "service-tree/tree-register.html"
         case "machine":
             menus[2].Status = "active"

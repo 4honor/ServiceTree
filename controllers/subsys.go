@@ -59,16 +59,6 @@ func (this *SubsysController) GetOne() {
 	this.ServeJson()
 }
 
-// @Title Get
-// @Description get Subsys by id
-// @Param	id		path 	string	true		"The key for staticblock"
-// @Success 200 {object} models.Subsys
-// @Failure 403 :id is empty
-// @router / [get]
-func (this *SubsysController) Get() {
-	this.TplNames = "service-tree/tree-register.html"
-}
-
 // @Title Get All
 // @Description get Subsys
 // @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
