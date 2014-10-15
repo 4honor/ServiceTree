@@ -125,6 +125,8 @@ func (this *TagMetaController) GetAll() {
 // @router /:id [put]
 func (this *TagMetaController) Put() {
     var result libs.Result
+    var value_model models.TagValue
+    var tag_values []string
 
 	idStr := this.Ctx.Input.Params[":id"]
 	id, _ := strconv.Atoi(idStr)
@@ -134,6 +136,25 @@ func (this *TagMetaController) Put() {
         result.Success = true
         result.Msg = "OK"
 		this.Data["json"] =  result
+        //clear tag value first 
+        if err := models.DeleteTagValueByKeyId(id) ; err == nil {
+            //renew tag value
+            if v.Values != "" {
+                tag_values = strings.Split(strings.TrimRight(v.Values, ","), ",")
+                for _, value := range tag_values {
+                    fmt.Println("insert tag value into db, value:", value)
+                    value_model.KeyId = int(id)
+                    value_model.Value = value
+                    if id, err := models.AddTagValue(&value_model); err == nil {
+                        fmt.Println("insert into db successfully")
+                    }else{
+                        fmt.Println("insert into db failed, err:", err, "id:", id)
+                    }
+                }
+            } 
+        }else{
+            fmt.Println("delete error, error:", err)
+        }
 	} else {
         result.Success = false
         result.Msg =  err.Error()

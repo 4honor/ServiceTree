@@ -51,9 +51,7 @@ func GetTagAllValueByKeyId(key_id int) string {
     var query map[string]string = make(map[string]string)
 
     query["KeyId"] = strconv.Itoa(key_id)
-    fmt.Println("query:",query,"fields:", fields,"sortby:", sortby, "order:",order, "offset:", offset,"limit:", limit)
     tag_list, err := GetAllTagValue(query, fields, sortby, order, offset, limit)
-    fmt.Println("query tag value ", tag_list)
     if  err == nil {
         for _, value_model := range tag_list {
             if tag , ok := value_model.(TagValue) ; ok {
@@ -167,4 +165,15 @@ func DeleteTagValue(id int) (err error) {
 		}
 	}
 	return
+}
+
+
+func DeleteTagValueByKeyId(key_id int) (err error) {
+    o := orm.NewOrm() 
+    res, err := o.Raw("DELETE FROM tag_value WHERE key_id = ?", key_id).Exec()
+    if err == nil {
+        num, _ := res.RowsAffected()
+        fmt.Println("delete tag value affect nums : ", num)
+    }
+    return 
 }
