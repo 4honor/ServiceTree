@@ -17,6 +17,7 @@ func (this *MainController) Get() {
     }
     menus[0].Status = "active"
     this.Data["Menus"] = menus
+    this.Data["Hierarchy"] = "corp,depart"
     this.TplNames =  "service-tree/menu.tpl"
     this.Layout = "service-tree/tree-tag-manager.html"
 }

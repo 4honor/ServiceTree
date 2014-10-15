@@ -36,6 +36,7 @@ func (this *PageController) Get() {
         case "tag":
             menus[0].Status = "active"
             this.Data["Menus"] = menus
+            this.Data["Hierarchy"] = "corp,depart"
             this.Layout = "service-tree/tree-tag-manager.html"
         case "subsys":
             menus[1].Status = "active"
@@ -54,6 +55,7 @@ func (this *PageController) Get() {
         default:
             menus[0].Status = "active"
             this.Data["Menus"] = menus
+            this.Data["Hierarchy"] = "corp,depart"
             this.Layout = "service-tree/tree-tag-manager.html"
     }
 }
