@@ -293,7 +293,7 @@
 						dom: [$('.my_select'),$('.my_aaa')]	
 					});
 					
-					var globleNum = 0;
+					var globleNum = 0;//添加select id为了mlk.editSelect 插件遍历
 					$('#add_list').bind('click',function(){
 						var addList = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="input1" class="col-sm-2 control-label">tag key</label><div class="col-sm-8"><select class="form-control" id="tag_name"><option value="1">1</option><option value="2">2</option></select></div></div><div class="form-group"><label for="input1" class="col-sm-2 control-label">tag value</label><div class="col-sm-8"><input type="text" class="form-control" id="tag_mess" placeholder="以逗号隔开"></div></div></form></div>';
 						mlk.alertBox({
