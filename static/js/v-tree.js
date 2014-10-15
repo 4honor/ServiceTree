@@ -67,7 +67,7 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 			func: function(){}, 
 			style:{
 				width: 300,
-				height: windowHeight-190
+				height: windowHeight-130
 			}	
 		});
 		
