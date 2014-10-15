@@ -12,12 +12,15 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 				}
 			},
 			callback: {
-				onClick: function(){
-					var treeObj = $.fn.zTree.getZTreeObj("tree_cont");
-					console.log(treeObj);
+				onClick: function(ev){
+					var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
 					var sNodes = treeObj.getSelectedNodes();
 					if (sNodes.length > 0) {
+						var my = sNodes[0];
 						var node = sNodes[0].getParentNode();
+						var nodeType = sNodes[0].getParentNode().ename;
+						//var parent = sNodes[0].getParentNode().getParentNode();
+						var level = sNodes[0].level;
 						console.log(node);
 					}	
 				} 	
@@ -25,8 +28,8 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 		};
 
 		var zNodes =[
-			{ id:1, pId:0, name:"父节点1 - 展开", open:false, iconSkin:"pIcon01", "ename":"nimei"},
-			{ id:11, pId:1, name:"父节点11 - 折叠", iconSkin:"pIcon01"},
+			{ id:1, pId:0, name:"父节点1 - 展开", open:false, iconSkin:"pIcon01"},
+			{ id:11, pId:1, name:"父节点11 - 折叠", iconSkin:"pIcon01", ename:"nimei", A:"abc"},
 			{ id:111, pId:11, name:"叶子节点111", iconSkin:"icon01"},
 			{ id:112, pId:11, name:"叶子节点112", iconSkin:"icon01"},
 			{ id:113, pId:11, name:"叶子节点113", iconSkin:"icon01"},
