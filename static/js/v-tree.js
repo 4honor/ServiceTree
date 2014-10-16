@@ -128,7 +128,11 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 		$(document).on('click','#bulk_production',function(){
 			removeTableTr('/v1/machine/');
 		});
-			
+		
+		//sys 页批量删除
+		$(document).on('click','#remove_sys',function(){
+			removeTableTr('/v1/monitor/');
+		});
 		
 	}
 	
