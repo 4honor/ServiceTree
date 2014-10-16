@@ -1,6 +1,7 @@
 package controllers
 
 import (
+    "fmt"
     "ServiceTree/models"
 	"github.com/astaxie/beego"
 )
@@ -46,7 +47,9 @@ func (this *PageController) Get() {
             this.Data["Menus"] = menus
             tags := getTags() 
             this.Data["Tags"] = tags
+            this.Data["OptionalKeys"] = models.OptionalKeys()
             this.Data["Hierarchy"] = models.DefaultHierarchy()
+            fmt.Println("get optional key list is : " , models.OptionalKeys())
             this.Layout = "service-tree/tree-tag-manager-init.html"
         case "subsys":
             menus[1].Status = "active"
