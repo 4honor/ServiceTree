@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-        <title>服务树</title>
+        <title>Tag管理</title>
     
         <!-- Bootstrap core CSS -->
         <link href="../../static//css/bootcss/css/bootstrap.css" rel="stylesheet">
@@ -29,25 +29,11 @@
         
         <div class="navbar-wrapper">
         	<div class="" style="background:none; padding-left:20px;">
-            	<img class="nav-img" src="../../static/images/Odin.jpg" height="60">
+            	<img class="nav-img" src="../../static/images/Odin.jpg" height="50">
                 <div class="left">
-                    <span class="left-word">滴滴打车</span>
-                    |
-                    <span class="right-word">业务监控平台</span>
+                    <span class="left-word">运维平台</span>
                 </div>
-            </div>
-        </div>
-        
-        <div class="cont_pad">
-           	<div class="mt20">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a>Tag管理</a></li>
-                    <li><a>系统注册</a></li>
-                    <li><a>机器管理</a></li>
-                    <li><a>监控系统</a></li>
-                    <li><a>上线系统</a></li>
-                    <li><a>虚拟机管理</a></li>
-                </ul>
+                {{template "menu" .}}
             </div>
         </div>
         
@@ -59,15 +45,15 @@
                     <a class="btn btn-default active">Tag变更</a>
                     <a class="btn btn-default">初始化Tag</a>
                 </div>-->
-                <ul class="tree_sec_menu" id="check_tab">
+                <ul class="tree_sec_menu">
                     <li class="active">Tag变更</li>
-                    <li>初始化Tag</li>
+                    <li><a href="">初始化Tag</a></li>
                 </ul>
                 
                 <div class="odin_check_outer">
                 	<!-- 第一部分 -->
-                    <div class="odin_check_inner" isshow="yes">
-                    	<div class="tree_cont_title"><div>服务树显示结构：</div><div id="tag_show">444,5555,666</div></div>
+                    <div class="odin_check_inner">
+                    	<div class="tree_cont_title"><div>服务树显示结构：</div><div id="tag_show">{{.Hierarchy}}</div></div>
                         <p class="tree_cont_btn_outer">
                             <a class="btn btn-default" id="add_new_tag">新增tagk</a>
                             <a class="btn btn-default" id="remove_tag">批量删除</a>
@@ -76,103 +62,14 @@
                             <thead>
                                 <tr class="active">
                                     <th width="5%"><input type="checkbox"></th>
-                                    <th>kagkey</th>
+                                    <th>Tagkey</th>
                                     <th>查询</th>
                                 </tr>
                             </thead>
                             <tbody id="tag_table">
-                                <!--<tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>web01.qq</td>
-                                    <td>机器详情</td>
-                                    <td>机器改名</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>web02.qq</td>
-                                    <td>机器详情</td>
-                                    <td>机器改名</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>web03.qq</td>
-                                    <td>机器详情</td>
-                                    <td>机器改名</td>
-                                </tr>-->
                             </tbody>
                         </table>
                         
-                    </div>
-                    
-                    <!-- 第二部分 -->
-                    <div class="odin_check_inner" style="display:none;" isshow="no">
-                    	<textarea class="form-control tag_textarea" placeholder="机器列表，一行一台机器"></textarea>
-                        <div class="tag_select_outer mb20">
-                        	<h3>选择 tag</h3>
-                            <div class="tag_select">
-                                <!--<input type="text" class="form-control" id="tag" list="tag_list" autocomplete="off">
-                                <datalist id="tag_list" style="display:none;">
-                                    <option value="aaa">aaa</option>
-                                    <option value="bbb">bbb</option>
-                                    <option value="ccc">ccc</option>
-                                    <option value="ddd">ddd</option>
-                                </datalist>-->
-                                <form class="form-horizontal" role="form" id="tag_form">
-                                	<!--  隐藏一个做复制  -->
-                                	<div class="form-group" id="clone-list" style="display:none;">
-                                        <label for="inputEmail3" class="col-sm-2 control-label"></label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control" id="" name="">
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <!--  end  -->
-                                    <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-2 control-label">corp</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control my_select" id="aaa" name="aaa">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-2 control-label">env</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control my_aaa" id="bbb" name="bbb">
-                                                <option value="0">0</option>
-                                                <option value="0">0</option>
-                                                <option value="0">0</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-2 control-label">env</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control my_aaa" id="ccc" name="ccc">
-                                                <option value="0">0</option>
-                                                <option value="0">0</option>
-                                                <option value="0">0</option>
-                                                <option value="4">4</option>
-                                                <option value="1111">1111</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                                <p>
-                                    <a class="btn btn-default right mb10" id="add_list" title="新增一条">
-                                        <span class="glyphicon glyphicon-plus"></span>
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                        
-                        <p class="tag_btn_outer"><a class="btn btn-primary right">确定</a></p>
                     </div>
                     
                 </div>
@@ -234,7 +131,7 @@
 					
 					//新增tag
 					$('#add_new_tag').bind('click',function(){
-						var alertHtml = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="tag_name" class="col-sm-3 control-label">tag key</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_name"></div></div><div class="form-group"><label for="tag_chinese" class="col-sm-3 control-label">tag名字</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_chinese" placeholder="tag中文名字，可留空"></div></div><div class="form-group"><label for="is_allow" class="col-sm-3 control-label">是否必须</label><div class="col-sm-9"><input type="checkbox" id="is_allow" style="position:relative; top:7px;"></div></div><div class="form-group"><label for="tag_comment" class="col-sm-3 control-label">tag value范围</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_val" placeholder="tag对应多个值逗号分割，可留空"></div></div><div class="form-group"><label class="col-sm-3 control-label">tag key作用说明</label><div class="col-sm-9"><textarea style="height:120px;"  class="form-control" id="tag_comment"></textarea></div></div></form></div>';
+						var alertHtml = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="tag_name" class="col-sm-3 control-label">tag key</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_name"></div></div><div class="form-group"><label for="tag_chinese" class="col-sm-3 control-label">tag名字</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_chinese" placeholder="tag中文名字，可留空"></div></div><div class="form-group"><label for="is_allow" class="col-sm-3 control-label">允许为空?</label><div class="col-sm-9"><input type="checkbox" id="is_allow" style="position:relative; top:7px;"></div></div><div class="form-group"><label for="tag_comment" class="col-sm-3 control-label">tag value范围</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_val" placeholder="tag对应多个值逗号分割，可留空"></div></div><div class="form-group"><label class="col-sm-3 control-label">tag key作用说明</label><div class="col-sm-9"><textarea style="height:120px;"  class="form-control" id="tag_comment"></textarea></div></div></form></div>';
 						mlk.alertBox({//启动弹窗
 							title: '新增 tagkey',
 							html: alertHtml,
@@ -273,40 +170,6 @@
 						});
 					});
 					
-					//删除tag
-					$('#remove_tag').bind('click',function(){
-						var tableEachTr = $('.table tbody tr input[type=checkbox]:checked'),
-							list = '';
-						if(tableEachTr.length > 0){//确保优选tag
-							tableEachTr.each(function(){
-							var thisId = $(this).parents('tr').attr('id');
-							list += thisId + ',';//拼接id	
-							});
-							list = list.substring(0,list.length-1);
-							mlk.ajax({
-								method: 'DELETE',
-								url: '/v1/tag_meta/' + list,
-								data: null,
-								isloading: true,
-								callback: function(da){
-									if(da.Success){
-										var domArray = [];
-										tableEachTr.each(function(){
-											var thisTr = $(this).parents('tr');
-											domArray.push(thisTr);	
-										});
-										mlk.removeDom({//删除dom
-											dom: domArray	
-										});	
-									}	
-								}
-							});
-						}
-						else{
-							alert('请选择需要删除的tag key！')	
-						}
-						
-					});
 					
 					//tag key详情
 					$('.table').on('click','.btn_machine_mess',function(){
@@ -319,7 +182,7 @@
 							isloading: true,
 							callback: function(da){
 								if(da){
-									var innerHtml = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="tag_name" class="col-sm-3 control-label">tag key</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_name" value="' + da.TagKey + '"></div></div><div class="form-group"><label for="tag_chinese" class="col-sm-3 control-label">tag名字</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_chinese" value="' + da.AliasName + '" placeholder="tag中文名字，可留空"></div></div><div class="form-group"><label for="is_allow" class="col-sm-3 control-label">是否必须</label><div class="col-sm-9"><input type="checkbox" id="is_allow" style="position:relative; top:7px;" ' + (da.AllowEmpty ? 'checked' : '') + '></div></div><div class="form-group"><label for="tag_comment" class="col-sm-3 control-label">tag value范围</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_val" value="' + da.Values + '" placeholder="tag对应多个值逗号分割，可留空"></div></div><div class="form-group"><label class="col-sm-3 control-label">tag key作用说明</label><div class="col-sm-9"><textarea style="height:120px;"  class="form-control" id="tag_comment">' + da.Comment + '</textarea></div></div></form></div>';
+                  var innerHtml = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="tag_name" class="col-sm-3 control-label">tag key</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_name" value="' + da.TagKey + '"></div></div><div class="form-group"><label for="tag_chinese" class="col-sm-3 control-label">tag名字</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_chinese" value="' + da.AliasName + '" placeholder="tag中文名字，可留空"></div></div><div class="form-group"><label for="is_allow" class="col-sm-3 control-label">允许留空?</label><div class="col-sm-9"><input type="checkbox" id="is_allow" style="position:relative; top:7px;" ' + (da.AllowEmpty ? 'checked' : '') + '></div></div><div class="form-group"><label for="tag_comment" class="col-sm-3 control-label">tag value范围</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_val" value="' + da.Values + '" placeholder="tag对应多个值逗号分割，可留空"></div></div><div class="form-group"><label class="col-sm-3 control-label">tag key作用说明</label><div class="col-sm-9"><textarea style="height:120px;"  class="form-control" id="tag_comment">' + da.Comment + '</textarea></div></div></form></div>';
 									mlk.alertBox({//启动弹窗
 										title: 'tag key详情',
 										html: innerHtml,
@@ -353,42 +216,6 @@
 								}
 							}
 						});
-					});
-					
-					mlk.editSelect({
-						dom: [$('.my_select'),$('.my_aaa')]	
-					});
-					
-					var globleNum = 0;
-					$('#add_list').bind('click',function(){
-						var addList = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="input1" class="col-sm-2 control-label">tag名字</label><div class="col-sm-8"><input type="text" class="form-control" id="tag_name"></div></div><div class="form-group"><label for="input1" class="col-sm-2 control-label">tag内容</label><div class="col-sm-8"><input type="text" class="form-control" id="tag_mess" placeholder="以逗号隔开"></div></div></form></div>'
-						mlk.alertBox({
-							title: '新增 tag',
-							html: addList,
-							btnfunc: function(obj){
-								var tagName = obj.parents('.mlk-alert-box-inner').find('#tag_name');
-								if(tagName.val()){
-									var tagNameVal = tagName.val(),
-										tagMessVal = obj.parents('.mlk-alert-box-inner').find('#tag_mess').val(),
-										listArray = tagMessVal.split(',');
-									var newLsit = $('#clone-list').clone();
-									newLsit.find('label').text(tagNameVal);
-									var allOption = '';
-									for(var i = 0; i < listArray.length; i++){
-										var newOption = '<option value="' + listArray[i] + '">' + listArray[i] + '</option>';	
-										allOption += newOption;
-									}
-									globleNum ++;
-									var tagId = 'new_tag' + globleNum;
-									newLsit.find('select').html(allOption).attr({'id':tagId,'name':tagId});
-									$('#tag_form').append(newLsit);
-									newLsit.slideDown();
-									mlk.editSelect({
-										dom: [newLsit.find('select')]	
-									});
-								}
-							}	
-						});	
 					});
 					
 					

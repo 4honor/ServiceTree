@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-        <title>服务树</title>
+        <title>系统注册</title>
     
         <!-- Bootstrap core CSS -->
         <link href="../../static//css/bootcss/css/bootstrap.css" rel="stylesheet">
@@ -33,25 +33,11 @@
         
         <div class="navbar-wrapper">
         	<div class="" style="background:none; padding-left:20px;">
-            	<img class="nav-img" src="../../static/images/Odin.jpg" height="60">
+            	<img class="nav-img" src="../../static/images/Odin.jpg" height="50">
                 <div class="left">
-                    <span class="left-word">滴滴打车</span>
-                    |
-                    <span class="right-word">业务监控平台</span>
+                    <span class="left-word">运维平台</span>
                 </div>
-            </div>
-        </div>
-        
-        <div class="cont_pad">
-           	<div class="mt20">
-                <ul class="nav nav-tabs">
-                    <li><a>Tag管理</a></li>
-                    <li class="active"><a>系统注册</a></li>
-                    <li><a>机器管理</a></li>
-                    <li><a>监控系统</a></li>
-                    <li><a>上线系统</a></li>
-                    <li><a>虚拟机管理</a></li>
-                </ul>
+                {{template "menu" .}}
             </div>
         </div>
         
@@ -60,7 +46,6 @@
             <div class="tree_cont">
             	<!--  内容区域  -->
             	<div class="show_formation">
-                	服务树结构显示：corp-depart-env-mod
                 </div>
                 <p class="mb20"><a class="btn btn-default" id="alert-btn">应用注册</a></p>
                 <table class="table table-bordered" style="margin-top:20px">
@@ -79,7 +64,7 @@
                         <tr>
                             <td>系统监控</td>
                             <td>系统监控</td>
-                            <td>余进秋</td>
+                            <td>俞进秋</td>
                             <td>xxxx</td>
                             <td>是</td>
                             <td>审批中</td>
@@ -114,8 +99,8 @@
 					
                     $('#alert-btn').click(function(){
                         mlk.alertBox({
-                            title: '新增 tagkey',
-                            html: '<div class="alertBox" style="padding-right: 20px ;padding-left: 5px"><form class="form-horizontal" role="form"><div class="form-group"><label for="Name" class="col-sm-2 control-label">app名称</label><div class="col-sm-10"><input type="text" class="form-control" id="Name" placeholder=""></div></div><div class="form-group"><label for="AliasName" class="col-sm-2 control-label">中文名</label><div class="col-sm-10"><input type="text" class="form-control" id="AliasName" placeholder=""></div></div><div class="form-group"><label for="TreeInteract" class="col-sm-3 control-label">是否联动服务树</label><div class="col-sm-9"><input type="checkbox" id="TreeInteract" style="position:relative; top:7px;"></div></div><div class="form-group"><label for="AuthorId" class="col-sm-2 control-label">系统负责人</label><div class="col-sm-10"><input type="text" class="form-control" id="AuthorId" placeholder=""></div></div><div class="form-group"><label for="Hierarychy" class="col-sm-2 control-label">服务树结构</label><div class="col-sm-10"><input type="text" class="form-control" id="Hierarychy" placeholder=""></div></div><div class="form-group"> <label for="Comment" class="col-sm-2 control-label">系统说明</label><div class="col-sm-10"><textarea class="form-control" rows="3" id="Comment" style="height:100px;"></textarea></div></div></form></div>',
+                            title: '应用注册',
+                            html: '<div class="alertBox" style="padding-right: 20px ;padding-left: 5px"><form class="form-horizontal" role="form"><div class="form-group"><label for="Name" class="col-sm-3 control-label">app名称</label><div class="col-sm-9"><input type="text" class="form-control" id="Name" placeholder=""></div></div><div class="form-group"><label for="AliasName" class="col-sm-3 control-label">中文名</label><div class="col-sm-9"><input type="text" class="form-control" id="AliasName" placeholder=""></div></div><div class="form-group"><label for="TreeInteract" class="col-sm-3 control-label">是否联动服务树</label><div class="col-sm-9"><input type="checkbox" id="TreeInteract" style="position:relative; top:7px;"></div></div><div class="form-group"><label for="AuthorId" class="col-sm-3 control-label">系统负责人</label><div class="col-sm-9"><input type="text" class="form-control" id="AuthorId" placeholder=""></div></div><div class="form-group"><label for="Hierarchy" class="col-sm-3 control-label">服务树层次结构</label><div class="col-sm-9"><input type="text" class="form-control" id="Hierarchy" placeholder="" value="{{.Hierarchy}}"></div></div><div class="form-group"> <label for="Comment" class="col-sm-3 control-label">系统说明</label><div class="col-sm-9"><textarea class="form-control" rows="3" id="Comment" style="height:100px;"></textarea></div></div></form></div>',
                             btnfunc: function(obj){
 								if($('#Name').val() && $('#AuthorId').val()){
 									var isTree = $('#TreeInteract')[0].checked ? 1 : 0,
@@ -123,7 +108,7 @@
 											AliasName: $('#AliasName').val(),
 											AuthorId: $('#AuthorId').val(),
 											Comment: $('#Comment').val(),
-											Hierarychy: $('#Hierarychy').val(),
+											Hierarchy: $('#Hierarchy').val(),
 											Name: $('#Name').val(),
 											TreeInteract: isTree
 										};

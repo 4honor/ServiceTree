@@ -42,7 +42,7 @@ func (this *TagMetaController) Post() {
             tag_values = strings.Split(strings.TrimRight(v.Values, ","), ",")
             for _, value := range tag_values {
                 fmt.Println("insert tag value into db, value:", value)
-                value_model.KeyId = id
+                value_model.KeyId = int(id)
                 value_model.Value = value
                 if id, err := models.AddTagValue(&value_model); err == nil {
                     fmt.Println("insert into db successfully")
@@ -64,13 +64,17 @@ func (this *TagMetaController) Post() {
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (this *TagMetaController) GetOne() {
+    var values string
 	idStr := this.Ctx.Input.Params[":id"]
 	id, _ := strconv.Atoi(idStr)
-	v, err := models.GetTagMetaById(id)
+	tag_key_model , err := models.GetTagMetaById(id)
+    values = models.GetTagAllValueByKeyId(id)
+    fmt.Println("get tag values with id:", id, "result:", values)
+    tag_key_model.Values = values
 	if err != nil {
 		this.Data["json"] = err.Error()
 	} else {
-		this.Data["json"] = v
+		this.Data["json"] = tag_key_model
 	}
 	this.ServeJson()
 }
@@ -120,14 +124,41 @@ func (this *TagMetaController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (this *TagMetaController) Put() {
+    var result libs.Result
+    var value_model models.TagValue
+    var tag_values []string
+
 	idStr := this.Ctx.Input.Params[":id"]
 	id, _ := strconv.Atoi(idStr)
 	v := models.TagMeta{Id: id}
 	json.Unmarshal(this.Ctx.Input.RequestBody, &v)
 	if err := models.UpdateTagMetaById(&v); err == nil {
-		this.Data["json"] = "OK"
+        result.Success = true
+        result.Msg = "OK"
+		this.Data["json"] =  result
+        //clear tag value first 
+        if err := models.DeleteTagValueByKeyId(id) ; err == nil {
+            //renew tag value
+            if v.Values != "" {
+                tag_values = strings.Split(strings.TrimRight(v.Values, ","), ",")
+                for _, value := range tag_values {
+                    fmt.Println("insert tag value into db, value:", value)
+                    value_model.KeyId = int(id)
+                    value_model.Value = value
+                    if id, err := models.AddTagValue(&value_model); err == nil {
+                        fmt.Println("insert into db successfully")
+                    }else{
+                        fmt.Println("insert into db failed, err:", err, "id:", id)
+                    }
+                }
+            } 
+        }else{
+            fmt.Println("delete error, error:", err)
+        }
 	} else {
-		this.Data["json"] = err.Error()
+        result.Success = false
+        result.Msg =  err.Error()
+		this.Data["json"] = result
 	}
 	this.ServeJson()
 }

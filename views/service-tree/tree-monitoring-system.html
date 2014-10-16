@@ -22,33 +22,6 @@
 			body,h2,h3,h4,h5,h6,p,a{
 				font-family:"Microsoft YaHei";
             }
-            .embody{
-                overflow: hidden;
-            }
-            .card{
-                width: 100%;
-                overflow: hidden;
-            }
-            .tree_cont_ul{ 
-                background: #f5f5f5; 
-                width: 100%; 
-                padding:10px 0; 
-                overflow: hidden;}
-            .tree_cont_ul li{ 
-                list-style: none; 
-                float: left; 
-                width: 100px; 
-                border-right: 2px solid #ccc; 
-                font-size: 16px;
-                text-align: center; 
-                cursor: pointer;
-            }
-            .tree_cont_ul li:last-child{ 
-                border-right: 0;
-            }
-            .current{
-                color: #ccf;
-            } 
         </style>
         <script data-main="../../static/lib/main" src="../../static/lib/require.js"></script>
         
@@ -57,26 +30,11 @@
         
         <div class="navbar-wrapper">
         	<div class="" style="background:none; padding-left:20px;">
-            	<img class="nav-img" src="../../static/images/Odin.jpg" height="60">
+            	<img class="nav-img" src="../../static/images/Odin.jpg" height="50">
                 <div class="left">
-                    <span class="left-word">滴滴打车</span>
-                    |
-                    <span class="right-word">业务监控平台</span>
+                    <span class="left-word">运维平台</span>
                 </div>
-            </div>
-        </div>
-        
-        <div class="cont_pad">
-           	<div class="mt20">
-                 <ul class="nav nav-tabs">
-                    <li><a>Tag管理</a></li>
-                    <li><a>系统注册</a></li>
-                    <li><a>机器管理</a></li>
-                    <li class="active"><a>监控系统</a></li>
-                    <li><a>上线系统</a></li>
-                    <li><a>虚拟机管理</a></li>
-                </ul>
-                <div class="clear"></div>
+                {{template "menu" .}}
             </div>
         </div>
         
@@ -84,51 +42,40 @@
             
             <div class="tree_cont">
             	<!--  内容区域  -->
-                <ul class="tree_cont_ul">
-                    <li class="current">监控列表</li>   
+                <ul class="tree_sec_menu" id="check_tab">
+                    <li class="active">监控列表</li>
                     <li>监控展示</li>
                     <li>监控添加</li>
                 </ul>
-                <div class="embody">
-                    <div class="card">
-                        <input type="button" name="" value="批量删除" class="btn btn-default" id="">
-                        <table class="table table-bordered" style="margin-top:20px" id="forSelect">
+                
+                <div class="odin_check_outer">
+                
+                    <div class="odin_check_inner" isshow="yes">
+                        <p class="mt20"><a class="btn btn-default" id="remove_sys">批量删除</a>
+                        <table class="table table-bordered">
                             <thead>
                                 <tr class="active">
                                     <th><input type="checkbox"></th>
                                     <th>监控名</th>
+                                    <th>类别</th>
                                     <th>查询</th>
-                                    <th>操作</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
+                            <tbody id="sys_list">
+                                <!--<tr>
                                     <td><input type="checkbox"></td>
                                     <td>api.nginx.status</td>
-                                    <td>监控详情</td>
-                                    <td>监控修改</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>api.php.error</td>
-                                    <td>监控详情</td>
-                                    <td>监控修改</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>api.php.error</td>
-                                    <td>监控详情</td>
-                                    <td>监控修改</td>
-                                </tr>
+                                    <td>aa</td>
+                                    <td><a class="sys_mess">监控详情</a></td>
+                                </tr>-->
+                                
                             </tbody>
                         </table>
                     </div>
-                    <div class="card" style=" background:red; display:none;" >
-                        111
-                    </div>
-                    <div class="card" style=" background:green; display:none;">
-                        222
-                    </div>
+                    
+                    <div class="odin_check_inner" isshow="no" style="display:none;">11</div>
+                    <div class="odin_check_inner" isshow="no" style="display:none;">222</div>
+                    
             	</div>
                 	
             </div>
@@ -157,96 +104,59 @@
 				}
 			});
 			
-			require(['jquery', 'zTree', 'milk', 'vtree'],function($, zTree, mlik, vtree){
+			require(['jquery', 'zTree', 'milk', 'vtree', 'datatables'],function($, zTree, mlik, vtree, datatables){
 				$(document).ready(function(){
 					
 					vtree.init();
+					
+					//拉取table
+					mlk.ajax({
+						method: 'GET',
+						url: '/v1/monitor/',
+						data: null, 
+						isloading: true,
+						callback: function(da){
+							if(da){
+								var tbodyTr = '';
+								for(var i = 0;i < da.length; i++){
+									var html = '<tr id="' + da[i].Id + '"><td><input type="checkbox"></td><td>' + da[i].Metric + '</td><td>' + da[i].Type + '</td><td><a class="sys_mess">监控详情</a></td></tr>';	
+									tbodyTr += html;
+								}
+								$('#sys_list').html(tbodyTr);
+								$('.table').DataTable();
+								mlk.tableInverse({//启动table全选反选
+									dom: $('.table')	
+								});
+							}
+						}
+					});
+					
+					//显示详情
+					$('.table').on('click','.sys_mess',function(){
+						var thisId = $(this).parents('tr').attr('id');
+						mlk.ajax({
+							method: 'GET',
+							url: '/v1/monitor/' + thisId,
+							data: null, 
+							isloading: true,
+							callback: function(da){
+								if(da){
+									var alertHtml = '<div style="padding:0 10px; margin-bottom:10px;"><table class="table table-bordered"><thead><tr class="active"><th>ID</th><th>metric</th><th>type</th><th>comment</th></tr></thead><tbody><tr><td>' + da.Id + '</td><td>' + da.Metric + '</td><td>' + da.Type + '</td><td>' + da.Comment + '</td></tr></tbody></table></div>';
+									mlk.alertBox({
+										title: '详情',
+										html: alertHtml,
+										btnfunc: function(obj){}
+									});
+								}
+							}
+						});
+					});
 
-                    /*function checkAll(id){
-
-                        var selectAll=$('#' + id +' thead input[type=checkbox]').eq(0); 
-                        var checkBox=$('#' + id +' tbody input[type=checkbox]');
-                        selectAll.attr('checkFlag','false');
-
-                        selectAll.bind('click',function(){
-                            if (selectAll.attr('checkFlag')=='false') {
-                                checkBox.each(function(){
-                                    this.checked=true;
-                                    selectAll.attr('checkFlag','true');
-                                })
-                            }else{
-                                checkBox.each(function(){
-                                    this.checked=false;
-                                    selectAll.attr('checkFlag','false');
-                                })   
-                            }
-                        })
-                        checkBox.bind('click',function(){
-                            checkBox.each(function(){
-                                if (this.checked==false) { 
-                                    selectAll[0].checked=false;
-                                    selectAll.attr('checkFlag','false');
-                                    return false; 
-                                }
-                                else{
-                                    selectAll[0].checked=true;
-                                    selectAll.attr('checkFlag','true');
-                                }    
-                            })
-                        }) 
-                    } */
-
-                    $('.tree_cont_ul li').bind('click',function(){
-
-                        var thisIndex=$(this).index();
-                        $(this).addClass('current').siblings().removeClass('current');
-                        $('.card').eq(thisIndex).show().siblings().hide();
-                        
-                    })
 				});
 			});
 
 
 
-        /*function checkAll(tableId){
-            var selectAll=document.getElementById(tableId).getElementsByTagName('thead')[0].getElementsByTagName('input')[0];
-            var checkBox=document.getElementById(tableId).getElementsByTagName('tbody')[0].getElementsByTagName('input');
-            selectAll.checkFlag='false';
-            selectAll.onclick=function(){
-                if (selectAll.checkFlag=='false') {
-                    for (var i = 0; i<checkBox.length; i++) {
-                        checkBox[i].checked=true;
-                        selectAll.checkFlag='true';
-                    }
-                }else{
-                    for (var i = 0; i<checkBox.length; i++) {
-                        checkBox[i].checked=false;
-                        selectAll.checkFlag='false';
-                    }
-                }
-            }
-            for(var i=0; i<checkBox.length; i++){   
-                checkBox[i].onclick=function(){
-                    judge();
-                }
-            }
-            function judge(){
-                for(var j=0; j<checkBox.length;){
-                    if (checkBox[j].checked==false) {   
-                        selectAll.checked=false;
-                        selectAll.checkFlag='false';
-                        return;
-                    }else {    
-                        j++;
-                        if (j==checkBox.length) {
-                            selectAll.checked=true;
-                            selectAll.checkFlag='true';
-                        };
-                    }
-                }
-            }
-        }
-         checkAll('forSelect');*/
 
             
             

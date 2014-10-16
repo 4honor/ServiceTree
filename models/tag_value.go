@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+    "strconv"
 
 	"github.com/astaxie/beego/orm"
 )
 
 type TagValue struct {
 	Id    int    `orm:"column(id);pk"`
-	KeyId int64 `orm:"column(key_id)"`
+	KeyId int `orm:"column(key_id)"`
 	Value string `orm:"column(value);size(255)"`
 }
 
@@ -36,6 +37,46 @@ func GetTagValueById(id int) (v *TagValue, err error) {
 		return v, nil
 	}
 	return nil, err
+}
+
+func GetTagValueByKey(tag_key string) []string {
+    o := orm.NewOrm()
+    var tag_list orm.ParamsList        
+    var tag_values []string
+
+    o.Raw("select value from tag_value ,  tag_meta where tag_meta.tag_key = ? and tag_meta.id = tag_value.key_id", tag_key).ValuesFlat(&tag_list)
+    for _, value := range  tag_list {
+        if v, ok := value.(string) ; ok {
+            tag_values = append(tag_values, v)
+        } else {
+            fmt.Println("warning:  convert to string failed.", ok)
+        }
+    }
+    return tag_values
+}
+
+// GetTagAllValueByKeyId 根据 tag key id 来获取对应的 tag value 列表
+// 如果不存在返回空字符
+func GetTagAllValueByKeyId(key_id int) string {
+    var values string
+    var fields []string
+    sortby := []string{"Value"}
+    order :=  []string{"asc"}
+    var offset  int64 = 0
+    var limit   int64 = 10
+    var query map[string]string = make(map[string]string)
+
+    query["KeyId"] = strconv.Itoa(key_id)
+    tag_list, err := GetAllTagValue(query, fields, sortby, order, offset, limit)
+    if  err == nil {
+        for _, value_model := range tag_list {
+            if tag , ok := value_model.(TagValue) ; ok {
+                values += tag.Value + ","
+            }
+        }
+        values = strings.TrimRight(values,",")
+    }
+    return values
 }
 
 // GetAllTagValue retrieves all TagValue matches certain condition. Returns empty list if
@@ -140,4 +181,15 @@ func DeleteTagValue(id int) (err error) {
 		}
 	}
 	return
+}
+
+
+func DeleteTagValueByKeyId(key_id int) (err error) {
+    o := orm.NewOrm() 
+    res, err := o.Raw("DELETE FROM tag_value WHERE key_id = ?", key_id).Exec()
+    if err == nil {
+        num, _ := res.RowsAffected()
+        fmt.Println("delete tag value affect nums : ", num)
+    }
+    return 
 }

@@ -29,25 +29,11 @@
         
         <div class="navbar-wrapper">
         	<div class="" style="background:none; padding-left:20px;">
-            	<img class="nav-img" src="../../static/images/Odin.jpg" height="60">
+            	<img class="nav-img" src="../../static/images/Odin.jpg" height="50">
                 <div class="left">
-                    <span class="left-word">滴滴打车</span>
-                    |
-                    <span class="right-word">业务监控平台</span>
+                    <span class="left-word">运维平台</span>
                 </div>
-            </div>
-        </div>
-        
-        <div class="cont_pad">
-           	<div class="mt20">
-                <ul class="nav nav-tabs">
-                    <li><a>Tag管理</a></li>
-                    <li><a>系统注册</a></li>
-                    <li class="active"><a>机器管理</a></li>
-                    <li><a>监控系统</a></li>
-                    <li><a>上线系统</a></li>
-                    <li><a>虚拟机管理</a></li>
-                </ul>
+                {{template "menu" .}}
             </div>
         </div>
         
@@ -55,12 +41,12 @@
             
             <div class="tree_cont">
             	<!--  内容区域  -->
-                <div class="tree_cont_title"><div>节点坐标：</div><div>corp:xiaoju,depart:env</div></div>
+                <div class="tree_cont_title"><div>节点坐标：</div><div id="machine_drop">corp:xiaoju</div></div>
                 
                 <p class="tree_cont_btn_outer">
-                	<a class="btn btn-default">批量导入</a>
-                    <a class="btn btn-default">批量下线</a>
-                    <a class="btn btn-default">节点调整</a>
+                	<a class="btn btn-default" id="bulk_import">批量导入</a>
+                    <a class="btn btn-default" id="bulk_production">批量下线</a>
+                    <a class="btn btn-default" id="adjustment">节点调整</a>
                 </p>
                 
                 <table class="table table-bordered">
@@ -72,25 +58,7 @@
                             <th>操作</th>
                         </tr>
                     </thead>
-                    <tbody>
-                    	<tr>
-                        	<td><input type="checkbox"></td>
-                            <td>web01.qq</td>
-                            <td>机器详情</td>
-                            <td>机器改名</td>
-                        </tr>
-                        <tr>
-                        	<td><input type="checkbox"></td>
-                            <td>web02.qq</td>
-                            <td>机器详情</td>
-                            <td>机器改名</td>
-                        </tr>
-                        <tr>
-                        	<td><input type="checkbox"></td>
-                            <td>web03.qq</td>
-                            <td>机器详情</td>
-                            <td>机器改名</td>
-                        </tr>
+                    <tbody id="machine_table">
                     </tbody>
                 </table>
                     
@@ -124,7 +92,60 @@
 				$(document).ready(function(){
 					
 					vtree.init();
-					$('.table').dataTable();
+					
+					var myDatatable;//datatable对象
+					
+					//拉取table
+					mlk.ajax({
+						method: 'GET',
+						url: '/v1/machine/' + $('#machine_drop').text(),
+						data: null, 
+						isloading: true,
+						callback: function(da){
+							if(da){
+								var tableTr = '';
+								for(var i = 0; i < da.length; i++){
+									var html = '<tr id="' + da[i].Id + '"><td><input type="checkbox"></td><td>' + da[i].Name + '</td><td><a class="mach_mess">机器详情</a></td><td><a class="mach_name">机器改名</a></td></tr>';
+									tableTr += html;	
+								}
+								$('#machine_table').html(tableTr);
+								myDatatable = $('.table').DataTable();
+								mlk.tableInverse({//启动table全选反选
+									dom: $('.table')	
+								});	
+							}	
+						}
+					});
+					
+					//批量导入
+					$('#bulk_import').bind('click',function(){
+						var alertHtml = '<div style="padding:0 10px;"><textarea class="form-control tag_textarea mb10" placeholder="机器列表，一行一台机器" style="width:100%;margin-top:10px;"></textarea></div>';
+						mlk.alertBox({//启动弹窗
+							title: '批量导入',
+							html: alertHtml,
+							btnfunc: function(obj){
+								
+							}
+						});
+					});
+					
+					//节点调整
+					$('#adjustment').bind('click',function(){
+						var alertHtml = '';
+						mlk.alertBox({//启动弹窗
+							title: '节点调整',
+							html: alertHtml,
+							btnfunc: function(obj){
+								
+							}
+						});	
+					});
+					
+					//监听节点坐标的变化
+					$('#machine_drop').bind('DOMNodeInserted',function(e){
+						alert(0)
+					});
+					
 				});
 			
 			});
