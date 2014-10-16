@@ -42,19 +42,18 @@ func (this *TagValueController) Post() {
 
 // @Title Get
 // @Description get TagValue by id
-// @Param	id		path 	string	true		"The key for staticblock"
+// @Param	tagk		path 	string	true		"需要查询tag value的 tag key条件"
 // @Success 200 {object} models.TagValue
 // @Failure 403 :id is empty
-// @router /:id [get]
+// @router /:tagk:string [get]
 func (this *TagValueController) GetOne() {
-	idStr := this.Ctx.Input.Params[":id"]
-	id, _ := strconv.Atoi(idStr)
-	v, err := models.GetTagValueById(id)
-	if err != nil {
-		this.Data["json"] = err.Error()
-	} else {
-		this.Data["json"] = v
-	}
+    var tag_value []string = []string{}
+	tagk := this.Ctx.Input.Params[":tagk"]
+    tag_value = models.GetTagValueByKey(tagk)
+    if len(tag_value) == 0 {
+        tag_value = append(tag_value, "")
+    }
+    this.Data["json"]  = tag_value
 	this.ServeJson()
 }
 

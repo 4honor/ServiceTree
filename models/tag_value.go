@@ -39,6 +39,22 @@ func GetTagValueById(id int) (v *TagValue, err error) {
 	return nil, err
 }
 
+func GetTagValueByKey(tag_key string) []string {
+    o := orm.NewOrm()
+    var tag_list orm.ParamsList        
+    var tag_values []string
+
+    o.Raw("select value from tag_value ,  tag_meta where tag_meta.tag_key = ? and tag_meta.id = tag_value.key_id", tag_key).ValuesFlat(&tag_list)
+    for _, value := range  tag_list {
+        if v, ok := value.(string) ; ok {
+            tag_values = append(tag_values, v)
+        } else {
+            fmt.Println("warning:  convert to string failed.", ok)
+        }
+    }
+    return tag_values
+}
+
 // GetTagAllValueByKeyId 根据 tag key id 来获取对应的 tag value 列表
 // 如果不存在返回空字符
 func GetTagAllValueByKeyId(key_id int) string {
