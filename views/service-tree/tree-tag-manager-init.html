@@ -53,11 +53,11 @@
                 <div class="odin_check_outer">
                     
                     <div class="odin_check_inner">
-                    	<textarea class="form-control tag_textarea left" placeholder="机器列表，一行一台机器(需验证！)"></textarea><!--  1111&#10;2222  -->
+                    	<textarea class="form-control tag_textarea left"disabled placeholder="机器列表，一行一台机器(需验证！)"></textarea><!--  1111&#10;2222  -->
                         <a class="btn btn-default left ml10 mr10" id="btn_check_result" style="margin-top:130px;" title="验证">
                             <span class="glyphicon glyphicon-arrow-right"></span>
                         </a>
-                        <textarea class="form-control tag_textarea left" disabled placeholder="验证结果"></textarea>
+                        <textarea class="form-control tag_textarea left"  id="add_machine" placeholder="验证结果"></textarea>
                         <div class="tag_select_outer mb20 clear">
                         	<h3>选择 tag</h3>
                             <div class="tag_select">
@@ -70,7 +70,7 @@
                                 </datalist>-->
                                 <form class="form-horizontal" role="form" id="tag_form">
                                 	<!--  隐藏一个做复制  -->
-                                	<div class="form-group" id="clone-list" style="display:none;">
+                                	<div class="form-group new_group" id="clone-list" style="display:none;">
                                         <label for="inputEmail3" class="col-sm-2 control-label"></label>
                                         <div class="col-sm-10">
                                             <select class="form-control" id="" name="">
@@ -95,11 +95,14 @@
                                     <a class="btn btn-default right mb10" id="add_list" title="新增一条">
                                         <span class="glyphicon glyphicon-plus"></span>
                                     </a>
+                                    <a class="btn btn-default right mb10 mr10" id="remove_list" title="删除一条">
+                                        <span class="glyphicon glyphicon-minus"></span>
+                                    </a>
                                 </p>
                             </div>
                         </div>
                         
-                        <p class="tag_btn_outer"><a class="btn btn-primary right">确定</a></p>
+                        <p class="tag_btn_outer"><a class="btn btn-primary right" id="tag_init_sub">确定</a></p>
                     </div>
                     
                 </div>
@@ -136,51 +139,162 @@
 					
 					vtree.init();
 					
-					mlk.editSelect({
+					mlk.editSelect({//开启下拉可编辑
 						dom: [$('.my_select')],
 						isdele: false
 					});
 					
+					//全局变量 用于存储验证返回的json
+					var globleJson = [{"SysId":11,"ResourceId":4,"Name":"aaaa"},{"SysId":11,"ResourceId":5,"Name":"ccc"}];
+					
+					//新增
 					var globleNum = 0;//添加select id为了mlk.editSelect 插件遍历
 					$('#add_list').bind('click',function(){
-            var Myselect = '<select class="form-control" id="tag_name">{{range $key, $val := .OptionalKeys }}<option value="{{$val}}">{{$val}}</option>{{end}}</select>',
-							addList = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="input1" class="col-sm-2 control-label">tag key</label><div class="col-sm-8">' + Myselect + '</div></div><div class="form-group"><label for="input1" class="col-sm-2 control-label">tag value</label><div class="col-sm-8"><input type="text" class="form-control" id="tag_mess" placeholder="以逗号隔开"></div></div></form></div>';
+						var Myselect = '<select class="form-control" id="tag_name"><option></option>{{range $key, $val := .OptionalKeys }}<option value="{{$val}}">{{$val}}</option>{{end}}</select>',
+							addList = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="input1" class="col-sm-2 control-label">tag key</label><div class="col-sm-8">' + Myselect + '</div></div><div class="form-group"><label for="input1" class="col-sm-2 control-label">tag value</label><div class="col-sm-8"><select class="form-control" id="tag_mess"></select></div></div></form></div>';
 						mlk.alertBox({
 							title: '新增 tag',
 							html: addList,
 							btnfunc: function(obj){
-								var tagName = obj.parents('.mlk-alert-box-inner').find('#tag_name');
-								if(tagName.val()){
-									var tagNameVal = tagName.val(),
-										tagMessVal = obj.parents('.mlk-alert-box-inner').find('#tag_mess').val(),
-										listArray = tagMessVal.split(',');
-									var newLsit = $('#clone-list').clone();
-									newLsit.find('label').text(tagNameVal);
-									var allOption = '';
-									for(var i = 0; i < listArray.length; i++){
-										var newOption = '<option value="' + listArray[i] + '">' + listArray[i] + '</option>';	
-										allOption += newOption;
+								var tagName = obj.parents('.mlk-alert-box-inner').find('#tag_name'),
+									tagNameVl = tagName.val(),
+									allTagList = $('#tag_form .form-group label'),
+									canBegin = true;
+								allTagList.each(function(){
+									if($(this).text() == tagNameVl){
+										canBegin = false;
+										return false;	
+									}	
+								});
+								
+								if(canBegin){//判断是否添加重复的tag
+									if(tagNameVl){
+										var tagNameVal = tagName.val(),
+											tagMessVal = obj.parents('.mlk-alert-box-inner').find('#tag_mess').val(),
+											listArray = tagMessVal.split(',');
+										var newLsit = $('#clone-list').clone();
+										newLsit.find('label').text(tagNameVal);
+										var allOption = '';
+										for(var i = 0; i < listArray.length; i++){
+											var newOption = '<option value="' + listArray[i] + '">' + listArray[i] + '</option>';	
+											allOption += newOption;
+										}
+										globleNum ++;
+										var tagId = 'new_tag' + globleNum;
+										newLsit.find('select').html(allOption).attr({'id':tagId,'name':tagId});
+										$('#tag_form').append(newLsit);
+										newLsit.slideDown();
+										mlk.editSelect({
+											dom: [newLsit.find('select')]	
+										});
 									}
-									globleNum ++;
-									var tagId = 'new_tag' + globleNum;
-									newLsit.find('select').html(allOption).attr({'id':tagId,'name':tagId});
-									$('#tag_form').append(newLsit);
-									newLsit.slideDown();
-									mlk.editSelect({
-										dom: [newLsit.find('select')]	
-									});
 								}
+								else{
+									alert('请勿重复添加tag');	
+								}
+								
 							}	
+						});	
+					});
+					
+					//删除
+					$('#remove_list').bind('click',function(){
+						if($('#tag_form .form-group:last.new_group').length < 1){
+							alert('只能删除新增tag！');
+							return false;
+						}
+						$('#tag_form .form-group:last.new_group').slideUp(300,function(){
+							$(this).remove();	
 						});	
 					});
 					
 					//弹出 加载value
 					$(document).on('change','#tag_name',function(){
-						
+						var thisVal = $(this).val();
+						if(thisVal){
+							mlk.ajax({
+								method: 'GET',
+								url: '/v1/tag_value/' + thisVal,
+								data: null, 
+								isloading: false,
+								callback: function(da){
+									if(da){	
+										var alloption = '';
+										for(var i = 0; i < da.length; i++){
+											var html = '<option value="' + da[i] + '">' + da[i] + '</option>';	
+											alloption += html;
+										}
+										$('#tag_mess').html(alloption);
+									}	
+								}
+							});
+						}
 					});
 					
+					//var c = a.concat( b );合并数组
+					
+					//提交
+					$('#tag_init_sub').bind('click',function(){
+						var allINput = $('#tag_form input'),
+							isSub = true;
+						allINput.each(function(){
+							if(!$(this).val()){
+								isSub = false;
+								return false;	
+							}	
+						});	
+						
+						if(isSub && $('#add_machine').val()){
+							var machineArray = $('#add_machine').val().split('\n'),
+								allJson = [];
+							//解析选择tag栏
+							$('#tag_form .form-group').each(function(){
+								var thisIndex = $(this).index();
+								if(thisIndex > 0){//排除第一个
+									var label = $(this).find('label').text(),
+										val = $(this).find('input').val(),
+										jsonString = {
+											Key: label,
+											Value: val	
+										};
+									allJson.push(jsonString); 
+								}
+							});	
+							//重新组成提交json
+							var newJson = [];
+							for(var i = 0; i < globleJson.length; i++){
+								var eachJson = {
+									SysId: globleJson[i].SysId,
+									ResourceId: globleJson[i].ResourceId,
+									Tags: allJson
+								};
+								newJson.push(eachJson);	
+							}
+							
+							//提交ajax
+							mlk.ajax({//发送ajax
+								method: 'POST',
+								url: '/v1/tagging/',
+								data: JSON.stringify(newJson),
+								contentType: "application/json; charset=utf-8",
+								dataType: "json", 
+								isloading: true,
+								callback: function(da){
+									if(da.Success){
+										alert('提交成功！');	
+									}	
+								}
+							});
+						}
+						else{
+							alert('请填写内容');	
+						}
+					});
+					
+					$('#add_machine').val().split('\n')
+					
+					
 				});
-			
 			});
 			
         </script>
