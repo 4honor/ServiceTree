@@ -53,11 +53,11 @@
                 <div class="odin_check_outer">
                     
                     <div class="odin_check_inner">
-                    	<textarea class="form-control tag_textarea left"disabled placeholder="机器列表，一行一台机器(需验证！)"></textarea><!--  1111&#10;2222  -->
+                    	<textarea class="form-control tag_textarea left" id="old_machine" placeholder="机器列表，一行一台机器(需验证！)"></textarea><!--  1111&#10;2222  -->
                         <a class="btn btn-default left ml10 mr10" id="btn_check_result" style="margin-top:130px;" title="验证">
                             <span class="glyphicon glyphicon-arrow-right"></span>
                         </a>
-                        <textarea class="form-control tag_textarea left"  id="add_machine" placeholder="验证结果"></textarea>
+                        <textarea class="form-control tag_textarea left" disabled  id="add_machine" placeholder="验证结果"></textarea>
                         <div class="tag_select_outer mb20 clear">
                         	<h3>选择 tag</h3>
                             <div class="tag_select">
@@ -145,7 +145,8 @@
 					});
 					
 					//全局变量 用于存储验证返回的json
-					var globleJson = [{"SysId":11,"ResourceId":4,"Name":"aaaa"},{"SysId":11,"ResourceId":5,"Name":"ccc"}];
+					var globleJson = [];
+					//[{"SysId":11,"ResourceId":4,"Name":"aaaa"},{"SysId":11,"ResourceId":5,"Name":"ccc"}]
 					
 					//新增
 					var globleNum = 0;//添加select id为了mlk.editSelect 插件遍历
@@ -291,7 +292,41 @@
 						}
 					});
 					
-					$('#add_machine').val().split('\n')
+					//验证
+					$('#btn_check_result').bind('click',function(){
+						var checVal = $('#old_machine').val().split('\n'),
+							postArray = [],
+							sysId = 2;//
+						for(var i = 0; i < checVal.length; i++){
+							var json = {
+								SysId: sysId,
+								Name: checVal[i]	
+							};
+							postArray.push(json);	
+						}
+						mlk.ajax({//发送ajax
+							method: 'POST',
+							url: '/v1/resource/',
+							data: JSON.stringify(postArray),
+							contentType: "application/json; charset=utf-8",
+							dataType: "json", 
+							isloading: true,
+							callback: function(da){
+								if(da){
+									globleJson = globleJson.concat(da);	
+									var allName = '';
+									for(var i = 0; i < da.length; i++){
+										var innerMess = da[i].Name + '\n';
+										allName += innerMess;
+									}
+									var oldVal = $('#add_machine').val();
+									$('#add_machine').val(oldVal + allName);
+								}	
+							}
+						});
+					});
+					
+					
 					
 					
 				});
