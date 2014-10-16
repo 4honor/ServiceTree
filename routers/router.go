@@ -49,6 +49,12 @@ func init() {
 			),
 		),
 
+        beego.NSNamespace("/resource",
+            beego.NSInclude(
+                &controllers.ResourceController{},
+            ),
+        ),
+
 		beego.NSNamespace("/subsys",
 			beego.NSInclude(
 				&controllers.SubsysController{},
