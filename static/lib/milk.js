@@ -285,7 +285,7 @@
 							inputMask = $('<div class="mlk-edit-mask"></div>'),
 							inputSpan = $('<span class="mlk-edit-down"></span>'),
 							inputDele = $('<span class="glyphicon glyphicon-remove mlk-edit-remove" title="删除该条选项"></span>'),
-							newInput = $('<input type="text" autocomplete="off">'),
+							newInput = $('<input type="text" autocomplete="off" placeholder="可选择，可新增">'),
 							newDatalist = $('<datalist style="display:none;"></datalist>');
 						newInput.attr({'id':oldId,'name':oldName,'list':oldId+'_list','class':oldClass});
 						newDatalist.attr('id',oldId+'_list').html(oldOption);

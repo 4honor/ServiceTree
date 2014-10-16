@@ -115,7 +115,7 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 				});
 			}
 			else{
-				alert('请选择需要删除的机器！')	
+				alert('请选择需要删除的内容！')	
 			}	
 		}
 		
