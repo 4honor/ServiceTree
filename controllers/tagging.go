@@ -31,7 +31,9 @@ func (this *TaggingController) Post() {
 	json.Unmarshal(this.Ctx.Input.RequestBody, &v)
     fmt.Printf("start add tagging, with input : %+v\n", v)
 	if id := models.AddTagging(v); id != -1 {
-		this.Data["json"] = map[string]int64{"id": id}
+        result.Success = true
+        result.Msg = "打 Tag成功"
+		this.Data["json"] = result
 	} else {
         result.Msg = "failed"
         result.Success = false
