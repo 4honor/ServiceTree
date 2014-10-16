@@ -145,3 +145,17 @@ func DeleteSubsys(id int) (err error) {
 	}
 	return
 }
+
+// Get default sys hierarychy
+func  DefaultHierarchy() string{
+    o := orm.NewOrm() 
+    var  lists []orm.ParamsList
+    // name = 'tag' for tag manage sys
+    num, err := o.Raw("SELECT hierarychy from subsys WHERE name = 'tag'").ValuesList(&lists)
+    if err == nil && num > 0 {
+        if v, ok := lists[0][0].(string) ; ok {
+            return v
+        }
+    }
+    return ""
+}

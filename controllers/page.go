@@ -1,6 +1,7 @@
 package controllers
 
 import (
+    "ServiceTree/models"
 	"github.com/astaxie/beego"
 )
 
@@ -36,13 +37,14 @@ func (this *PageController) Get() {
         case "tag":
             menus[0].Status = "active"
             this.Data["Menus"] = menus
-            this.Data["Hierarchy"] = "corp,depart"
+            tags := getTags() 
+            this.Data["Tags"] = tags
+            this.Data["Hierarchy"] = models.DefaultHierarchy()
             this.Layout = "service-tree/tree-tag-manager.html"
         case "subsys":
             menus[1].Status = "active"
             this.Data["Menus"] = menus
-            this.Data["Hierarchy"] = "corp,depart"
-            this.Data["Title"] = "Test"
+            this.Data["Hierarchy"] = models.DefaultHierarchy()
             this.Layout = "service-tree/tree-register.html"
         case "machine":
             menus[2].Status = "active"
@@ -55,7 +57,19 @@ func (this *PageController) Get() {
         default:
             menus[0].Status = "active"
             this.Data["Menus"] = menus
-            this.Data["Hierarchy"] = "corp,depart"
+            this.Data["Hierarchy"] = models.DefaultHierarchy()
             this.Layout = "service-tree/tree-tag-manager.html"
     }
+}
+
+func getTags() []models.Tag {
+    var tags []models.Tag
+    var tag  models.Tag
+    keys := models.MustKeys()     
+    for _, key := range keys {
+        values := models.GetTagValueByKey(key)
+        tag = models.Tag{Key:key,Value:values}
+        tags = append(tags, tag)
+    }
+    return tags
 }
