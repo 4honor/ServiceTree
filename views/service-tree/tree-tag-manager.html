@@ -95,42 +95,18 @@
                                         </div>
                                     </div>
                                     <!--  end  -->
+                                    {{range $key,  $val := .Tags}}
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-2 control-label">corp</label>
+                                      <label class="col-sm-2 control-label">{{$val.Key}}</label>
                                         <div class="col-sm-10">
-                                            <select class="form-control my_select" id="aaa" name="aaa">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
+                                          <select class="form-control my_select" id="{{$val.Key}}" name="{{$val.Key}}">
+                                            {{range $key,  $value := $val.Value}}
+                                            <option value="{{$value}}">{{$value}}</option>
+                                            {{end}}
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-2 control-label">env</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control my_aaa" id="bbb" name="bbb">
-                                                <option value="0">0</option>
-                                                <option value="0">0</option>
-                                                <option value="0">0</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-2 control-label">env</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control my_aaa" id="ccc" name="ccc">
-                                                <option value="0">0</option>
-                                                <option value="0">0</option>
-                                                <option value="0">0</option>
-                                                <option value="4">4</option>
-                                                <option value="1111">1111</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                    {{end}}
                                 </form>
                                 <p>
                                     <a class="btn btn-default right mb10" id="add_list" title="新增一条">
@@ -202,7 +178,7 @@
 					
 					//新增tag
 					$('#add_new_tag').bind('click',function(){
-						var alertHtml = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="tag_name" class="col-sm-3 control-label">tag key</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_name"></div></div><div class="form-group"><label for="tag_chinese" class="col-sm-3 control-label">tag名字</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_chinese" placeholder="tag中文名字，可留空"></div></div><div class="form-group"><label for="is_allow" class="col-sm-3 control-label">是否必须</label><div class="col-sm-9"><input type="checkbox" id="is_allow" style="position:relative; top:7px;"></div></div><div class="form-group"><label for="tag_comment" class="col-sm-3 control-label">tag value范围</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_val" placeholder="tag对应多个值逗号分割，可留空"></div></div><div class="form-group"><label class="col-sm-3 control-label">tag key作用说明</label><div class="col-sm-9"><textarea style="height:120px;"  class="form-control" id="tag_comment"></textarea></div></div></form></div>';
+						var alertHtml = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="tag_name" class="col-sm-3 control-label">tag key</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_name"></div></div><div class="form-group"><label for="tag_chinese" class="col-sm-3 control-label">tag名字</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_chinese" placeholder="tag中文名字，可留空"></div></div><div class="form-group"><label for="is_allow" class="col-sm-3 control-label">允许为空?</label><div class="col-sm-9"><input type="checkbox" id="is_allow" style="position:relative; top:7px;"></div></div><div class="form-group"><label for="tag_comment" class="col-sm-3 control-label">tag value范围</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_val" placeholder="tag对应多个值逗号分割，可留空"></div></div><div class="form-group"><label class="col-sm-3 control-label">tag key作用说明</label><div class="col-sm-9"><textarea style="height:120px;"  class="form-control" id="tag_comment"></textarea></div></div></form></div>';
 						mlk.alertBox({//启动弹窗
 							title: '新增 tagkey',
 							html: alertHtml,
@@ -253,7 +229,7 @@
 							isloading: true,
 							callback: function(da){
 								if(da){
-									var innerHtml = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="tag_name" class="col-sm-3 control-label">tag key</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_name" value="' + da.TagKey + '"></div></div><div class="form-group"><label for="tag_chinese" class="col-sm-3 control-label">tag名字</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_chinese" value="' + da.AliasName + '" placeholder="tag中文名字，可留空"></div></div><div class="form-group"><label for="is_allow" class="col-sm-3 control-label">是否必须</label><div class="col-sm-9"><input type="checkbox" id="is_allow" style="position:relative; top:7px;" ' + (da.AllowEmpty ? 'checked' : '') + '></div></div><div class="form-group"><label for="tag_comment" class="col-sm-3 control-label">tag value范围</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_val" value="' + da.Values + '" placeholder="tag对应多个值逗号分割，可留空"></div></div><div class="form-group"><label class="col-sm-3 control-label">tag key作用说明</label><div class="col-sm-9"><textarea style="height:120px;"  class="form-control" id="tag_comment">' + da.Comment + '</textarea></div></div></form></div>';
+                  var innerHtml = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="tag_name" class="col-sm-3 control-label">tag key</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_name" value="' + da.TagKey + '"></div></div><div class="form-group"><label for="tag_chinese" class="col-sm-3 control-label">tag名字</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_chinese" value="' + da.AliasName + '" placeholder="tag中文名字，可留空"></div></div><div class="form-group"><label for="is_allow" class="col-sm-3 control-label">允许留空?</label><div class="col-sm-9"><input type="checkbox" id="is_allow" style="position:relative; top:7px;" ' + (da.AllowEmpty ? 'checked' : '') + '></div></div><div class="form-group"><label for="tag_comment" class="col-sm-3 control-label">tag value范围</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_val" value="' + da.Values + '" placeholder="tag对应多个值逗号分割，可留空"></div></div><div class="form-group"><label class="col-sm-3 control-label">tag key作用说明</label><div class="col-sm-9"><textarea style="height:120px;"  class="form-control" id="tag_comment">' + da.Comment + '</textarea></div></div></form></div>';
 									mlk.alertBox({//启动弹窗
 										title: 'tag key详情',
 										html: innerHtml,
