@@ -45,14 +45,14 @@
                     <a class="btn btn-default active">Tag变更</a>
                     <a class="btn btn-default">初始化Tag</a>
                 </div>-->
-                <ul class="tree_sec_menu" id="check_tab">
+                <ul class="tree_sec_menu">
                     <li class="active">Tag变更</li>
-                    <li>初始化Tag</li>
+                    <li><a href="">初始化Tag</a></li>
                 </ul>
                 
                 <div class="odin_check_outer">
                 	<!-- 第一部分 -->
-                    <div class="odin_check_inner" isshow="yes" style="display:none;">
+                    <div class="odin_check_inner">
                     	<div class="tree_cont_title"><div>服务树显示结构：</div><div id="tag_show">{{.Hierarchy}}</div></div>
                         <p class="tree_cont_btn_outer">
                             <a class="btn btn-default" id="add_new_tag">新增tagk</a>
@@ -70,57 +70,6 @@
                             </tbody>
                         </table>
                         
-                    </div>
-                    
-                    <!-- 第二部分 -->
-                    <div class="odin_check_inner" isshow="no">
-                    	<textarea class="form-control tag_textarea left" placeholder="机器列表，一行一台机器(需验证！)"></textarea><!--  1111&#10;2222  -->
-                        <a class="btn btn-default left ml10 mr10" id="btn_check_result" style="margin-top:130px;" title="验证">
-                            <span class="glyphicon glyphicon-arrow-right"></span>
-                        </a>
-                        <textarea class="form-control tag_textarea left" disabled placeholder="验证结果"></textarea>
-                        <div class="tag_select_outer mb20 clear">
-                        	<h3>选择 tag</h3>
-                            <div class="tag_select">
-                                <!--<input type="text" class="form-control" id="tag" list="tag_list" autocomplete="off">
-                                <datalist id="tag_list" style="display:none;">
-                                    <option value="aaa">aaa</option>
-                                    <option value="bbb">bbb</option>
-                                    <option value="ccc">ccc</option>
-                                    <option value="ddd">ddd</option>
-                                </datalist>-->
-                                <form class="form-horizontal" role="form" id="tag_form">
-                                	<!--  隐藏一个做复制  -->
-                                	<div class="form-group" id="clone-list" style="display:none;">
-                                        <label for="inputEmail3" class="col-sm-2 control-label"></label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control" id="" name="">
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <!--  end  -->
-                                    {{range $key,  $val := .Tags}}
-                                    <div class="form-group">
-                                      <label class="col-sm-2 control-label">{{$val.Key}}</label>
-                                        <div class="col-sm-10">
-                                          <select class="form-control my_select" id="{{$val.Key}}" name="{{$val.Key}}">
-                                            {{range $key,  $value := $val.Value}}
-                                            <option value="{{$value}}">{{$value}}</option>
-                                            {{end}}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    {{end}}
-                                </form>
-                                <p>
-                                    <a class="btn btn-default right mb10" id="add_list" title="新增一条">
-                                        <span class="glyphicon glyphicon-plus"></span>
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                        
-                        <p class="tag_btn_outer"><a class="btn btn-primary right">确定</a></p>
                     </div>
                     
                 </div>
@@ -267,46 +216,6 @@
 								}
 							}
 						});
-					});
-					
-					//初始化tag 抓取tag value
-					mlk
-					
-					/*mlk.editSelect({
-						dom: [$('.my_select'),$('.my_aaa')]	,
-						isdele: false
-					});*/
-					
-					var globleNum = 0;//添加select id为了mlk.editSelect 插件遍历
-					$('#add_list').bind('click',function(){
-						var addList = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="input1" class="col-sm-2 control-label">tag key</label><div class="col-sm-8"><select class="form-control" id="tag_name"><option value="1">1</option><option value="2">2</option></select></div></div><div class="form-group"><label for="input1" class="col-sm-2 control-label">tag value</label><div class="col-sm-8"><input type="text" class="form-control" id="tag_mess" placeholder="以逗号隔开"></div></div></form></div>';
-						mlk.alertBox({
-							title: '新增 tag',
-							html: addList,
-							btnfunc: function(obj){
-								var tagName = obj.parents('.mlk-alert-box-inner').find('#tag_name');
-								if(tagName.val()){
-									var tagNameVal = tagName.val(),
-										tagMessVal = obj.parents('.mlk-alert-box-inner').find('#tag_mess').val(),
-										listArray = tagMessVal.split(',');
-									var newLsit = $('#clone-list').clone();
-									newLsit.find('label').text(tagNameVal);
-									var allOption = '';
-									for(var i = 0; i < listArray.length; i++){
-										var newOption = '<option value="' + listArray[i] + '">' + listArray[i] + '</option>';	
-										allOption += newOption;
-									}
-									globleNum ++;
-									var tagId = 'new_tag' + globleNum;
-									newLsit.find('select').html(allOption).attr({'id':tagId,'name':tagId});
-									$('#tag_form').append(newLsit);
-									newLsit.slideDown();
-									mlk.editSelect({
-										dom: [newLsit.find('select')]	
-									});
-								}
-							}	
-						});	
 					});
 					
 					

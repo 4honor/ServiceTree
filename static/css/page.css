@@ -392,8 +392,11 @@ table.dataTable tbody th, table.dataTable tbody td{
 	border-right:1px solid #ccc;
 	color:#2a6496;
 	text-align:center;
-	cursor:pointer;}	
-.tree_sec_menu li:hover{
+	cursor:pointer;}
+.tree_sec_menu li a{
+	display:block;
+	color:#2a6496;}	
+.tree_sec_menu li a:hover{
 	color:#000;}
 .tree_sec_menu li.active{
 	color:#000;
