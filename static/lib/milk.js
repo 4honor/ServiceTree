@@ -49,8 +49,8 @@
 				if(opts.isloading){
 					clearTimeout(timer);
 					loadHtml.remove();
-					opts.callback(da);
 				}
+				opts.callback(da);
 			}
 		});
 	}
