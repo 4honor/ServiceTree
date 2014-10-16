@@ -261,7 +261,7 @@
 		newFunc.init(opts);	
 	}
 	
-	//{dom:[a,b,c]}
+	//{dom:[a,b,c],isdele:true}
 	mlk.editSelect = function(opts){
 		var innerFunction = function(){};
 		innerFunction.prototype = {
@@ -297,7 +297,10 @@
 						selectParent.append(inputOuter);
 						selectParent.append(newDatalist);
 						that.bindEdit(newInput);
-						that.bindDele(newInput);
+						var isDele = opts.isdele;
+						if(isDele){
+							that.bindDele(newInput);
+						}
 					});
 				}
 			},

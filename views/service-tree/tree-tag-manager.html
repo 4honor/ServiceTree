@@ -52,7 +52,7 @@
                 
                 <div class="odin_check_outer">
                 	<!-- 第一部分 -->
-                    <div class="odin_check_inner" isshow="yes">
+                    <div class="odin_check_inner" isshow="yes" style="display:none;">
                     	<div class="tree_cont_title"><div>服务树显示结构：</div><div id="tag_show">{{.Hierarchy}}</div></div>
                         <p class="tree_cont_btn_outer">
                             <a class="btn btn-default" id="add_new_tag">新增tagk</a>
@@ -73,9 +73,13 @@
                     </div>
                     
                     <!-- 第二部分 -->
-                    <div class="odin_check_inner" style="display:none;" isshow="no">
-                    	<textarea class="form-control tag_textarea" placeholder="机器列表，一行一台机器"></textarea>
-                        <div class="tag_select_outer mb20">
+                    <div class="odin_check_inner" isshow="no">
+                    	<textarea class="form-control tag_textarea left" placeholder="机器列表，一行一台机器(需验证！)"></textarea><!--  1111&#10;2222  -->
+                        <a class="btn btn-default left ml10 mr10" id="btn_check_result" style="margin-top:130px;" title="验证">
+                            <span class="glyphicon glyphicon-arrow-right"></span>
+                        </a>
+                        <textarea class="form-control tag_textarea left" disabled placeholder="验证结果"></textarea>
+                        <div class="tag_select_outer mb20 clear">
                         	<h3>选择 tag</h3>
                             <div class="tag_select">
                                 <!--<input type="text" class="form-control" id="tag" list="tag_list" autocomplete="off">
@@ -96,7 +100,7 @@
                                     </div>
                                     <!--  end  -->
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-2 control-label">corp</label>
+                                        <label class="col-sm-2 control-label">corp</label>
                                         <div class="col-sm-10">
                                             <select class="form-control my_select" id="aaa" name="aaa">
                                                 <option value="1">1</option>
@@ -107,30 +111,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-2 control-label">env</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control my_aaa" id="bbb" name="bbb">
-                                                <option value="0">0</option>
-                                                <option value="0">0</option>
-                                                <option value="0">0</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-2 control-label">env</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control my_aaa" id="ccc" name="ccc">
-                                                <option value="0">0</option>
-                                                <option value="0">0</option>
-                                                <option value="0">0</option>
-                                                <option value="4">4</option>
-                                                <option value="1111">1111</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                    
                                 </form>
                                 <p>
                                     <a class="btn btn-default right mb10" id="add_list" title="新增一条">
@@ -289,9 +270,13 @@
 						});
 					});
 					
-					mlk.editSelect({
-						dom: [$('.my_select'),$('.my_aaa')]	
-					});
+					//初始化tag 抓取tag value
+					mlk
+					
+					/*mlk.editSelect({
+						dom: [$('.my_select'),$('.my_aaa')]	,
+						isdele: false
+					});*/
 					
 					var globleNum = 0;//添加select id为了mlk.editSelect 插件遍历
 					$('#add_list').bind('click',function(){
