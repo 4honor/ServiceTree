@@ -146,13 +146,13 @@ func DeleteTagMeta(id int) (err error) {
 	return
 }
 
-//get all must tag key
-func MustKeys() []string {
+//获取所有 tag key
+func GetKeys(empty int) []string {
     var must_keys []string
     o := orm.NewOrm() 
     var results orm.ParamsList
     //only show must key
-    num, err := o.Raw("SELECT distinct tag_key FROM tag_meta WHERE allow_empty = 0").ValuesFlat(&results)
+    num, err := o.Raw("SELECT distinct tag_key FROM tag_meta WHERE allow_empty = ?", empty).ValuesFlat(&results)
     if err == nil && num > 0 {
         for _, value := range  results {
             if  v, ok := value.(string); ok {
@@ -161,4 +161,13 @@ func MustKeys() []string {
         }
     }
     return must_keys
+}
+
+//get all must tag key
+func MustKeys() []string {
+    return GetKeys(0)
+}
+
+func OptionalKeys() []string {
+    return GetKeys(1)
 }

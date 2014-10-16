@@ -41,6 +41,13 @@ func (this *PageController) Get() {
             this.Data["Tags"] = tags
             this.Data["Hierarchy"] = models.DefaultHierarchy()
             this.Layout = "service-tree/tree-tag-manager.html"
+        case "init":
+            menus[0].Status = "active"
+            this.Data["Menus"] = menus
+            tags := getTags() 
+            this.Data["Tags"] = tags
+            this.Data["Hierarchy"] = models.DefaultHierarchy()
+            this.Layout = "service-tree/tree-tag-manager-init.html"
         case "subsys":
             menus[1].Status = "active"
             this.Data["Menus"] = menus
