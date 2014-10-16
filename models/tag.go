@@ -1,6 +1,11 @@
 package models
 
-type Tag struct {
-	Key   string
+type TagSchema struct {
+	Key     string
 	Value   []string
+}
+
+type Tag struct {
+    Key     string
+    Value   string
 }

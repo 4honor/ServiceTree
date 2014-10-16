@@ -72,13 +72,13 @@ func (this *PageController) Get() {
     }
 }
 
-func getTags() []models.Tag {
-    var tags []models.Tag
-    var tag  models.Tag
+func getTags() []models.TagSchema {
+    var tags []models.TagSchema
+    var tag  models.TagSchema
     keys := models.MustKeys()     
     for _, key := range keys {
         values := models.GetTagValueByKey(key)
-        tag = models.Tag{Key:key,Value:values}
+        tag = models.TagSchema{Key:key,Value:values}
         tags = append(tags, tag)
     }
     return tags

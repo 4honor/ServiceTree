@@ -55,6 +55,12 @@ func init() {
 			),
 		),
 
+        beego.NSNamespace("/tagging",
+            beego.NSInclude(
+                &controllers.TaggingController{},
+            ),
+        ),
+
 		beego.NSNamespace("/tag_meta",
 			beego.NSInclude(
 				&controllers.TagMetaController{},
@@ -64,18 +70,6 @@ func init() {
 		beego.NSNamespace("/tag_value",
 			beego.NSInclude(
 				&controllers.TagValueController{},
-			),
-		),
-
-		beego.NSNamespace("/user",
-			beego.NSInclude(
-				&controllers.UserController{},
-			),
-		),
-
-		beego.NSNamespace("/view",
-			beego.NSInclude(
-				&controllers.ViewController{},
 			),
 		),
 
@@ -89,6 +83,18 @@ func init() {
                 &controllers.TreeController{}, 
             ),
         ),
+
+		beego.NSNamespace("/user",
+			beego.NSInclude(
+				&controllers.UserController{},
+			),
+		),
+
+		beego.NSNamespace("/view",
+			beego.NSInclude(
+				&controllers.ViewController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }
