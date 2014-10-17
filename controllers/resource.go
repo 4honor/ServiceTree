@@ -24,9 +24,9 @@ func (this *ResourceController) URLMapping() {
 // @router / [post]
 func (this *ResourceController) Post() {
     var resources []models.Resource = []models.Resource{}
-//    var valid_resources []models.Resource
+
 	json.Unmarshal(this.Ctx.Input.RequestBody, &resources)
-    fmt.Println(resources)
-    this.Data["json"] =  resources
+    fmt.Printf("input is :[%+v]\n", resources)
+    this.Data["json"] = models.FilterResources(resources)
 	this.ServeJson()
 }
