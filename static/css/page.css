@@ -114,7 +114,7 @@ body{
 	margin-bottom:10px;
 	line-height:30px;
 	text-indent:10px;
-	display:block;
+	display:none;
 	}
 .login_account ul li{
 	width:300px;
