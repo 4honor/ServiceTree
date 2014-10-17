@@ -177,6 +177,9 @@ func (this *SubsysController) SubsysList() {
                 subsysList[index]["State"] = "审核中"
        }
     }
+    if subsysList == nil {
+        this.Data["json"]  = make([]int, 0)
+    }
     this.Data["json"]   = subsysList
     this.ServeJson()
 }
