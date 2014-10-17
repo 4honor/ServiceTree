@@ -51,8 +51,7 @@ func (this *TagValueController) GetOne() {
 	tagk := this.Ctx.Input.Params[":tagk"]
     tag_value = models.GetTagValueByKey(tagk)
     if len(tag_value) == 0 {
-        //让 json encode 之后返回[] , 避免 json 返回 null
-        tag_value = []string{}
+        tag_value = append(tag_value, "")
     }
     this.Data["json"]  = tag_value
 	this.ServeJson()

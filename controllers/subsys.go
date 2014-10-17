@@ -18,7 +18,7 @@ type SubsysController struct {
 func (this *SubsysController) URLMapping() {
 	this.Mapping("Post", this.Post)
 	this.Mapping("GetOne", this.GetOne)
-	this.Mapping("GetAll", this.GetAll)
+	this.Mapping("GetAll", this.SubsysList)
 	this.Mapping("Put", this.Put)
 	this.Mapping("Delete", this.Delete)
 	this.Mapping("Get", this.Get)
@@ -156,4 +156,27 @@ func (this *SubsysController) Delete() {
 		this.Data["json"] = err.Error()
 	}
 	this.ServeJson()
+}
+
+
+// @Title Get All
+// @Description get Subsys
+// @Success 200 {object} models.Subsys
+// @Failure 403
+// @router / [get]
+func (this *SubsysController) SubsysList() {
+    subsysList := models.SubsysList()
+    for index, sys := range subsysList {
+        state := sys["State"] 
+        switch state {
+            case "0": 
+                subsysList[index]["State"] = "审核中"
+            case "1":
+                subsysList[index]["State"] = "审核通过"
+            default:
+                subsysList[index]["State"] = "审核中"
+       }
+    }
+    this.Data["json"]   = subsysList
+    this.ServeJson()
 }

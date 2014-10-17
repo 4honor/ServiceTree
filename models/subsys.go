@@ -13,9 +13,13 @@ type Subsys struct {
 	Id           int    `orm:"column(id);auto"`
 	Name         string `orm:"column(name);size(255)"`
 	AliasName    string `orm:"column(alias_name);size(255);null"`
-	Hierarychy   string `orm:"column(hierarychy);size(512)"`
+	Hierarchy   string `orm:"column(hierarchy);size(512)"`
 	AuthorId     int    `orm:"column(author_id)"`
+    Author       string `orm:"-"`
 	TreeInteract int8   `orm:"column(tree_interact);null"`
+    Token        string `orm:"column(token);null"`
+    State        int    `orm:"column(state)"`
+    Progress     string  `orm:"-"`
 	Comment      string `orm:"column(comment);null"`
 }
 
@@ -158,4 +162,25 @@ func  DefaultHierarchy() string{
         }
     }
     return ""
+}
+
+//获取应用列表
+func SubsysList() []orm.Params{
+    o := orm.NewOrm()
+    var maps []orm.Params
+    _, err := o.Raw(`
+            select subsys.id as Id, 
+            subsys.name as Name,
+            subsys.alias_name as AliasName,
+            subsys.hierarchy as Hierarchy,
+            subsys.author_id as AuthorId,
+            user.alias_name as Author,
+            subsys.comment as Comment,
+            subsys.state as State,
+            subsys.token as Token
+            from subsys, user where subsys.author_id = user.id`).Values(&maps)
+    if  err != nil {
+        fmt.Println("[warning] exec failed.")
+    }
+    return maps
 }

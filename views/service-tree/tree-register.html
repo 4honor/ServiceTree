@@ -120,7 +120,7 @@
 							if(da){
 								var tableTr = '';
 								for(var i = 0; i < da.length; i++){
-									var html = '<tr id="' + da[i].Id + '"><td>' + da[i].Name + '</td><td>' + da[i].AliasName + '</td><td>' + da[i].Author + '</td><td>' + da[i].Token + '</td><td>' + (da[i].TreeInteract == 1 ? '是' : '否') + '</td><td>' + da[i].Progress + '</td><td>' + da[i].Comment + '</td></tr>';	
+									var html = '<tr id="' + da[i].Id + '"><td>' + da[i].Name + '</td><td>' + da[i].AliasName + '</td><td>' + da[i].Author + '</td><td>' + da[i].Token + '</td><td>' + (da[i].TreeInteract == 1 ? '是' : '否') + '</td><td>' + da[i].State + '</td><td>' + da[i].Comment + '</td></tr>';	
 									tableTr += html;
 								}
 								$('#register_list').html(tableTr);

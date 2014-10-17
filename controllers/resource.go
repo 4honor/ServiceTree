@@ -1,8 +1,9 @@
 package controllers
 
 import (
+    "fmt"
 	"ServiceTree/models"
-	"encoding/json"
+//	"encoding/json"
 	"github.com/astaxie/beego"
 )
 
@@ -22,13 +23,9 @@ func (this *ResourceController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (this *ResourceController) Post() {
-	var resource models.Resource
-    var resources []models.Resource
-    resource.SysId = 2
-    resource.Name = "web01.qq"
-    resource.ResourceId = 1
-	json.Unmarshal(this.Ctx.Input.RequestBody, &resource)
-    resources = append(resources, resource)
+    var resources []models.Resource = []models.Resource{}
+	//json.Unmarshal(this.Ctx.Input.RequestBody, &resources)
+    fmt.Println(resources)
     this.Data["json"] =  resources
 	this.ServeJson()
 }
