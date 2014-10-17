@@ -59,10 +59,12 @@ func (this *PageController) Get() {
         case "machine":
             menus[2].Status = "active"
             this.Data["Menus"] = menus
+            this.Data["Hierarchy"] = "corp,dept"
             this.Layout = "service-tree/tree-machine-manager.html"
         case "monitor":
             menus[3].Status = "active"
             this.Data["Menus"] = menus
+            this.Data["Hierarchy"] = "dept,corp"
             this.Layout = "service-tree/tree-monitoring-system.html"
         default:
             menus[0].Status = "active"
