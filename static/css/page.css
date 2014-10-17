@@ -20,18 +20,17 @@ body{
 	}
 .header{
 	width:960px;
-	height:78px;
+	height:70px;
 	margin:0 auto;
 	overflow:hidden;
 	}
 .header img{
 	display:inline-block;
-	margin-top:10px;
 	}
 .header span{
 	font-size:20px;
 	color:#707070;
-	line-height:70px;
+	line-height:60px;
 	margin-left:20px;
 	position:relative;
 	top:5px;}

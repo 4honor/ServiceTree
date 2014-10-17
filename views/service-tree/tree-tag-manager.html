@@ -8,7 +8,7 @@
         <title>Tag管理</title>
     
         <!-- Bootstrap core CSS -->
-        <link href="../../static//css/bootcss/css/bootstrap.css" rel="stylesheet">
+        <link href="../../static/css/bootcss/css/bootstrap.css" rel="stylesheet">
         <link href="../../static/lib/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
         <link href="../../static/lib/DataTables/media/css/jquery.dataTables.css" rel="stylesheet">
         <link href="../../static/css/base.css" rel="stylesheet">
@@ -131,7 +131,7 @@
 					
 					//新增tag
 					$('#add_new_tag').bind('click',function(){
-						var alertHtml = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="tag_name" class="col-sm-3 control-label">tag key</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_name"></div></div><div class="form-group"><label for="tag_chinese" class="col-sm-3 control-label">tag名字</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_chinese" placeholder="tag中文名字，可留空"></div></div><div class="form-group"><label for="is_allow" class="col-sm-3 control-label">允许为空?</label><div class="col-sm-9"><input type="checkbox" id="is_allow" style="position:relative; top:7px;"></div></div><div class="form-group"><label for="tag_comment" class="col-sm-3 control-label">tag value范围</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_val" placeholder="tag对应多个值逗号分割，可留空"></div></div><div class="form-group"><label class="col-sm-3 control-label">tag key作用说明</label><div class="col-sm-9"><textarea style="height:120px;"  class="form-control" id="tag_comment"></textarea></div></div></form></div>';
+						var alertHtml = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="tag_name" class="col-sm-3 control-label">tag key</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_name" placeholder="以字母开头，首字母不能为下划线"></div></div><div class="form-group"><label for="tag_chinese" class="col-sm-3 control-label">tag名字</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_chinese" placeholder="tag中文名字，可留空"></div></div><div class="form-group"><label for="is_allow" class="col-sm-3 control-label">允许为空?</label><div class="col-sm-9"><input type="checkbox" id="is_allow" style="position:relative; top:7px;"></div></div><div class="form-group"><label for="tag_comment" class="col-sm-3 control-label">tag value范围</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_val" placeholder="tag对应多个值逗号分割，可留空"></div></div><div class="form-group"><label class="col-sm-3 control-label">tag key作用说明</label><div class="col-sm-9"><textarea style="height:120px;"  class="form-control" id="tag_comment"></textarea></div></div></form></div>';
 						mlk.alertBox({//启动弹窗
 							title: '新增 tagkey',
 							html: alertHtml,
@@ -145,6 +145,10 @@
 											Comment: $('#tag_comment').val(),
 											Values: $('#tag_val').val()	
 										};
+									if($('#tag_name').val()[0] == '_'){
+										alert('首字母不能为下划线！');
+										return false;	
+									}
 									mlk.ajax({//发送ajax
 										method: 'POST',
 										url: '/v1/tag_meta/',

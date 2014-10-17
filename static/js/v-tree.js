@@ -16,12 +16,20 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 					var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
 					var sNodes = treeObj.getSelectedNodes();
 					if (sNodes.length > 0) {
-						var my = sNodes[0];
-						var node = sNodes[0].getParentNode();
-						var nodeType = sNodes[0].getParentNode().ename;
-						//var parent = sNodes[0].getParentNode().getParentNode();
-						var level = sNodes[0].level;
-						console.log(node);
+						var thisStr = (sNodes[0].meta + ':' + sNodes[0].name),//查找自己tre上的属性
+							thisparent = sNodes[0].getParentNode(),//查找父级
+							allArray = [];
+						var resourceVal = $('#resource').val(),
+							resourStr = '_resource:' + resourceVal;
+						allArray.push(resourStr);//把每页的标记放入数组并展示
+						allArray.push(thisStr);//把自己放入数组
+						while(thisparent){
+							var each = (thisparent.meta + ':' + thisparent.name);
+							allArray.push(each);//把父级放入数组
+							thisparent = thisparent	.getParentNode();
+						}
+						allArray.reverse();
+						$('#machine_drop').text(allArray.join(','));
 					}	
 				} 	
 			}
@@ -70,7 +78,6 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 				if(da){
 					var zNodes = da.children,
 						windowHeight = $(window).height();
-					console.log(zNodes);
 					mlk.tree({//启动服务树
 						node: zNodes, 
 						set: setting, 
