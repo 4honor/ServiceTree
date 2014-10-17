@@ -3,7 +3,7 @@ package controllers
 import (
     "fmt"
 	"ServiceTree/models"
-//	"encoding/json"
+	"encoding/json"
 	"github.com/astaxie/beego"
 )
 
@@ -24,7 +24,8 @@ func (this *ResourceController) URLMapping() {
 // @router / [post]
 func (this *ResourceController) Post() {
     var resources []models.Resource = []models.Resource{}
-	//json.Unmarshal(this.Ctx.Input.RequestBody, &resources)
+//    var valid_resources []models.Resource
+	json.Unmarshal(this.Ctx.Input.RequestBody, &resources)
     fmt.Println(resources)
     this.Data["json"] =  resources
 	this.ServeJson()

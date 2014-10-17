@@ -23,6 +23,7 @@ func (this *TreeController) URLMapping() {
 // @Failure 403 :hierarchy 层次无法构建服务树
 // @router /?:hierarchy [get]
 func (this *TreeController) Get() {
+	hierarchy := this.Ctx.Input.Params[":hierarchy"]
     var root = models.TreeNode{}
 
     root.Name = "Root"
@@ -66,6 +67,12 @@ func (this *TreeController) Get() {
     module3.IsParent = false
     module3.IconSkin = "icon01"
 
+    var module4 = models.TreeNode{}
+    module4.Name =  hierarchy
+    module4.Meta = "module"
+    module4.IsParent = false
+    module4.IconSkin = "icon01"
+
     var depart3 = models.TreeNode{}
     depart3.Name = "testing"
     depart3.Meta = "dept"
@@ -75,12 +82,12 @@ func (this *TreeController) Get() {
     depart1.Children = append(depart1.Children, &module1)
     depart1.Children = append(depart1.Children, &module2)
     depart2.Children = append(depart2.Children, &module3)
+    depart2.Children = append(depart2.Children, &module4)
     corp.Children = append(corp.Children, &depart1)
     corp.Children = append(corp.Children, &depart2)
     corp.Children = append(corp.Children, &depart3)
     root.Children = append(root.Children, &corp)
 
-	hierarchy := this.Ctx.Input.Params[":hierarchy"]
     fmt.Printf("get hierarchy: %s, tree:%+v", hierarchy,root)
     this.Data["json"] = root
 	this.ServeJson()
@@ -88,12 +95,14 @@ func (this *TreeController) Get() {
 
 // @Title Get
 // @Description 获取服务树节点下的
-// @Param	ns		path 	string	false		"资源所属空间"
+// @Param	ns		query 	string	false		"资源所属空间"
+// @Param	resource		query 	string	false		"资源所属空间"
 // @Success 200 {object} models.Tree
-// @Failure 403 :hierarchy 层次无法构建服务树
-// @router /ns/:ns [get]
+// @Failure 403 :ns 层次无法构建服务树
+// @router /ns
 func (this *TreeController) Ns() {
-	hierarchy := this.Ctx.Input.Params[":ns"]
-    this.Data["json"] = hierarchy
+	ns := this.Ctx.Input.Params[":ns"]
+    resource := this.Ctx.Input.Params[":resource"]
+    this.Data["json"] = ns + resource
 	this.ServeJson()
 }
