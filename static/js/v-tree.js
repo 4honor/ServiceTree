@@ -27,7 +27,7 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 			}
 		};
 
-		var zNodes =[
+		/*var zNodes =[
 			{ id:1, pId:0, name:"父节点1 - 展开", open:false, iconSkin:"pIcon01"},
 			{ id:11, pId:1, name:"父节点11 - 折叠", iconSkin:"pIcon01", ename:"nimei", A:"abc"},
 			{ id:111, pId:11, name:"叶子节点111", iconSkin:"icon01"},
@@ -57,19 +57,35 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 			{ id:233, pId:23, name:"叶子节点233", iconSkin:"icon01"},
 			{ id:234, pId:23, name:"叶子节点234", iconSkin:"icon01"},
 			{ id:3, pId:0, name:"父节点3 - 没有子节点", isParent:true, iconSkin:"pIcon01"}
-		];
+		];*/
 		
-		var windowHeight = $(window).height();
-		mlk.tree({//启动服务树
-			node: zNodes, 
-			set: setting, 
-			movement: '.tree_cont', 
-			func: function(){}, 
-			style:{
-				width: 300,
-				height: windowHeight-130
-			}	
+		//获取tree 数据
+		var hierarchy = $('#hierarchy').val();
+		mlk.ajax({
+			method: 'GET',
+			url: '/v1/tree/' + hierarchy,
+			data: null, 
+			isloading: false,
+			callback: function(da){
+				if(da){
+					var zNodes = da.children,
+						windowHeight = $(window).height();
+					console.log(zNodes);
+					mlk.tree({//启动服务树
+						node: zNodes, 
+						set: setting, 
+						movement: '.tree_cont', 
+						func: function(){}, 
+						style:{
+							width: 300,
+							height: windowHeight-130
+						}	
+					});
+				}	
+			}
 		});
+		
+		
 		
 		mlk.edit({//启动编辑
 			ele: '#tag_show',
