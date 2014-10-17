@@ -61,15 +61,7 @@
                         </tr>
                     </thead>
                     <tbody id="register_list">
-                        <tr>
-                            <td>系统监控</td>
-                            <td>系统监控</td>
-                            <td>俞进秋</td>
-                            <td>xxxx</td>
-                            <td>是</td>
-                            <td>审批中</td>
-                            <td>监控线上业务</td>
-                        </tr>
+                        
                     </tbody>
                 </table>
             </div>
@@ -96,7 +88,8 @@
 					
 					vtree.init();
 					
-					var myDatatable = $('.table').DataTable();
+					//存储datatable对象
+					var myDatatable = '';
 					
 					//掉取系统负责人，弹出中使用
 					var registerUser = '';
@@ -113,6 +106,25 @@
 									allOpion += html;
 								}
 								registerUser = allOpion
+							}
+						}
+					});
+					
+					//掉取table
+					mlk.ajax({//发送ajax
+						method: 'GET',
+						url: '/v1/subsys/',
+						data: null,
+						isloading: true,
+						callback: function(da){
+							if(da){
+								var tableTr = '';
+								for(var i = 0; i < da.length; i++){
+									var html = '<tr id="' + da[i].Id + '"><td>' + da[i].Name + '</td><td>' + da[i].AliasName + '</td><td>' + da[i].Author + '</td><td> </td><td>' + (da[i].TreeInteract == 1 ? '是' : '否') + '</td><td>审批中</td><td>' + da[i].Comment + '</td></tr>';	
+									tableTr += html;
+								}
+								$('#register_list').html(tableTr);
+								myDatatable = $('.table').DataTable();
 							}
 						}
 					});
