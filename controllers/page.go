@@ -68,6 +68,14 @@ func (this *PageController) Get() {
             this.Data["Hierarchy"] = "dept,corp"
             this.Data["Resource"] = "monitor"
             this.Layout = "service-tree/tree-monitoring-system.html"
+        case "login":
+            error_msg := this.GetString("error")
+            if error_msg == "block" {
+                this.Data["Error"] = error_msg
+            }else{
+                this.Data["Error"] = ""
+            }
+            this.TplNames = "service-tree/login.html"
         default:
             menus[0].Status = "active"
             this.Data["Menus"] = menus
