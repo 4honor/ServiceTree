@@ -39,16 +39,45 @@ func (this *TreeController) Get() {
     var depart1 = models.TreeNode{}
     depart1.Name = "gs"
     depart1.Meta = "dept"
-    depart1.IconSkin = "pIcon1"
-    depart1.IsParent = false
+    depart1.IconSkin = "pIcon01"
+    depart1.IsParent = true
+
+    var module1 = models.TreeNode{}
+    module1.Name = "api"
+    module1.Meta = "module"
+    module1.IsParent = false
+    module1.IconSkin = "icon01"
+
+    var module2 = models.TreeNode{}
+    module2.Name = "pay"
+    module2.Meta = "module"
+    module2.IsParent = false
+    module2.IconSkin = "icon01"
 
     var depart2 = models.TreeNode{}
     depart2.Name = "dache"
     depart2.Meta = "dept"
-    depart2.IsParent = false
+    depart2.IconSkin = "pIcon01"
+    depart2.IsParent = true
 
+    var module3 = models.TreeNode{}
+    module3.Name = "api"
+    module3.Meta = "module"
+    module3.IsParent = false
+    module3.IconSkin = "icon01"
+
+    var depart3 = models.TreeNode{}
+    depart3.Name = "testing"
+    depart3.Meta = "dept"
+    depart3.IconSkin = "icon01"
+    depart3.IsParent = false
+
+    depart1.Children = append(depart1.Children, &module1)
+    depart1.Children = append(depart1.Children, &module2)
+    depart2.Children = append(depart2.Children, &module3)
     corp.Children = append(corp.Children, &depart1)
     corp.Children = append(corp.Children, &depart2)
+    corp.Children = append(corp.Children, &depart3)
     root.Children = append(root.Children, &corp)
 
 	hierarchy := this.Ctx.Input.Params[":hierarchy"]
