@@ -31,7 +31,7 @@
         
         <div class="login_bg" id="login_box">
             <section class="login">
-                <form action="/authredirect/" method="POST" id="form">
+                <form action="aaaa" method="POST" id="form">
                         <img class="radius_img" src="../../static/images/Odin.jpg" width="94" height="94"/>
                         <div class="radius_line"></div>
                         <div class="login_account">
@@ -40,8 +40,8 @@
                                 <li><span></span><input type="text" name="username" value="" required placeholder="VPN帐号"/></li>
                                 <li class="mt20"><span class="login_buttom_two"></span><input type="password" name="password" value="" required placeholder="VPN密码"/></li>
                             </ul>
-                            <!--<button class="btn_click" type="submit" id="btn_click">登陆</button>-->
-                            <a class="btn_click" type="submit" id="btn_click" style="display:block;">登陆</a>
+                            <button class="btn_click" type="submit" id="btn_click">登陆</button>
+                            <!--<a class="btn_click" type="submit" id="btn_click" style="display:block;">登陆</a>-->
                         </div>
                 </form>
                 <!--<p class="logo_bottom_bg"></p>-->
@@ -66,31 +66,7 @@
 			$(this).parents('li').removeClass('activation');	
 		});	
 		
-		$('#btn_click').bind('click',function(){
-			
-			var data = {
-					username: $('input[name=username]').val(),
-					password: $('input[name=password]').val()
-				};
-				
-			mlk.ajax({
-				method: 'POST',
-				url: '/auth/',
-				data: data,
-				callback: function(da){
-					var myData = JSON.parse(da);
-					if(myData.errno == 0){
-						localStorage.userName = $('input[name=username]').val();
-						$('#form').submit();	
-					}
-					else{
-						$('.login_account_wr').show();
-						$('#ulist li:not(.login_account_wr)').addClass('wrong');	
-					}	
-				}	
-			});
-			
-		});
+		
 		
 	});
 	
