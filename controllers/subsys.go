@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"ServiceTree/models"
 	"encoding/json"
 	"errors"
@@ -177,9 +178,11 @@ func (this *SubsysController) SubsysList() {
                 subsysList[index]["State"] = "审核中"
        }
     }
+    fmt.Println("len of subsysList is : ", len(subsysList))
     if subsysList == nil || len(subsysList) == 0 {
         this.Data["json"]  = make([]int, 0)
+    }else{
+    	this.Data["json"]   = subsysList
     }
-    this.Data["json"]   = subsysList
     this.ServeJson()
 }
