@@ -46,6 +46,19 @@ func GetSubsysById(id int) (v *Subsys, err error) {
 	return nil, err
 }
 
+// GetSubsysByName retrieves Subsys by Name. Returns error if
+// Id doesn't exist
+func GetSubsysByName(name string) (v *Subsys, err error) {
+    var subsys Subsys
+	o := orm.NewOrm()
+    qs := o.QueryTable("subsys")
+	err = qs.Filter("name", name).One(&subsys)
+    if err == orm.ErrNoRows {
+        return nil, err 
+    }
+	return &subsys, err
+}
+
 // GetAllSubsys retrieves all Subsys matches certain condition. Returns empty list if
 // no records exist
 func GetAllSubsys(query map[string]string, fields []string, sortby []string, order []string,

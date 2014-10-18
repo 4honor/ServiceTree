@@ -49,7 +49,7 @@
                 </ul>
                 
                 <div class="odin_check_outer">
-                    <div class="tree_cont_title"><div>节点坐标：</div><div id="machine_drop"></div></div>
+                    <div class="tree_cont_title"><div>节点空间(ns)：</div><div id="machine_drop"></div></div>
                 
                     <div class="odin_check_inner" isshow="yes">
                         <p class="mt20"><a class="btn btn-default" id="remove_sys">批量删除</a>
@@ -156,7 +156,7 @@
 						});
 					});
 					
-					//监听节点坐标的变化
+					//监听点坐标的变化
 					$('#machine_drop').bind('DOMNodeInserted',function(e){
 						var thisText = $(this).text(),
 							resourceVal = $('#resource').val();

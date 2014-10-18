@@ -10,6 +10,7 @@ type Resource struct {
     ResourceId int
     SysId int
     Name string
+    Tags string
 }
 
 

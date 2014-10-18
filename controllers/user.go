@@ -71,13 +71,17 @@ func (this *UserController) Login() {
 // @router /:id [get]
 func (this *UserController) GetOne() {
 	idStr := this.Ctx.Input.Params[":id"]
-	id, _ := strconv.Atoi(idStr)
-	v, err := models.GetUserById(id)
+	//id, _ := strconv.Atoi(idStr)
+    models.GetResourcesByNs(idStr)
+    /*
+	//v, err := models.GetResourcesByNs(idStr)
 	if err != nil {
 		this.Data["json"] = err.Error()
 	} else {
 		this.Data["json"] = v
 	}
+    */
+    this.Data["json"] = models.GetResourcesByNs(idStr)
 	this.ServeJson()
 }
 
