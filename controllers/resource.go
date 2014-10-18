@@ -54,7 +54,7 @@ func (this *ResourceController) Ns() {
         this.ServeJson()
     }
     tags = parseNs(ns)
-    resource, exists := tags["_resource"]
+    resource, exists := tags["resource"]
     if exists {
         if resourceExists(resource) == false {
             this.Data["json"] =  make([]string, 0)

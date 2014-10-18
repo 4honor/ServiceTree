@@ -7,10 +7,10 @@ import (
        )
 
 type Resource struct {
-    ResourceId int
-    SysId int
-    Name string
-    Tags string
+    SysId int `json:"sys_id"`
+    ResourceId int `json:"resource_id"`
+    Name string `json:"-"`
+    Tags string `json:"-"`
 }
 
 

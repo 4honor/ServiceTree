@@ -20,7 +20,7 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 							thisparent = sNodes[0].getParentNode(),//查找父级
 							allArray = [];
 						var resourceVal = $('#resource').val(),
-							resourStr = '_resource:' + resourceVal;
+							resourStr = 'resource:' + resourceVal;
 						allArray.push(resourStr);//把每页的标记放入数组并展示
 						allArray.push(thisStr);//把自己放入数组
 						while(thisparent){
@@ -69,9 +69,10 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 		
 		//获取tree 数据
 		var hierarchy = $('#hierarchy').val();
+    var resource = $('#resource').val();
 		mlk.ajax({
 			method: 'GET',
-			url: '/v1/tree/' + hierarchy,
+			url: '/v1/tree/?hierarchy=' + hierarchy + '&resource=' + resource,
 			data: null, 
 			isloading: false,
 			callback: function(da){

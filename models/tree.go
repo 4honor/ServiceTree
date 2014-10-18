@@ -20,7 +20,7 @@ type TreeNode struct {
     IsParent bool `json:"isParent"`
     IconSkin string `json:"iconSkin"`
 	//leafs 和 children至少有一个不为空，leafs代表下面是resource 节点，children代表子节点（非叶子节点）
-	Leafs    []*Resource  `json:"leafs"`
+	Resources    []*Resource  `json:"resources"`
 	Children []*TreeNode `json:"children"`
 }
 
@@ -40,7 +40,7 @@ func BuildTreeByTagString(dbname, tag_str string, s_id int) (root *TreeNode, err
 		return nil, &QueryError{-1, "queryResourceByTagString failed"}
 	}
 
-	root = &TreeNode{Meta:"Root", Name:"Root", Leafs:nil, Children:[]*TreeNode{}, IsParent:true,IconSkin:"pIcon01"}
+	root = &TreeNode{Meta:"Root", Name:"Root",  Resources:nil, Children:[]*TreeNode{}, IsParent:true,IconSkin:"pIcon01"}
 	for _, res := range resources {
 		buildTree(root, tag_str, res)
 	}
@@ -60,19 +60,19 @@ func buildTree(root *TreeNode, tags string, res Resource) {
 			}
 		}
 		if !created {
-            new_node := &TreeNode{Meta:keys[i], Name:val, Leafs:nil, Children:[]*TreeNode{}, IsParent:true, IconSkin:"pIcon01"}
+            new_node := &TreeNode{Meta:keys[i], Name:val, Resources:nil, Children:[]*TreeNode{}, IsParent:true, IconSkin:"pIcon01"}
 			cur_node.Children = append(cur_node.Children, new_node)
 			cur_node = new_node
 		}
 	}
 
-	if cur_node.Leafs == nil {
-		cur_node.Leafs = []*Resource{}
+	if cur_node.Resources == nil {
+		cur_node.Resources = []*Resource{}
         cur_node.IsParent = false
         cur_node.IconSkin = "icon01"
 	}
 
-	cur_node.Leafs = append(cur_node.Leafs, &Resource{SysId:res.SysId, ResourceId:res.ResourceId, Tags:tags})
+	cur_node.Resources = append(cur_node.Resources, &Resource{SysId:res.SysId, ResourceId:res.ResourceId, Tags:tags})
 }
 
 func queryResourcesByTagString(dbname, tag_str string, s_id int) (resources []Resource, err error) {
@@ -146,10 +146,11 @@ func buildQueryString(tag_string string, s_id int) (q_string string, err error) 
 	return complete_sql.String(), nil
 }
 
-func GetResourcesByNs(ns string) TreeNode{
+//构建服务树
+//sys_id:表示资源对应的编号  0: 获取全部资源
+func BuildTree(hierary string, sys_id int) TreeNode{
 
-	s_id := 1
-	root, err := BuildTreeByTagString("alfred", ns, s_id)
+	root, err := BuildTreeByTagString("alfred", hierary, sys_id)
 	if err != nil {
 		fmt.Println(err.Error())
 	} else {
@@ -168,8 +169,8 @@ func printTree(root *TreeNode, dep int) {
 	} else {
 		fmt.Println(root.Meta, root.Name)
 	}
-	if root.Leafs != nil {
-		for _, leaf := range root.Leafs {
+	if root.Resources != nil {
+		for _, leaf := range root.Resources {
 			for i := 0; i < dep+1; i++ {
 				fmt.Print("	")
 			}
