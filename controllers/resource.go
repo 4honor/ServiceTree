@@ -54,16 +54,22 @@ func (this *ResourceController) Ns() {
         this.ServeJson()
     }
     tags = parseNs(ns)
+    //check resource
     resource, exists := tags["resource"]
     if exists {
-        if resourceExists(resource) == false {
+        sys_id, err :=  GetSysIdByName(resource)
+        if err != nil {
             this.Data["json"] =  make([]string, 0)
             this.ServeJson()
-        }  else {
+        } else {
             delete(tags,"resource")
-            this.Data["json"] = models.GetResourcesWithinNs(tags)
+            this.Data["json"] = models.GetResourcesWithinNs(tags,sys_id)
             this.ServeJson()
         }
+    }else{
+        //resource not specify, return all 
+        this.Data["json"] = models.GetResourcesWithinNs(tags,0)
+        this.ServeJson()
     }
     fmt.Println(resources)
     fmt.Println("tags is: ", tags)
@@ -94,10 +100,11 @@ func parseNs(ns string) map[string]string {
 }
 
 //check if resource exists or not
-func resourceExists(name string) bool{
-    if _, err := models.GetSubsysByName(name); err != nil {
+func GetSysIdByName(name string) (int, error) {
+    subsys, err := models.GetSubsysByName(name)
+    if err != nil {
         fmt.Println("get subsys failed, ", err)
-        return false
+        return -1, err
     }
-    return true
+    return subsys.Id, nil
 }

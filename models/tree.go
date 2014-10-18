@@ -162,7 +162,7 @@ func BuildTree(hierarchy string, sys_id int) *TreeNode{
 
 //get  specify resource within specify ns
 // sys_id :0  get all resource within ns
-func GetResourcesWitRinNs(tags map[string]string) []*Resource {
+func GetResourcesWithinNs(tags map[string]string, sys_id int) []*Resource {
     var hierarchy []string 
     var names []string
     var resources []*Resource
@@ -173,7 +173,7 @@ func GetResourcesWitRinNs(tags map[string]string) []*Resource {
     }
     fmt.Printf(">>>>>>>>>start search with: tags:%+v, hierarchy:%+v, names:%+v\n", tags, hierarchy, names)
 
-    root := BuildTree(strings.Join(hierarchy, ","), 0) 
+    root := BuildTree(strings.Join(hierarchy, ","), sys_id) 
     resources = searchResources(root,hierarchy,names,0)
     fmt.Println("get reources: ", resources)
     return resources
@@ -184,19 +184,27 @@ func searchResources(node *TreeNode, hierarchy []string, names []string, depth i
     if depth == 0 {
         for _, child := range node.Children {
             fmt.Printf("root-> children: %+v\n", child)
-            return searchResources(child, hierarchy, names, depth+1)
+                resources = searchResources(child, hierarchy, names, depth+1)
+                if len(resources) == 0 {
+                    fmt.Println("search another node")
+                    depth = 0
+                    continue
+                }else{
+                    return resources
+                }
         }
     }else{
         fmt.Printf("before search %+v, hierarchy:%+v, names:%+v\n", node, hierarchy, names )
         if (node.IsParent == false) && (node.Meta == hierarchy[0]) && (node.Name == names[0]) {
-            return node.Resources
+            fmt.Println("found , return node:", node)
+            resources = node.Resources
         }else{
             if (node.Meta == hierarchy[0]) && (node.Name == names[0]) {
                 for _, child := range node.Children {
                     fmt.Printf("check child %+v, hierarchy:%+v, names:%+v\n", child, hierarchy, names )
                     if (child.Meta == hierarchy[1]) && (child.Name == names[1]) {
                         fmt.Printf("node:%+v match .start search next\n", child)
-                        searchResources(child, hierarchy[1:], names[1:], depth+1)
+                        return searchResources(child, hierarchy[1:], names[1:], depth+1)
                     }
                 }
             }
