@@ -11,7 +11,7 @@ import (
 
 type Monitor struct {
 	Id      int    `orm:"column(id);auto"`
-	Metric  string `orm:"column(metric);size(255)"`
+	Name  string `orm:"column(name);size(255)"`
 	Type    int    `orm:"column(type)"`
 	Comment string `orm:"column(comment);null"`
 }

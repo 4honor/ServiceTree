@@ -26,7 +26,7 @@ func (this *TreeController) URLMapping() {
 func (this *TreeController) Get() {
     var sys_id  int
     var result libs.Result
-    var root = models.TreeNode{}
+    var root *models.TreeNode
 
 	hierarchy := this.GetString("hierarchy")
     resource := this.GetString("resource")

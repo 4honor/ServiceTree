@@ -60,7 +60,8 @@ func (this *ResourceController) Ns() {
             this.Data["json"] =  make([]string, 0)
             this.ServeJson()
         }  else {
-            this.Data["json"] = "resource exits"
+            delete(tags,"resource")
+            this.Data["json"] = models.GetResourcesWithinNs(tags)
             this.ServeJson()
         }
     }
@@ -89,11 +90,10 @@ func parseNs(ns string) map[string]string {
             tags[tagk] = tagv
         }
     }
-    fmt.Printf("tags: %+v\n")
     return tags
 }
 
-
+//check if resource exists or not
 func resourceExists(name string) bool{
     if _, err := models.GetSubsysByName(name); err != nil {
         fmt.Println("get subsys failed, ", err)

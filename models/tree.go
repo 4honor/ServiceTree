@@ -148,17 +148,63 @@ func buildQueryString(tag_string string, s_id int) (q_string string, err error) 
 
 //构建服务树
 //sys_id:表示资源对应的编号  0: 获取全部资源
-func BuildTree(hierary string, sys_id int) TreeNode{
+func BuildTree(hierarchy string, sys_id int) *TreeNode{
 
-	root, err := BuildTreeByTagString("alfred", hierary, sys_id)
+	root, err := BuildTreeByTagString("alfred", hierarchy, sys_id)
 	if err != nil {
 		fmt.Println(err.Error())
 	} else {
 		depth := 0
 		printTree(root, depth)
 	}
-    return *root
+    return root
 }
+
+//get  specify resource within specify ns
+// sys_id :0  get all resource within ns
+func GetResourcesWitRinNs(tags map[string]string) []*Resource {
+    var hierarchy []string 
+    var names []string
+    var resources []*Resource
+
+    for k, v := range tags {
+        hierarchy = append(hierarchy, k)
+        names = append(names , v)
+    }
+    fmt.Printf(">>>>>>>>>start search with: tags:%+v, hierarchy:%+v, names:%+v\n", tags, hierarchy, names)
+
+    root := BuildTree(strings.Join(hierarchy, ","), 0) 
+    resources = searchResources(root,hierarchy,names,0)
+    fmt.Println("get reources: ", resources)
+    return resources
+}
+
+func searchResources(node *TreeNode, hierarchy []string, names []string, depth int) []*Resource{
+    var resources []*Resource
+    if depth == 0 {
+        for _, child := range node.Children {
+            fmt.Printf("root-> children: %+v\n", child)
+            return searchResources(child, hierarchy, names, depth+1)
+        }
+    }else{
+        fmt.Printf("before search %+v, hierarchy:%+v, names:%+v\n", node, hierarchy, names )
+        if (node.IsParent == false) && (node.Meta == hierarchy[0]) && (node.Name == names[0]) {
+            return node.Resources
+        }else{
+            if (node.Meta == hierarchy[0]) && (node.Name == names[0]) {
+                for _, child := range node.Children {
+                    fmt.Printf("check child %+v, hierarchy:%+v, names:%+v\n", child, hierarchy, names )
+                    if (child.Meta == hierarchy[1]) && (child.Name == names[1]) {
+                        fmt.Printf("node:%+v match .start search next\n", child)
+                        searchResources(child, hierarchy[1:], names[1:], depth+1)
+                    }
+                }
+            }
+        }
+    }
+    return resources
+}
+
 
 func printTree(root *TreeNode, dep int) {
 	for i := 0; i < dep; i++ {
