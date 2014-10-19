@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
+    "github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
 
@@ -163,18 +163,25 @@ func DeleteSubsys(id int) (err error) {
 	return
 }
 
-// Get default sys hierarychy
-func  DefaultHierarchy() string{
+// Get default sys hierarchy
+func  GetHierarchy(subsys string) string{
     o := orm.NewOrm() 
     var  lists []orm.ParamsList
     // name = 'tag' for tag manage sys
-    num, err := o.Raw("SELECT hierarchy from subsys WHERE name = 'tag'").ValuesList(&lists)
+    num, err := o.Raw("SELECT hierarchy from subsys WHERE name = ?", subsys).ValuesList(&lists)
     if err == nil && num > 0 {
         if v, ok := lists[0][0].(string) ; ok {
+            beego.Debug("search hierarchy for subsys and got the result:", v)
             return v
         }
+    }else{
+        beego.Warn("search hierarchy  for subsys failed. err: ", err)
     }
     return ""
+}
+
+func DefaultHierarchy() string {
+    return GetHierarchy("tag") 
 }
 
 //获取应用列表

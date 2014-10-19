@@ -10,6 +10,7 @@ import (
 )
 
 func init() {
+    beego.SetLogger("file", `{"filename":"./logs/tree.log"}`)
 	orm.RegisterDataBase("default", "mysql", "root:MhxzKhl@tcp(127.0.0.1:3306)/alfred")
 }
 
