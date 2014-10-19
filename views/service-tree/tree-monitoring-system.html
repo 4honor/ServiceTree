@@ -123,7 +123,7 @@
 							if(da){
 								var tbodyTr = '';
 								for(var i = 0;i < da.length; i++){
-									var html = '<tr id="' + da[i].Id + '"><td><input type="checkbox"></td><td>' + da[i].Metric + '</td><td>' + da[i].Type + '</td><td><a class="sys_mess">监控详情</a></td></tr>';	
+									var html = '<tr id="' + da[i].Id + '"><td><input type="checkbox"></td><td>' + da[i].Name + '</td><td>' + da[i].Type + '</td><td><a class="sys_mess">监控详情</a></td></tr>';	
 									tbodyTr += html;
 								}
 								$('#sys_list').html(tbodyTr);
@@ -145,7 +145,7 @@
 							isloading: true,
 							callback: function(da){
 								if(da){
-									var alertHtml = '<div style="padding:0 10px; margin-bottom:10px;"><table class="table table-bordered"><thead><tr class="active"><th>ID</th><th>name</th><th>type</th><th>comment</th></tr></thead><tbody><tr><td>' + da.Id + '</td><td>' + da.Metric + '</td><td>' + da.Type + '</td><td>' + da.Comment + '</td></tr></tbody></table></div>';
+									var alertHtml = '<div style="padding:0 10px; margin-bottom:10px;"><table class="table table-bordered"><thead><tr class="active"><th>ID</th><th>name</th><th>type</th><th>comment</th></tr></thead><tbody><tr><td>' + da.Id + '</td><td>' + da.Name + '</td><td>' + da.Type + '</td><td>' + da.Comment + '</td></tr></tbody></table></div>';
 									mlk.alertBox({
 										title: '详情',
 										html: alertHtml,
@@ -162,14 +162,14 @@
 							resourceVal = $('#resource').val();
 						mlk.ajax({
 							method: 'GET',
-							url: '/v1/tree/ns?ns=' + thisText + '&resource=' + resourceVal,
+							url: '/v1/resource/' + thisText , 
 							data: null, 
 							isloading: true,
 							callback: function(da){
 								if(da){
 									var tbodyTr = '';
 									for(var i = 0;i < da.length; i++){
-										var html = '<tr id="' + da[i].Id + '"><td><input type="checkbox"></td><td>' + da[i].Metric + '</td><td>' + da[i].Type + '</td><td><a class="sys_mess">监控详情</a></td></tr>';	
+										var html = '<tr id="' + da[i].Id + '"><td><input type="checkbox"></td><td>' + da[i].Name + '</td><td>' + da[i].Type + '</td><td><a class="sys_mess">监控详情</a></td></tr>';	
 										tbodyTr += html;
 									}
 									$('#sys_list').html(tbodyTr);

@@ -150,7 +150,7 @@
 							resourceVal = $('#resource').val();
 						mlk.ajax({
 							method: 'GET',
-							url: '/v1/tree/ns?ns=' + thisText + '&resource=' + resourceVal,
+							url: '/v1/resource/' + thisText , 
 							data: null, 
 							isloading: true,
 							callback: function(da){

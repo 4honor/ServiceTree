@@ -162,10 +162,16 @@ func BuildTree(hierarchy string, sys_id int) *TreeNode{
 
 //get  specify resource within specify ns
 // sys_id :0  get all resource within ns
-func GetResourcesWithinNs(tags map[string]string, sys_id int) []*Resource {
+func GetResourcesWithinNs(tags map[string]string, sys_id int) []interface{}{
     var hierarchy []string 
     var names []string
-    var resources []*Resource
+    var resources []interface{}
+    var query_resources []*Resource
+    var query_all bool 
+
+    if sys_id == 0 {
+        query_all = true
+    }
 
     for k, v := range tags {
         hierarchy = append(hierarchy, k)
@@ -174,10 +180,36 @@ func GetResourcesWithinNs(tags map[string]string, sys_id int) []*Resource {
     fmt.Printf(">>>>>>>>>start search with: tags:%+v, hierarchy:%+v, names:%+v\n", tags, hierarchy, names)
 
     root := BuildTree(strings.Join(hierarchy, ","), sys_id) 
-    resources = searchResources(root,hierarchy,names,0)
-    fmt.Println("get reources: ", resources)
+    query_resources = searchResources(root,hierarchy,names,0)
+
+    for _, query_resource := range query_resources {
+        if query_all {
+            sys_id = query_resource.SysId
+        }
+        resource_id := query_resource.ResourceId
+        subsys, err := GetSubsysById(sys_id)
+        if err != nil {
+            fmt.Println("wfwefwefwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww=> query wrong sys id, err:", err, "with sys_id:", sys_id)
+            continue
+        }
+        fmt.Println("wfwefwefwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww=> start orm")
+        if subsys.Name == "machine" {
+            r, err := GetMachineById(resource_id)
+            if err == nil {
+               resources = append(resources, r) 
+            }
+        }
+        if subsys.Name == "monitor" {
+            r, err := GetMonitorById(resource_id)
+            if err == nil {
+               resources = append(resources, r) 
+            }
+        }
+    }
+    fmt.Println("============================> get reources: ", resources)
     return resources
 }
+
 
 func searchResources(node *TreeNode, hierarchy []string, names []string, depth int) []*Resource{
     var resources []*Resource
