@@ -142,10 +142,28 @@ func UpdateSubsysById(m *Subsys) (err error) {
 	if err = o.Read(&v); err == nil {
 		var num int64
 		if num, err = o.Update(m); err == nil {
-			fmt.Println("Number of records updated in database:", num)
+            beego.Debug("Number of records updated in database:", num)
 		}
 	}
 	return
+}
+
+// UpdateHierarchy updates Hierarchy by Name and return error if 
+// the subsys name is not exits
+func UpdateHierarchyByName(m *Subsys)(err error) {
+    o := orm.NewOrm()
+    num , err := o.QueryTable("subsys").Filter("name",m.Name).Update(orm.Params{
+        "hierarchy" : m.Hierarchy, 
+    })
+
+    if num == 0 {
+        err_msg := fmt.Sprintf("not subsys [%s] found", m.Name)
+        err = errors.New(err_msg)
+    }
+    if err == nil {
+        beego.Debug("Number of records updated in database:", num)
+    }
+    return 
 }
 
 // DeleteSubsys deletes Subsys by Id and returns error if

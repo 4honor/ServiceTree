@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"ServiceTree/models"
+    "ServiceTree/libs"
 	"encoding/json"
 	"errors"
 	"strconv"
@@ -11,7 +12,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// oprations for Subsys
+// 第三方系统接口
 type SubsysController struct {
 	beego.Controller
 }
@@ -23,6 +24,7 @@ func (this *SubsysController) URLMapping() {
 	this.Mapping("Put", this.Put)
 	this.Mapping("Delete", this.Delete)
 	this.Mapping("Get", this.Get)
+    this.Mapping("Hierarchy", this.Hierarchy)
 }
 
 // @Title Post
@@ -139,6 +141,35 @@ func (this *SubsysController) Put() {
 	} else {
 		this.Data["json"] = err.Error()
 	}
+	this.ServeJson()
+}
+
+// @Title Update
+// @Description update Subsys Hierarchy
+// @Param	name		query 	string	true		"系统名称"
+// @Param	hierarchy		query 	models.Subsys	true		"更新层次结构"
+// @Success 200 {object} models.Subsys
+// @Failure 403 :id is not int
+// @router /hierarchy [get]
+func (this *SubsysController) Hierarchy() {
+    var result libs.Result
+	name := this.GetString("name")
+    hierarchy := this.GetString("hierarchy")
+    if name == "" || hierarchy == "" {
+        result.Success = false 
+        result.Msg = "sys name and hierarchy not allow empty"
+        this.Data["json"] = result
+        this.ServeJson()
+    }
+    v := models.Subsys{Name: name, Hierarchy: hierarchy}
+	if err := models.UpdateHierarchyByName(&v); err == nil {
+        result.Success = true
+        result.Msg = "update success"
+	} else {
+        result.Success = false 
+        result.Msg = err.Error()
+	}
+	this.Data["json"] = result
 	this.ServeJson()
 }
 
