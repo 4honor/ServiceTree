@@ -117,14 +117,16 @@ define(["jquery", "datepicker", "allfunction", "highchart"], function($, datepic
 								}
 								creatDiv(serVal,hostVal,thisClass,(timeYearBeagin + '-' + timeStringBegin),(timeYearEnd + '-' + timeStringEnd),xTime,yNum,serviceName,serviceUnit,dateArry,valFlag,aggregate);
 								$('.mask_srch').find('.sumOrAvg option:eq(0)').attr('selected','true');
-								
+							  var ns = $('#machine_drop').html().split(",")
+                ns = ns.slice(0,ns.length)
+                ns.push("resource:machine")
 									
 								//当第一步完成后进行第二步ajax请求
 								$.ajax({
 									type: 'GET',
-									url: 'http://10.231.146.171/api/tagkv?metric=' + serVal + '@host=' + hostVal,
+									url: '/api/tagkv?metric=' + serVal + '@host=' + hostVal + '&ns='+ns.join(),
 									data: null,
-									dataType: "jsonp",
+									dataType: "json",
 									success: function(data){
 										if(data){
 											creatInput(data);

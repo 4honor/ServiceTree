@@ -16,6 +16,7 @@ import (
 func init() {
     beego.Router("/", &controllers.MainController{})
     beego.Router("/:subsys", &controllers.PageController{})
+    beego.Router("/api/tagkv", &controllers.OdinController{})
 
 	ns := beego.NewNamespace("/v1",
 

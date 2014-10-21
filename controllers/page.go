@@ -22,7 +22,7 @@ func (this *PageController) URLMapping() {
 }
 
 // @Title Get
-// @Description 获取一个新自增 id
+// @Description 构建显示页面
 // @Param	subsys		path 	string	false		"调用系统的接口名称"
 // @router /:subsys [get]
 func (this *PageController) Get() {
