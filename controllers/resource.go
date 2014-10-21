@@ -69,7 +69,7 @@ func (this *ResourceController) Ns() {
             }
             delete(tags,"resource")
             business_monitor := models.GetResourcesWithinNs(tags, sys_id)
-            this.Data["json"] = merge_resources(machine_monitor, business_monitor)
+            this.Data["json"] = merge_resources(business_monitor,machine_monitor)
             this.ServeJson()
         }
     }else{

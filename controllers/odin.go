@@ -59,7 +59,12 @@ func replace_host(tagkvs []Tagkvs, ns string) []Tagkvs {
             ns_tagkvs = append(ns_tagkvs, tagkv)
         }else{
         //用户默认全选, 需要过滤机器到对应的 ns 下面
-            query := fmt.Sprintf("http://127.0.0.1:8080/v1/resource/%s",ns)
+            httpport := beego.AppConfig.String("httpport")
+            if httpport == "" {
+              //try 8080 as default if not config
+              httpport = "8080"
+            }
+            query := fmt.Sprintf("http://127.0.0.1:%s/v1/resource/%s",httpport,ns)
             result, err := httplib.Get(query).String()
             if err == nil {
                 err = json.Unmarshal([]byte(result), &machines)
