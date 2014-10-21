@@ -1,0 +1,211 @@
+define(["jquery", "datepicker", "allfunction"], function($, datepicker, allfunction) {
+	var o = {};
+	  
+  	o.init = function(){
+		
+		/*点击下拉*/
+		$(document).on('click','.dropdown-toggle',function(ev){
+			$('.dropdown-menu').hide();
+			$(this).next('.dropdown-menu').show();	
+		});
+		$(document).on('click','.btn-group',function(ev){
+			ev.stopPropagation();
+		});
+		$(document).click(function(ev){
+			$('.dropdown-menu').hide();
+			//$('.select_div').hide();
+		});
+		/*点击下拉end*/
+		
+		/*绑定拖拽*/
+		/*$( "#outer" ).sortable({
+			revert: true,
+			delay: 300 ,
+			opacity: 0.6,
+		});*/
+		 //$( ".dropdown-menu" ).disableSelection();
+		/*绑定拖拽end*/
+		
+		/*删除*/
+		$(document).on('click','.close',function(){
+			$(this).parents('.drag_cont').slideUp(500,function(){
+				$(this).remove();	
+			});	
+		});
+		/*删除end*/
+		
+		//刷新
+		$(document).on('click','.btn_sx',function(){
+			var loading = $(this).parents('.drag_cont').find('.progress');
+			loadingBar(loading,200,'70%');
+			var inputDte = timeSearch(3600);
+			$(this).parents('.form-group').find('.time-search:eq(1)').val(inputDte.nowTime);
+			var that = $(this);
+			seachNext(that);
+			
+		});
+	
+		/*点击查询状态*/
+		$('#search').click(function(){
+			var serVal = $('#service').val(),
+				hostVal = $('#host').val();
+				
+			//运行动画
+			$('.mask_srch').fadeOut(500);
+			animateBtnAdd();
+			
+			var dateNow = new Date(),
+				dateHours = dateNow.getHours(),
+				dateMin = dateNow.getMinutes(),
+				dateYear = dateNow.getFullYear(),
+				dateMon = dateNow.getMonth() + 1,
+				dateDay = dateNow.getDate(),
+				dateSec = dateNow.getSeconds();
+			dateHours = dateHours.toString().length != 1 ? dateHours : ('0' + dateHours);
+			dateMin = dateMin.toString().length != 1 ? dateMin : ('0' + dateMin);
+			dateSec = dateSec.toString().length != 1 ? dateSec : ('0' + dateSec);
+			dateMon = dateMon.toString().length != 1 ? dateMon : ('0' + dateMon);
+			dateDay = dateDay.toString().length != 1 ? dateDay : ('0' + dateDay);
+			
+			var preTime = new Date((dateNow/1000-3600)*1000),
+				preHours = preTime.getHours(),
+				preMin = preTime.getMinutes(),
+				preYear = preTime.getFullYear(),
+				preMon = preTime.getMonth() + 1,
+				preDay = preTime.getDate(),
+				preSec = preTime.getSeconds();
+			preHours = preHours.toString().length != 1 ? preHours : ('0' + preHours);
+			preMin = preMin.toString().length != 1 ? preMin : ('0' + preMin);
+			preSec = preSec.toString().length != 1 ? preSec : ('0' + preSec);
+			preMon = preMon.toString().length != 1 ? preMon : ('0' + preMon);
+			preDay = preDay.toString().length != 1 ? preDay : ('0' + preDay);
+			
+			var	timeStringBegin = preHours + ':' + preMin + ':' + preSec,//起始时间
+				timeStringEnd = dateHours + ':' + dateMin + ':' + dateSec,//结束时间
+				timeYearBeagin = preYear + '/' + preMon + '/' + preDay,//起始年月
+				timeYearEnd = dateYear + '/' + dateMon + '/' + dateDay;//结束年月
+			var dateArry = [timeYearBeagin,timeYearEnd,timeStringBegin,timeStringEnd];
+			if(hostVal){
+				var valFlag = true;	
+			}else{
+				var valFlag = false;	
+			}
+			var aggregate = $(this).parents('.cont-mess-serch').find('.sumOrAvg').val();
+			if(serVal){
+				var thisNewDiv = '';//保留创建的那个div
+				$('.use_input').val('');
+				$.ajax({
+					type: 'GET',
+					url: 'http://10.231.146.171/api/ts?metric=' + serVal + '@host=' + hostVal + '&stime=' + timeYearBeagin + '-' + timeStringBegin + '&etime=' + timeYearEnd + '-' + timeStringEnd +'&aggregate=' + aggregate,
+					data: null,
+					dataType: "jsonp",
+					success: function(data){
+						if(data){
+							var xTime = [],
+								yNum = [],
+								serviceName = '',
+								serviceUnit = '';
+							serviceName = data[0].name;
+							serviceUnit = data[0].unit;
+							for(var i = 0; i < data[0].data.length; i++){
+								var j = data[0].data[i]
+								for(var attr in j){
+									xTime.push(getLocalTime(parseInt(attr)));//处理坐标
+									yNum.push(j[attr]);//处理每个点的值
+								}	
+							}
+							creatDiv(serVal,hostVal,(timeYearBeagin + '-' + timeStringBegin),(timeYearEnd + '-' + timeStringEnd),xTime,yNum,serviceName,serviceUnit,dateArry,valFlag,aggregate);
+							$('.mask_srch').find('.sumOrAvg option:eq(0)').attr('selected','true');
+							
+								
+							//当第一步完成后进行第二步ajax请求
+							$.ajax({
+								type: 'GET',
+								url: 'http://10.231.146.171/api/tagkv?metric=' + serVal + '@host=' + hostVal,
+								data: null,
+								dataType: "jsonp",
+								success: function(data){
+									if(data){
+										creatInput(data);
+									}
+								}
+							});
+						
+							}
+						}
+					});
+				
+					//
+			}	
+		});
+		
+		//$('.time-search').bind('blur')
+		
+		/*点击查询状态end*/
+		
+		/*点选下拉*/
+		$(document).on('change','.dropdown-menu input',function(){
+			var obj = $(this),
+				that = this;
+			var loading = $(this).parents('.drag_cont').find('.progress');
+			loadingBar(loading,200,'70%');
+			seachNext(obj);
+			clcikHostData(obj,that);
+		});
+		
+		/*end点选下拉*/
+		
+		/*查询时间*/
+		$(document).on('click','.time_search',function(){
+			var that = $(this);
+			var loading = $(this).parents('.drag_cont').find('.progress');
+			loadingBar(loading,200,'70%');
+			seachNext(that);
+		});
+		/*end查询时间*/
+		
+		//弹出层
+		$('#btn_add').click(function(){
+			$('.mask_srch').fadeIn(500,function(){
+				$('.input_frst').focus();	
+			});
+		});
+		
+		$('#close_alert').click(function(){
+			$('.mask_srch').fadeOut(500);	
+		});
+		
+		//给同比环比绑定
+		$(document).on('change','.more_checked input',function(){
+			var obj = $(this),
+				that = this;
+			clickMoreData(obj,that);
+			seachNext(obj);
+		});
+		
+		//给聚合计算绑定
+		$(document).on('change','.aggregate',function(){
+			var obj = $(this);
+			var loading = $(this).parents('.drag_cont').find('.progress');
+			loadingBar(loading,200,'70%');
+			seachNext(obj);	
+		});
+		
+		//给时间选择绑定
+		$(document).on('click','.other_btn_outer a',function(){
+			var thisTime = parseFloat($(this).attr('time')),
+				time = timeSearch(thisTime),
+				nowTime = time.nowTime,
+				preTime = time.preTime,
+				that = $(this);
+			var loading = $(this).parents('.drag_cont').find('.progress');
+			loadingBar(loading,200,'70%');
+			timeValueInput(that,nowTime,preTime);
+			seachNext(that);
+		});
+	  
+	}
+	
+	return o;
+
+});
