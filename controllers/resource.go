@@ -9,7 +9,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// id分配接口
+// 资源操作接口
 type ResourceController struct {
 	beego.Controller
 }
@@ -62,8 +62,14 @@ func (this *ResourceController) Ns() {
             this.Data["json"] =  make([]string, 0)
             this.ServeJson()
         } else {
+            //机器监控中的采集项不随着服务树进行变化, 任何节点的内容获取机器监控都一样
+            var machine_monitor []interface{}
+            if resource == "monitor" {
+                machine_monitor, err = models.GetAllMachineMonitor()
+            }
             delete(tags,"resource")
-            this.Data["json"] = models.GetResourcesWithinNs(tags,sys_id)
+            business_monitor := models.GetResourcesWithinNs(tags, sys_id)
+            this.Data["json"] = merge_resources(machine_monitor, business_monitor)
             this.ServeJson()
         }
     }else{
@@ -75,6 +81,14 @@ func (this *ResourceController) Ns() {
     fmt.Println("tags is: ", tags)
     this.Data["json"] = "resource not exists, get all"
 	this.ServeJson()
+}
+
+//merge two resources
+func merge_resources(r1, r2 []interface{}) []interface{} {
+    merged := make([]interface{}, len(r1)  + len(r2))
+    copy(merged, r1)
+    copy(merged[len(r1):], r2)
+    return merged
 }
 
 //parse corp:didi,dept:dache to map

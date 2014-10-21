@@ -43,6 +43,21 @@ func GetMonitorById(id int) (v *Monitor, err error) {
 	return nil, err
 }
 
+
+//GetAllMachineMonitor 获取所有机器监控项
+func GetAllMachineMonitor() (ml []interface{}, err error) {
+    var querys map[string]string = make(map[string]string)
+    var fields []string
+    var sortby []string
+    var order  []string
+    var offset int64
+    var limit  int64
+
+    querys["type"] =  "0"
+
+    return GetAllMonitor(querys, fields, sortby, order, offset, limit)
+}
+
 // GetAllMonitor retrieves all Monitor matches certain condition. Returns empty list if
 // no records exist
 func GetAllMonitor(query map[string]string, fields []string, sortby []string, order []string,
