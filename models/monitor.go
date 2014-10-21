@@ -13,6 +13,7 @@ type Monitor struct {
 	Id      int    `orm:"column(id);auto"`
 	Name  string `orm:"column(name);size(255)"`
 	Type    int    `orm:"column(type)"`
+    Class string `orm:"column(class);size(255)"`
 	Comment string `orm:"column(comment);null"`
 }
 
