@@ -29,6 +29,8 @@ define(["jquery", "datepicker", "allfunction", "highchart"], function($, datepic
 		/*删除*/
 		$(document).on('click','.close',function(){
 			$(this).parents('.drag_cont').slideUp(500,function(){
+				var thisId = $(this).attr('id');
+				$('.' + thisId)[0].checked = false;
 				$(this).remove();	
 			});	
 		});
@@ -47,9 +49,10 @@ define(["jquery", "datepicker", "allfunction", "highchart"], function($, datepic
 	
 		/*点击checkbox查询状态*/
 		$('.monitor_inner').on('click','input[type=checkbox]',function(){
-			if(this.checked){
+			if(this.checked){//选中状态
 			
 				var serVal = $(this).attr('name'),
+					thisClass = $(this).attr('class'),
 					hostVal = '';
 					
 				var dateNow = new Date(),
@@ -88,7 +91,7 @@ define(["jquery", "datepicker", "allfunction", "highchart"], function($, datepic
 				}else{
 					var valFlag = false;	
 				}
-				var aggregate = $(this).parents('.cont-mess-serch').find('.sumOrAvg').val();
+				var aggregate = 'num';
 				if(serVal){
 					var thisNewDiv = '';//保留创建的那个div
 					$('.use_input').val('');
@@ -112,7 +115,7 @@ define(["jquery", "datepicker", "allfunction", "highchart"], function($, datepic
 										yNum.push(j[attr]);//处理每个点的值
 									}	
 								}
-								creatDiv(serVal,hostVal,(timeYearBeagin + '-' + timeStringBegin),(timeYearEnd + '-' + timeStringEnd),xTime,yNum,serviceName,serviceUnit,dateArry,valFlag,aggregate);
+								creatDiv(serVal,hostVal,thisClass,(timeYearBeagin + '-' + timeStringBegin),(timeYearEnd + '-' + timeStringEnd),xTime,yNum,serviceName,serviceUnit,dateArry,valFlag,aggregate);
 								$('.mask_srch').find('.sumOrAvg option:eq(0)').attr('selected','true');
 								
 									
@@ -138,8 +141,11 @@ define(["jquery", "datepicker", "allfunction", "highchart"], function($, datepic
 			
 			//if end		
 			}
-			else{
-					
+			else{//取消选中状态
+				var thisClass = $(this).attr('class');
+				$('#' + thisClass).slideDown(500,function(){
+					$(this).remove();	
+				});	
 			}
 		});
 		

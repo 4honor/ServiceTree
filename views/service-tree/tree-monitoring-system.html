@@ -50,7 +50,7 @@
                 <div class="odin_check_outer">
                     <div class="tree_cont_title"><div>节点空间(ns)：</div><div id="machine_drop"></div></div>
                 
-                    <div class="odin_check_inner" isshow="yes" style="display:none;">
+                    <div class="odin_check_inner" isshow="yes">
                         <p class="mt20"><a class="btn btn-default" id="remove_sys">批量删除</a>
                         <table class="table table-bordered">
                             <thead>
@@ -74,7 +74,7 @@
                     </div>
                     
                     <!--  监控展示  -->
-                    <div class="odin_check_inner" isshow="no">
+                    <div class="odin_check_inner" isshow="no" style="display:none;">
                     	
                         <div class="monitor_btn_outer">
                             <p class="monitor_btn_title">
@@ -327,7 +327,7 @@
 									//解析checkbox选择器
 									$('.each_div').html('');//初始化每个栏目
 									for(var i = 0; i < da.length; i++){
-										var list = $('<p><input type="checkbox" name="' + da[i].Name + '">' + da[i].Name + '<span Id="' + da[i].Id +'" name="' + da[i].Name +'" type="' + da[i].TypeName +'" comment="' + da[i].Comment +'" myclass="' + da[i].Class +'" class="for_help">?</span></p>');
+										var list = $('<p><input class="modular' + i + '" type="checkbox" name="' + da[i].Name + '">' + da[i].Name + '<span Id="' + da[i].Id +'" name="' + da[i].Name +'" type="' + da[i].TypeName +'" comment="' + da[i].Comment +'" myclass="' + da[i].Class +'" class="for_help">?</span></p>');
 										switch(da[i].Class){
 											case 'CPU':
 											$('.cpu').append(list);

@@ -77,7 +77,8 @@
 					vtree: "../js/v-tree",
 					datepicker: "My97DatePicker/WdatePicker",
 					allfunction: "../js/monitor-functions",
-					monitorbind: "../js/monitor-bind"
+					monitorbind: "../js/monitor-bind",
+					highchart: "Highcharts/js/highcharts"
 				},
 				shim: {
 					"zTree": {
@@ -87,7 +88,7 @@
 				}
 			});
 			
-			require(['jquery', 'zTree', 'milk', 'vtree', 'datatables', 'datepicker', 'allfunction', 'monitorbind'],function($, zTree, mlik, vtree, datatables, datepicker, allfunction, monitorbind){
+			require(['jquery', 'zTree', 'milk', 'vtree', 'datatables', 'datepicker', 'allfunction', 'monitorbind', 'highchart'],function($, zTree, mlik, vtree, datatables, datepicker, allfunction, monitorbind, highchart){
 				$(document).ready(function(){
 					
 					vtree.init();

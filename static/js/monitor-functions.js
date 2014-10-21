@@ -5,8 +5,9 @@
 	}  
 	
 	//创建div
-	function creatDiv(ser,host,stime,etime,x,num,name,uni,arry,flag,aggr){
+	function creatDiv(ser,host,myid,stime,etime,x,num,name,uni,arry,flag,aggr){
 		var newDiv = $('#outer .drag_cont:eq(0)').clone();
+		newDiv.attr('id',myid);
 		$('#outer').append(newDiv);
 		newDiv.find('h3 span').text(ser);
 		newDiv.find('h3 span').attr('host',host);
@@ -14,7 +15,7 @@
 		newDiv.find('input.time-search:eq(1)').val(etime);
 		newDiv.slideDown(500,function(){
 			var newDivTop = newDiv.offset().top;
-			$('html,body').animate({'scrollTop':newDivTop},500);
+			$('.tree_cont').animate({'scrollTop':newDivTop},500);
 		});
 		thisNewDiv = newDiv;
 		var dateInput1 = newDiv.find('.time-search:eq(0)'),
