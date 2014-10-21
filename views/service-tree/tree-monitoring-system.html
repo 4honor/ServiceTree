@@ -77,30 +77,148 @@
                     <div class="odin_check_inner" isshow="no">
                     	
                         <div class="monitor_btn_outer">
-                        	<div class="monitor_inner">
+                            <p class="monitor_btn_title">
+                                <span>业务监控</span>
+                                <span>机器监控</span>
+                            </p>
+                        	<!--业务监控-->
+                        	<div class="monitor_inner" id="monitor_inner">
                             	<h3 class="active">日志监控</h3>
-                                <div class="each_div">
-                                	<p><input type="checkbox">cpu.idle<span Id="1" Name="cpu.idle" Type="0" Comment="机器压力监控" Class="1" class="for_help">?</span></p>
-                                    <p><input type="checkbox">cpu.idle<span Id="1" Name="cpu.idle" Type="0" Comment="机器压力监控" Class="1" class="for_help">?</span></p>
+                                <div class="each_div log" style="display:block;">
+                                	<!--<p><input type="checkbox">cpu.idle<span Id="1" name="cpu.idle" type="0" comment="机器压力监控" myclass="1" class="for_help">?</span></p>-->
                                 </div>
-                                <h3>日志监控</h3>
-                                <div class="each_div none">
-                                	<p><input type="checkbox">cpu.idle<span class="for_help">?</span></p>
-                                    <p><input type="checkbox">cpu.idle<span class="for_help">?</span></p>
+                                
+                                <h3 class="">存活监控</h3>
+                                <div class="each_div port"></div>
+                                
+                                <h3 class="">进程监控</h3>
+                                <div class="each_div proc"></div>
+                            </div>
+                            <!---->
+                            <!--机器监控-->
+                            <div class="monitor_inner" id="monitor_inner">
+                            	<h3 class="active">CPU</h3>
+                                <div class="each_div cpu" style="display:block;"></div>
+                                
+                                <h3 class="">内存</h3>
+                                <div class="each_div mem"></div>
+                                
+                                <h3 class="">网卡</h3>
+                                <div class="each_div net"></div>
+                                
+                                <h3 class="">磁盘</h3>
+                                <div class="each_div disk"></div>
+                                
+                                <h3 class="">IO</h3>
+                                <div class="each_div io"></div>
+                                
+                            </div>
+                           <!---->
+                        </div>
+                        
+                        
+                        
+                        <div class="cont_outer" id="outer">
+                            <!-- 隐藏一个div，下面所有的创建查询结果的都是克隆这个的  -->
+                            <!---->
+                            <div class="drag_cont" style="display:block;">
+                                
+                                <div class="progress progress_posi">
+                                    <div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                        <span class="sr-only"></span>
+                                    </div>
                                 </div>
-                                <h3>日志监控</h3>
-                                <div class="each_div none">
-                                	<p><input type="checkbox">cpu.idle<span class="for_help">?</span></p>
-                                    <p><input type="checkbox">cpu.idle<span class="for_help">?</span></p>
-                                </div>
-                                <h3>日志监控</h3>
-                                <div class="each_div none">
-                                	<p><input type="checkbox">cpu.idle<span class="for_help">?</span></p>
-                                    <p><input type="checkbox">cpu.idle<span class="for_help">?</span></p>
+                                
+                                <div class="cont-mess">
+                                    <h3><span>10.10.10.60</span> <a class="close">&times;</a></h3>
+                                    <form class="form-horizontal" role="form">
+                                        <div class="form-group">
+                                            <div class="col-sm-2">
+                                                <input type="text" class="form-control time-search" id="" placeholder="起始时间">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="text" class="form-control time-search" id="" placeholder="终止时间">
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <div class="col-sm-7">
+                                                    <a class="btn btn-primary time_search">查看</a>
+                                                    <a class="btn btn-default btn_sx" style="margin-left:10px;">刷新</a>
+                                                    <div style="display:inline-block;" class="other_btn_outer">
+                                                        <a class="btn btn-default" style="margin-left:10px;" time="3600">1小时</a>
+                                                        <a class="btn btn-default" style="margin-left:10px;" time="10800">3小时</a>
+                                                        <a class="btn btn-default" style="margin-left:10px;" time="86400">1天</a>
+                                                        <a class="btn btn-default" style="margin-left:10px;" time="259200">3天</a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4" style="display:inline-block;">
+                                                    <div class="form-group" style="margin-bottom:0;">
+                                                        <label class="col-sm-7 control-label hover_btn">
+                                                            聚合计算：
+                                                            <span class="badge">?</span>
+                                                            <div class="alert alert-info inner_mess">求和 表示集群内所有机器求和 <br>均值 表示集群内所有机器平均</div>
+                                                        </label>
+                                                        <div class="col-sm-5">
+                                                            <select class="form-control aggregate">
+                                                                <option value="sum">求和</option>
+                                                                <option value="avg">均值</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="col-sm-1 more_checked" style="padding:0; position:relative; left:-20px; text-align:right;">
+                                                <span class="badge hover_btn" style="position:relative; top:3px; margin-right:5px;">
+                                                    ?
+                                                    <div class="alert alert-info inner_mess" style="left:-70px; top:20px; line-height:16px;">
+                                                        同比: 昨天同一时刻对比<br>
+                                                        环比:上一个时刻对比
+                                                    </div>
+                                                </span>
+                                                
+                                                 <label class="checkbox-inline">
+                                                    <input type="checkbox" value="tb">同比
+                                                </label>
+                                                <label class="checkbox-inline" style="margin-left:6px;">
+                                                    <input type="checkbox" value="hb">环比
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="inner">
+                                        <div class="col-lg-12">
+                                            <div class="cont_box" style="min-width: 310px; height: 400px; margin: 0 auto; overflow:hidden;"></div>
+                                        </div>
+                                        
+                                        <div class="select_outer">
+                                              <!-- 删除 -->
+                                              <!--<div class="btn-group">
+                                                  <button type="button" style="width:77px;" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                    host <span class="caret"></span>
+                                                  </button>
+                                                  <div class="dropdown-menu" role="menu">
+                                                        <label class="checkbox">
+                                                            <input type="checkbox">1
+                                                        </label>
+                                                        <label class="checkbox" style="margin-left:6px;">
+                                                            <input type="checkbox">2
+                                                        </label>
+                                                        <label class="checkbox" style="margin-left:6px;">
+                                                            <input type="checkbox">3
+                                                        </label>
+                                                        <label class="checkbox" style="margin-left:6px;">
+                                                            <input type="checkbox">4
+                                                        </label>
+                                                  </div>
+                                              </div>-->
+                                          
+                                        </div>
+                                        
+                                   </div>
                                 </div>
                             </div>
-                           
-                        </div>
+                            <!---->
                         
                         
                     </div>
@@ -116,16 +234,12 @@
         	<div class="help_inner">
             	<div class="triangle-left"></div>
                 <div class="monitor_help_mess">
-                	<div class="col-lg-4">Id</div>
-                    <div class="col-lg-8">1</div>
-                    <div class="col-lg-4">Name</div>
-                    <div class="col-lg-8">1</div>
-                    <div class="col-lg-4">Type</div>
-                    <div class="col-lg-8">1</div>
-                    <div class="col-lg-4">Class</div>
-                    <div class="col-lg-8">1</div>
-                    <div class="col-lg-4">Comment</div>
-                    <div class="col-lg-8">1</div>
+                    <div class="col-lg-5">监控名:</div>
+                    <div class="col-lg-7 myname">1</div>
+                    <div class="col-lg-5">监控类别:</div>
+                    <div class="col-lg-7 mytype">1</div>
+                    <div class="col-lg-5">备注:</div>
+                    <div class="col-lg-7 mycomment">1</div>
                 </div>
             </div>
         </div>
@@ -145,7 +259,10 @@
 			require.config({
 				paths: {
 					zTree: "zTree/js/jquery.ztree.core-3.5",
-					vtree: "../js/v-tree"
+					vtree: "../js/v-tree",
+					datepicker: "My97DatePicker/WdatePicker",
+					allfunction: "../js/monitor-functions",
+					monitorbind: "../js/monitor-bind"
 				},
 				shim: {
 					"zTree": {
@@ -155,32 +272,13 @@
 				}
 			});
 			
-			require(['jquery', 'zTree', 'milk', 'vtree', 'datatables'],function($, zTree, mlik, vtree, datatables){
+			require(['jquery', 'zTree', 'milk', 'vtree', 'datatables', 'datepicker', 'allfunction', 'monitorbind'],function($, zTree, mlik, vtree, datatables, datepicker, allfunction, monitorbind){
 				$(document).ready(function(){
-					
+					//绑定树
 					vtree.init();
+					//绑定监控图表
+					monitorbind.init();
 					
-					//拉取table
-					/*mlk.ajax({
-						method: 'GET',
-						url: '/v1/monitor/',
-						data: null, 
-						isloading: true,
-						callback: function(da){
-							if(da){
-								var tbodyTr = '';
-								for(var i = 0;i < da.length; i++){
-									var html = '<tr id="' + da[i].Id + '"><td><input type="checkbox"></td><td>' + da[i].Name + '</td><td>' + da[i].TypeName + '</td><td><a class="sys_mess">监控详情</a></td></tr>';	
-									tbodyTr += html;
-								}
-								$('#sys_list').html(tbodyTr);
-								$('.table').DataTable();
-								mlk.tableInverse({//启动table全选反选
-									dom: $('.table')	
-								});
-							}
-						}
-					});*/
 					
 					//显示详情
 					$('.table').on('click','.sys_mess',function(){
@@ -214,6 +312,7 @@
 							isloading: true,
 							callback: function(da){
 								if(da){
+									//解析table
 									var tbodyTr = '';
 									for(var i = 0;i < da.length; i++){
 										var html = '<tr id="' + da[i].Id + '"><td><input type="checkbox"></td><td>' + da[i].Name + '</td><td>' + da[i].TypeName + '</td><td><a class="sys_mess">监控详情</a></td></tr>';	
@@ -224,9 +323,41 @@
 									mlk.tableInverse({//启动table全选反选
 										dom: $('.table')	
 									});
+									//解析checkbox选择器
+									for(var i = 0; i < da.length; i++){
+										var list = $('<p><input type="checkbox">' + da[i].Name + '<span Id="' + da[i].Id +'" name="' + da[i].Name +'" type="' + da[i].TypeName +'" comment="' + da[i].Comment +'" myclass="' + da[i].Class +'" class="for_help">?</span></p>');
+										switch(da[i].Class){
+											case 'CPU':
+											$('.cpu').append(list);
+											break;
+											case 'LOG':
+											$('.log').append(list);
+											break;
+											case 'PORT':
+											$('.port').append(list);
+											break;
+											case 'PROC':
+											$('.proc').append(list);
+											break;
+											case 'MEM':
+											$('.mem').append(list);
+											break;
+											case 'NET':
+											$('.net').append(list);
+											break;	
+											case 'IO':
+											$('.io').append(list);
+											break;	
+											case 'DISK':
+											$('.disk').append(list);
+											break;	
+										}	
+									}
+									
 								}	
 							}
 						});
+						
 					});
 
 				});

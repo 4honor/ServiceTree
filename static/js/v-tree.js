@@ -1,4 +1,4 @@
-define(["jquery", "milk", "zTree"], function($, milk, zTree) {
+define(["jquery", "milk", "zTree", "datepicker"], function($, milk, zTree, datepicker) {
 	var o = {};
 	
 	o.init = function(){
@@ -161,11 +161,22 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 		//help提示
 		$('.monitor_btn_outer').on('mouseover','.for_help',function(){
 			var thisOffset = $(this).offset();
+			$('#monitor_help .myname').text($(this).attr('name'));
+			$('#monitor_help .mytype').text($(this).attr('type'));
+			$('#monitor_help .mycomment').text($(this).attr('comment'));
 			$('#monitor_help').show().css({'top':thisOffset.top-15,'left':thisOffset.left+25});	
 		});
 		
 		$('.monitor_btn_outer').on('mouseout','.for_help',function(){
 			$('#monitor_help').hide();	
+		});
+		
+		//下拉
+		$('.monitor_inner').on('click','h3',function(){
+			$(this).parents('.monitor_inner').find('h3').removeClass('active');
+			$(this).addClass('active');
+			$(this).parents('.monitor_inner').find('.each_div').slideUp();
+			$(this).next('.each_div').slideDown();	
 		});
 		
 	}
