@@ -3,14 +3,15 @@ package models
 import (
 	"bytes"
 	"fmt"
-	"github.com/astaxie/beego/orm"
 	"strings"
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 )
 
 /*
-select t1.sys_id, t1.resource_id, concat(t1.tag_value,",",t2.tag_value) as tags from
-(select * from tagging where tag_name = 'corp') t1 ,
-(select * from tagging where tag_name = 'depart') t2
+select distinct t1.sys_id, t1.resource_id, concat(t1.tag_value,",",t2.tag_value) as tags from
+(select distinct sys_id, resource_id, tag_value from tagging where tag_name = 'corp') t1 ,
+(select distinct sys_id, resource_id, tag_value from tagging where tag_name = 'depart') t2
 where t1.sys_id = t2.sys_id and t1.resource_id = t2.resource_id;
 */
 
@@ -81,7 +82,7 @@ func queryResourcesByTagString(dbname, tag_str string, s_id int) (resources []Re
 
 	q_str, _ := buildQueryString(tag_str, s_id)
 
-	fmt.Println("buildDBQueryString:\n", q_str)
+    beego.Debug("build db query string: ", q_str)
 	num, err := o.Raw(q_str).QueryRows(&resources)
 	if err == nil {
 		fmt.Printf("Query successed and row count is %d\n", num)
@@ -109,9 +110,9 @@ func buildQueryString(tag_string string, s_id int) (q_string string, err error) 
 		j := i + 1
 		cat_sql.WriteString(fmt.Sprintf("t%d.tag_value", j))
         if s_id <= 0{
-		    sel_sql.WriteString(fmt.Sprintf("(select * from tagging where tag_name = \"%s\") t%d", tag, j))
+		    sel_sql.WriteString(fmt.Sprintf("(select distinct sys_id, resource_id, tag_value from tagging where tag_name = '%s') t%d", tag, j))
         }else{
-		    sel_sql.WriteString(fmt.Sprintf("(select * from tagging where tag_name = \"%s\" AND sys_id=%d) t%d", tag, s_id, j))
+		    sel_sql.WriteString(fmt.Sprintf("(select distinct sys_id, resource_id, tag_value from tagging where tag_name = '%s' AND sys_id=%d) t%d", tag, s_id, j))
         }
 		if j < len {
 			cat_sql.WriteString(",\",\",")
@@ -138,7 +139,7 @@ func buildQueryString(tag_string string, s_id int) (q_string string, err error) 
 
 	}
 	cat_sql.WriteString(")")
-	complete_sql.WriteString(fmt.Sprintf("select t1.sys_id, t1.resource_id, %s as tags from \n", cat_sql.String()))
+	complete_sql.WriteString(fmt.Sprintf("select distinct t1.sys_id, t1.resource_id, %s as tags from \n", cat_sql.String()))
 	complete_sql.WriteString(sel_sql.String())
 	if len > 1 {
 		complete_sql.WriteString(fmt.Sprintf("where %s;", where_sql.String()))
@@ -177,7 +178,6 @@ func GetResourcesWithinNs(tags map[string]string, sys_id int) []interface{}{
         hierarchy = append(hierarchy, k)
         names = append(names , v)
     }
-    fmt.Printf(">>>>>>>>>start search with: tags:%+v, hierarchy:%+v, names:%+v\n", tags, hierarchy, names)
 
     root := BuildTree(strings.Join(hierarchy, ","), sys_id) 
     query_resources = searchResources(root,hierarchy,names,0)
@@ -189,10 +189,9 @@ func GetResourcesWithinNs(tags map[string]string, sys_id int) []interface{}{
         resource_id := query_resource.ResourceId
         subsys, err := GetSubsysById(sys_id)
         if err != nil {
-            fmt.Println("wfwefwefwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww=> query wrong sys id, err:", err, "with sys_id:", sys_id)
+            beego.Warn("query subsys, err:", err, "with sys_id:", sys_id)
             continue
         }
-        fmt.Println("wfwefwefwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww=> start orm")
         if subsys.Name == "machine" {
             r, err := GetMachineById(resource_id)
             if err == nil {
@@ -206,7 +205,6 @@ func GetResourcesWithinNs(tags map[string]string, sys_id int) []interface{}{
             }
         }
     }
-    fmt.Println("============================> get reources: ", resources)
     return resources
 }
 
@@ -215,27 +213,22 @@ func searchResources(node *TreeNode, hierarchy []string, names []string, depth i
     var resources []*Resource
     if depth == 0 {
         for _, child := range node.Children {
-            fmt.Printf("root-> children: %+v\n", child)
-                resources = searchResources(child, hierarchy, names, depth+1)
-                if len(resources) == 0 {
-                    fmt.Println("search another node")
-                    depth = 0
-                    continue
-                }else{
-                    return resources
-                }
+            resources = searchResources(child, hierarchy, names, depth+1)
+            if len(resources) == 0 {
+                fmt.Println("search another node")
+                depth = 0
+                continue
+            }else{
+                return resources
+            }
         }
     }else{
-        fmt.Printf("before search %+v, hierarchy:%+v, names:%+v\n", node, hierarchy, names )
         if (node.IsParent == false) && (node.Meta == hierarchy[0]) && (node.Name == names[0]) {
-            fmt.Println("found , return node:", node)
             resources = node.Resources
         }else{
             if (node.Meta == hierarchy[0]) && (node.Name == names[0]) {
                 for _, child := range node.Children {
-                    fmt.Printf("check child %+v, hierarchy:%+v, names:%+v\n", child, hierarchy, names )
                     if (child.Meta == hierarchy[1]) && (child.Name == names[1]) {
-                        fmt.Printf("node:%+v match .start search next\n", child)
                         return searchResources(child, hierarchy[1:], names[1:], depth+1)
                     }
                 }
