@@ -91,7 +91,10 @@
 			require.config({
 				paths: {
 					zTree: "zTree/js/jquery.ztree.core-3.5",
-					vtree: "../js/v-tree"
+					vtree: "../js/v-tree",
+					datepicker: "My97DatePicker/WdatePicker",
+					allfunction: "../js/monitor-functions",
+					monitorbind: "../js/monitor-bind"
 				},
 				shim: {
 					"zTree": {
@@ -101,7 +104,7 @@
 				}
 			});
 			
-			require(['jquery', 'zTree', 'milk', 'vtree', 'datatables'],function($, zTree, mlik, vtree, datatables){
+			require(['jquery', 'zTree', 'milk', 'vtree', 'datatables', 'datepicker', 'allfunction', 'monitorbind'],function($, zTree, mlik, vtree, datatables, datepicker, allfunction, monitorbind){
 				$(document).ready(function(){
 					
 					vtree.init();

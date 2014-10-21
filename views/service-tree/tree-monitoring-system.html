@@ -325,7 +325,7 @@
 									});
 									//解析checkbox选择器
 									for(var i = 0; i < da.length; i++){
-										var list = $('<p><input type="checkbox">' + da[i].Name + '<span Id="' + da[i].Id +'" name="' + da[i].Name +'" type="' + da[i].TypeName +'" comment="' + da[i].Comment +'" myclass="' + da[i].Class +'" class="for_help">?</span></p>');
+										var list = $('<p><input type="checkbox" name="' + da[i].Name + '">' + da[i].Name + '<span Id="' + da[i].Id +'" name="' + da[i].Name +'" type="' + da[i].TypeName +'" comment="' + da[i].Comment +'" myclass="' + da[i].Class +'" class="for_help">?</span></p>');
 										switch(da[i].Class){
 											case 'CPU':
 											$('.cpu').append(list);

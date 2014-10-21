@@ -48,7 +48,7 @@ define(["jquery", "datepicker", "allfunction"], function($, datepicker, allfunct
 		/*点击查询状态*/
 		$('#search').click(function(){
 			var serVal = $('#service').val(),
-				hostVal = $('#host').val();
+				hostVal = '';
 				
 			//运行动画
 			$('.mask_srch').fadeOut(500);
