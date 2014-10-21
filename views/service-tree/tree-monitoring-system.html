@@ -45,13 +45,12 @@
                 <ul class="tree_sec_menu" id="check_tab">
                     <li class="active">监控列表</li>
                     <li>监控展示</li>
-                    <li>监控添加</li>
                 </ul>
                 
                 <div class="odin_check_outer">
                     <div class="tree_cont_title"><div>节点空间(ns)：</div><div id="machine_drop"></div></div>
                 
-                    <div class="odin_check_inner" isshow="yes">
+                    <div class="odin_check_inner" isshow="yes" style="display:none;">
                         <p class="mt20"><a class="btn btn-default" id="remove_sys">批量删除</a>
                         <table class="table table-bordered">
                             <thead>
@@ -74,13 +73,61 @@
                         </table>
                     </div>
                     
-                    <div class="odin_check_inner" isshow="no" style="display:none;">11</div>
-                    <div class="odin_check_inner" isshow="no" style="display:none;">222</div>
+                    <!--  监控展示  -->
+                    <div class="odin_check_inner" isshow="no">
+                    	
+                        <div class="monitor_btn_outer">
+                        	<div class="monitor_inner">
+                            	<h3 class="active">日志监控</h3>
+                                <div class="each_div">
+                                	<p><input type="checkbox">cpu.idle<span Id="1" Name="cpu.idle" Type="0" Comment="机器压力监控" Class="1" class="for_help">?</span></p>
+                                    <p><input type="checkbox">cpu.idle<span Id="1" Name="cpu.idle" Type="0" Comment="机器压力监控" Class="1" class="for_help">?</span></p>
+                                </div>
+                                <h3>日志监控</h3>
+                                <div class="each_div none">
+                                	<p><input type="checkbox">cpu.idle<span class="for_help">?</span></p>
+                                    <p><input type="checkbox">cpu.idle<span class="for_help">?</span></p>
+                                </div>
+                                <h3>日志监控</h3>
+                                <div class="each_div none">
+                                	<p><input type="checkbox">cpu.idle<span class="for_help">?</span></p>
+                                    <p><input type="checkbox">cpu.idle<span class="for_help">?</span></p>
+                                </div>
+                                <h3>日志监控</h3>
+                                <div class="each_div none">
+                                	<p><input type="checkbox">cpu.idle<span class="for_help">?</span></p>
+                                    <p><input type="checkbox">cpu.idle<span class="for_help">?</span></p>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        
+                        
+                    </div>
+                    <!--  监控展示end  -->
                     
             	</div>
                 	
             </div>
             
+        </div>
+        
+        <div class="monitor_help" id="monitor_help">
+        	<div class="help_inner">
+            	<div class="triangle-left"></div>
+                <div class="monitor_help_mess">
+                	<div class="col-lg-4">Id</div>
+                    <div class="col-lg-8">1</div>
+                    <div class="col-lg-4">Name</div>
+                    <div class="col-lg-8">1</div>
+                    <div class="col-lg-4">Type</div>
+                    <div class="col-lg-8">1</div>
+                    <div class="col-lg-4">Class</div>
+                    <div class="col-lg-8">1</div>
+                    <div class="col-lg-4">Comment</div>
+                    <div class="col-lg-8">1</div>
+                </div>
+            </div>
         </div>
         
         <input type="hidden" id="hierarchy" value="{{.Hierarchy}}">

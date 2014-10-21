@@ -105,7 +105,7 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 			var thisIndex = $(this).index();
 			$(this).addClass('active').siblings().removeClass('active');
 			$('.odin_check_outer .odin_check_inner').eq(thisIndex).show()
-			.attr('isshow','yes').siblings()
+			.attr('isshow','yes').siblings('.odin_check_inner')
 			.hide().attr('isshow','no');	
 		});
 		
@@ -156,6 +156,16 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 		//sys 页批量删除
 		$(document).on('click','#remove_sys',function(){
 			removeTableTr('/v1/monitor/');
+		});
+		
+		//help提示
+		$('.monitor_btn_outer').on('mouseover','.for_help',function(){
+			var thisOffset = $(this).offset();
+			$('#monitor_help').show().css({'top':thisOffset.top-15,'left':thisOffset.left+25});	
+		});
+		
+		$('.monitor_btn_outer').on('mouseout','.for_help',function(){
+			$('#monitor_help').hide();	
 		});
 		
 	}
