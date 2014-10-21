@@ -59,13 +59,13 @@ func (this *PageController) Get() {
         case "machine":
             menus[2].Status = "active"
             this.Data["Menus"] = menus
-            this.Data["Hierarchy"] = models.GetHierarchy("machine")
+            this.Data["Hierarchy"] = getSysHierarchy("machine")
             this.Data["Resource"] = "machine"
             this.Layout = "service-tree/tree-machine-manager.html"
         case "monitor":
             menus[3].Status = "active"
             this.Data["Menus"] = menus
-            this.Data["Hierarchy"] = models.GetHierarchy("monitor")
+            this.Data["Hierarchy"] = getSysHierarchy("monitor")
             beego.Debug("get monitor hierarchy: ", this.Data["Hierarchy"])
             this.Data["Resource"] = "monitor"
             this.Layout = "service-tree/tree-monitoring-system.html"
@@ -95,4 +95,13 @@ func getTags() []models.TagSchema {
         tags = append(tags, tag)
     }
     return tags
+}
+
+func getSysHierarchy(sys string) string {
+    hierarchy := models.GetHierarchy(sys)    
+    //empty hierarchy downgrade to default hierarchy
+    if hierarchy == "" {
+        hierarchy = models.DefaultHierarchy()
+    }
+    return hierarchy
 }
