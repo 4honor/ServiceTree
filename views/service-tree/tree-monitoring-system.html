@@ -121,7 +121,7 @@
                         <div class="cont_outer" id="outer">
                             <!-- 隐藏一个div，下面所有的创建查询结果的都是克隆这个的  -->
                             <!---->
-                            <div class="drag_cont" style="display:block;">
+                            <div class="drag_cont" style="display:none;">
                                 
                                 <div class="progress progress_posi">
                                     <div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
@@ -187,7 +187,7 @@
                                         </div>
                                     </form>
                                     <div class="inner">
-                                        <div class="col-lg-12">
+                                        <div class="col-lg-12 position-re">
                                             <div class="cont_box" style="min-width: 310px; height: 400px; margin: 0 auto; overflow:hidden;"></div>
                                         </div>
                                         
@@ -262,7 +262,8 @@
 					vtree: "../js/v-tree",
 					datepicker: "My97DatePicker/WdatePicker",
 					allfunction: "../js/monitor-functions",
-					monitorbind: "../js/monitor-bind"
+					monitorbind: "../js/monitor-bind",
+					highchart: "Highcharts/js/highcharts"
 				},
 				shim: {
 					"zTree": {
@@ -272,7 +273,7 @@
 				}
 			});
 			
-			require(['jquery', 'zTree', 'milk', 'vtree', 'datatables', 'datepicker', 'allfunction', 'monitorbind'],function($, zTree, mlik, vtree, datatables, datepicker, allfunction, monitorbind){
+			require(['jquery', 'zTree', 'milk', 'vtree', 'datatables', 'datepicker', 'allfunction', 'monitorbind', 'highchart'],function($, zTree, mlik, vtree, datatables, datepicker, allfunction, monitorbind, highchart){
 				$(document).ready(function(){
 					//绑定树
 					vtree.init();
@@ -324,6 +325,7 @@
 										dom: $('.table')	
 									});
 									//解析checkbox选择器
+									$('.each_div').html('');//初始化每个栏目
 									for(var i = 0; i < da.length; i++){
 										var list = $('<p><input type="checkbox" name="' + da[i].Name + '">' + da[i].Name + '<span Id="' + da[i].Id +'" name="' + da[i].Name +'" type="' + da[i].TypeName +'" comment="' + da[i].Comment +'" myclass="' + da[i].Class +'" class="for_help">?</span></p>');
 										switch(da[i].Class){
