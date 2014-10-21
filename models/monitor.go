@@ -13,6 +13,7 @@ type Monitor struct {
 	Id      int    `orm:"column(id);auto"`
 	Name  string `orm:"column(name);size(255)"`
 	Type    int    `orm:"column(type)"`
+    TypeName string `orm:"-"`
     Class string `orm:"column(class);size(255)"`
 	Comment string `orm:"column(comment);null"`
 }
@@ -32,9 +33,11 @@ func AddMonitor(m *Monitor) (id int64, err error) {
 // GetMonitorById retrieves Monitor by Id. Returns error if
 // Id doesn't exist
 func GetMonitorById(id int) (v *Monitor, err error) {
+    var type2name = map[int]string{0:"机器监控", 1:"业务监控"}
 	o := orm.NewOrm()
 	v = &Monitor{Id: id}
 	if err = o.Read(v); err == nil {
+        v.TypeName = type2name[v.Type]
 		return v, nil
 	}
 	return nil, err
