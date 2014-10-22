@@ -11,6 +11,14 @@ type Tagging  struct {
     Tags       []Tag
 }
 
+type TaggingRecord struct {
+    TagsetId   int64  `json:"tagset_id"`
+    SysId      int64  `json:"sys_id"`
+    ResourceId int64  `json:"resource_id"`
+    TagName    string  `json:"tag_name"`
+    TagValue   string  `json:"tag_value"` 
+}
+
 // 对对应的资源新增 tag
 func AddTagging(taggings []Tagging) int64{
     id := getTaggingId()

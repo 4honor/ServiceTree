@@ -9,3 +9,5 @@ type Tag struct {
     Key     string
     Value   string
 }
+
+type Ns []Tag

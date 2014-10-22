@@ -50,6 +50,12 @@ func init() {
 			),
 		),
 
+        beego.NSNamespace("/ns",
+            beego.NSInclude(
+                &controllers.NsController{},         
+            ),
+        ),
+
         beego.NSNamespace("/resource",
             beego.NSInclude(
                 &controllers.ResourceController{},

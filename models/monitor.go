@@ -46,6 +46,23 @@ func GetMonitorById(id int) (v *Monitor, err error) {
 	return nil, err
 }
 
+//GetMonitoryByName retrieves Monitor by Name. Returns error if 
+//Name doesn't exit
+func GetMonitorByName(name string)(m Monitor, err error) {
+    var monitor Monitor  
+
+    o := orm.NewOrm()
+    qs := o.QueryTable("monitor")
+    beego.Debug("start query monitor to get info")
+    err = qs.Filter("name", name).One(&monitor)
+    if err == orm.ErrNoRows {
+        beego.Warn("no resource found")
+        return monitor, err
+    }
+    beego.Trace("get monitor resource:", monitor)
+    return monitor, err
+}
+
 
 //GetAllMachineMonitor 获取所有机器监控项
 func GetAllMachineMonitor() (ml []interface{}, err error) {

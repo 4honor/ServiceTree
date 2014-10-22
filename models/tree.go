@@ -161,6 +161,51 @@ func BuildTree(hierarchy string, sys_id int) *TreeNode{
     return root
 }
 
+//获取某个资源所在的ns, 机器资源可能挂载在多个 ns 下, 所以是二维数组
+func GetNsWithResource(resource Resource) []Ns {
+    var records []TaggingRecord
+    var ns []Ns
+
+    o := orm.NewOrm() 
+    query := fmt.Sprintf("SELECT tagset_id , sys_id , resource_id as ResourceId, tag_name, tag_value FROM tagging WHERE sys_id = %d AND resource_id = %d  ORDER by tagset_id ", resource.SysId, resource.ResourceId)
+    beego.Debug("query ns with sql: ", query)
+    num, err := o.Raw(query).QueryRows(&records)
+    if err == nil {
+        if num == 0 {
+            // not ns found by resource, return empty
+            beego.Debug(" not ns found by resource, return empty")
+            ns = make([]Ns, 0)
+            return  ns
+        }
+        var last_taskset_id int64= 0
+        var node_space Ns
+        beego.Debug("query ns with resource success, got resource:", records)
+        for index:=0; index < len(records); index += 1{
+            var tag Tag
+            tag.Key = records[index].TagName
+            tag.Value = records[index].TagValue
+            if index == 0 {
+                last_taskset_id = records[index].TagsetId
+                node_space = append(node_space, tag) 
+            } else {
+                if last_taskset_id !=  records[index].TagsetId {
+                    //different node space, finish append tag
+                    ns = append(ns, node_space)
+                    node_space = make(Ns,8)
+                }
+                node_space = append(node_space, tag)
+                //last one, append node space
+                if index == len(records) -1 {
+                    ns = append(ns, node_space)
+                }
+            }
+        }
+    }else{
+        beego.Warn("query ns failed with err: ", err)
+    }
+    return ns
+}
+
 //get  specify resource within specify ns
 // sys_id :0  get all resource within ns
 func GetResourcesWithinNs(tags map[string]string, sys_id int) []interface{}{
