@@ -102,28 +102,6 @@
 					
 					var myDatatable;//datatable对象
 					
-					//拉取table
-					/*mlk.ajax({
-						method: 'GET',
-						url: '/v1/machine/' + $('#machine_drop').text(),
-						data: null, 
-						isloading: true,
-						callback: function(da){
-							if(da){
-								var tableTr = '';
-								for(var i = 0; i < da.length; i++){
-									var html = '<tr id="' + da[i].Id + '"><td><input type="checkbox"></td><td>' + da[i].Name + '</td><td><a class="mach_mess">机器详情</a></td><td><a class="mach_name">机器改名</a></td></tr>';
-									tableTr += html;	
-								}
-								$('#machine_table').html(tableTr);
-								myDatatable = $('.table').DataTable();
-								mlk.tableInverse({//启动table全选反选
-									dom: $('.table')	
-								});	
-							}	
-						}
-					});*/
-					
 					//批量导入
 					$('#bulk_import').bind('click',function(){
 						var alertHtml = '<div style="padding:0 10px;"><textarea class="form-control tag_textarea mb10" placeholder="机器列表，一行一台机器" style="width:100%;margin-top:10px;"></textarea></div>';

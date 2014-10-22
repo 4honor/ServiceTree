@@ -83,33 +83,33 @@
                             </p>
                         	<!--业务监控-->
                         	<div class="monitor_inner" id="monitor_inner">
-                            	<h3 class="active">日志监控</h3>
-                                <div class="each_div log" style="display:block;">
-                                	<!--<p><input type="checkbox">cpu.idle<span Id="1" name="cpu.idle" type="0" comment="机器压力监控" myclass="1" class="for_help">?</span></p>-->
+                            	<h3><span><em class="glyphicon glyphicon-plus"></em></span>日志监控</h3>
+                                <div class="each_div log">
+                                	<!--<p><input type="checkbox">cpu.idle<span Id="1" name="cpu.idle" type="0" comment="机器压力监控" myclass="1" class="badge">?</span></p>-->
                                 </div>
                                 
-                                <h3 class="">存活监控</h3>
+                                <h3 class=""><span><em class="glyphicon glyphicon-plus"></em></span>存活监控</h3>
                                 <div class="each_div port"></div>
                                 
-                                <h3 class="">进程监控</h3>
+                                <h3 class=""><span><em class="glyphicon glyphicon-plus"></em></span>进程监控</h3>
                                 <div class="each_div proc"></div>
                             </div>
                             <!---->
                             <!--机器监控-->
                             <div class="monitor_inner" id="monitor_inner">
-                            	<h3 class="active">CPU</h3>
-                                <div class="each_div cpu" style="display:block;"></div>
+                            	<h3><span><em class="glyphicon glyphicon-plus"></em></span>CPU</h3>
+                                <div class="each_div cpu"></div>
                                 
-                                <h3 class="">内存</h3>
+                                <h3 class=""><span><em class="glyphicon glyphicon-plus"></em></span>内存</h3>
                                 <div class="each_div mem"></div>
                                 
-                                <h3 class="">网卡</h3>
+                                <h3 class=""><span><em class="glyphicon glyphicon-plus"></em></span>网卡</h3>
                                 <div class="each_div net"></div>
                                 
-                                <h3 class="">磁盘</h3>
+                                <h3 class=""><span><em class="glyphicon glyphicon-plus"></em></span>磁盘</h3>
                                 <div class="each_div disk"></div>
                                 
-                                <h3 class="">IO</h3>
+                                <h3 class=""><span><em class="glyphicon glyphicon-plus"></em></span>IO</h3>
                                 <div class="each_div io"></div>
                                 
                             </div>
@@ -130,34 +130,38 @@
                                 </div>
                                 
                                 <div class="cont-mess">
-                                    <h3><span>10.10.10.60</span> <a class="close">&times;</a></h3>
+                                    <h3>
+                                        <span class="left">10.10.10.60</span>
+                                        <em class="for_help" style="float:left; top:10px; left:10px;">?</em> 
+                                        <a class="close">&times;</a>
+                                    </h3>
                                     <form class="form-horizontal" role="form">
                                         <div class="form-group">
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-2" style="padding-left:10px; padding-right:5px;">
                                                 <input type="text" class="form-control time-search" id="" placeholder="起始时间">
                                             </div>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-2" style="padding-left:5px;">
                                                 <input type="text" class="form-control time-search" id="" placeholder="终止时间">
                                             </div>
-                                            <div class="col-sm-7">
-                                                <div class="col-sm-7">
+                                            <div class="left" style="width:570px;">
+                                                <div class="left">
                                                     <a class="btn btn-primary time_search">查看</a>
-                                                    <a class="btn btn-default btn_sx" style="margin-left:10px;">刷新</a>
-                                                    <div style="display:inline-block;" class="other_btn_outer">
-                                                        <a class="btn btn-default" style="margin-left:10px;" time="3600">1小时</a>
-                                                        <a class="btn btn-default" style="margin-left:10px;" time="10800">3小时</a>
-                                                        <a class="btn btn-default" style="margin-left:10px;" time="86400">1天</a>
-                                                        <a class="btn btn-default" style="margin-left:10px;" time="259200">3天</a>
+                                                    <a class="btn btn-default btn_sx" style="margin-left:5px;">刷新</a>
+                                                    <div style="display:inline-block;" class="btn-group other_btn_outer">
+                                                        <a class="btn btn-default" time="3600">1小时</a>
+                                                        <a class="btn btn-default" time="7200">2小时</a>
+                                                        <a class="btn btn-default" time="86400">1天</a>
+                                                        <a class="btn btn-default" time="172800">2天</a>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4" style="display:inline-block;">
+                                                <div class="col-sm-4" style="display:inline-block; position:relative; left:10px;">
                                                     <div class="form-group" style="margin-bottom:0;">
-                                                        <label class="col-sm-7 control-label hover_btn">
+                                                        <label class="col-sm-7 control-label hover_btn spe-col-padd-0">
                                                             聚合计算：
-                                                            <span class="badge">?</span>
+                                                            <span class="badge" style="position:relative; right:3px;">?</span>
                                                             <div class="alert alert-info inner_mess">求和 表示集群内所有机器求和 <br>均值 表示集群内所有机器平均</div>
                                                         </label>
-                                                        <div class="col-sm-5">
+                                                        <div class="col-sm-5 spe-col-padd-0">
                                                             <select class="form-control aggregate">
                                                                 <option value="sum">求和</option>
                                                                 <option value="avg">均值</option>
@@ -168,19 +172,19 @@
                                                 </div>
                                                 
                                             </div>
-                                            <div class="col-sm-1 more_checked" style="padding:0; position:relative; left:-20px; text-align:right;">
-                                                <span class="badge hover_btn" style="position:relative; top:3px; margin-right:5px;">
+                                            <div class="left more_checked" style="padding:0; position:relative; left:20px; text-align:right; width:85px;">
+                                                <span class="badge hover_btn" style="position:relative; top:8px; margin-right:5px; float:right;">
                                                     ?
-                                                    <div class="alert alert-info inner_mess" style="left:-70px; top:20px; line-height:16px;">
+                                                    <div class="alert alert-info inner_mess" style="left:-180px; top:20px; line-height:16px;">
                                                         同比: 昨天同一时刻对比<br>
                                                         环比:上一个时刻对比
                                                     </div>
                                                 </span>
                                                 
-                                                 <label class="checkbox-inline">
+                                                <label class="checkbox-inline left" style="padding-top:0;margin-left:6px;">
                                                     <input type="checkbox" value="tb">同比
                                                 </label>
-                                                <label class="checkbox-inline" style="margin-left:6px;">
+                                                <label class="checkbox-inline left" style="margin-left:6px;padding-top:0;">
                                                     <input type="checkbox" value="hb">环比
                                                 </label>
                                             </div>
@@ -263,7 +267,7 @@
 					datepicker: "My97DatePicker/WdatePicker",
 					allfunction: "../js/monitor-functions",
 					monitorbind: "../js/monitor-bind",
-					highchart: "Highcharts/js/highcharts"
+					highchart: "Highstock/js/highstock"
 				},
 				shim: {
 					"zTree": {
@@ -326,6 +330,11 @@
 									});
 									//解析checkbox选择器
 									$('.each_div').html('');//初始化每个栏目
+									//初始化每个监控
+									for(var i = 1; i < $('#outer .drag_cont').length; i++){
+										$('#outer .drag_cont').eq(i).remove();
+									}
+									
 									for(var i = 0; i < da.length; i++){
 										var list = $('<p><input class="modular' + i + '" type="checkbox" name="' + da[i].Name + '">' + da[i].Name + '<span Id="' + da[i].Id +'" name="' + da[i].Name +'" type="' + da[i].TypeName +'" comment="' + da[i].Comment +'" myclass="' + da[i].Class +'" class="for_help">?</span></p>');
 										switch(da[i].Class){
