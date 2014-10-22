@@ -47,16 +47,17 @@ func (this *OdinController) Get() {
 //small the host only the ns 
 func replace_host(tagkvs []Tagkvs, ns string) []Tagkvs {
     var ns_tagkvs []Tagkvs
+    var tmp_tagkvs []Tagkvs
     var machines []models.Machine
     beego.Trace("name space is : ", ns)
     for _, tagkv := range tagkvs {
         if tagkv.Name != "host" {
-            ns_tagkvs = append(ns_tagkvs, tagkv)
+            tmp_tagkvs = append(tmp_tagkvs, tagkv)
             continue
         }
         //用户选择对应的机器, 不需要过滤
         if tagkv.Checked {
-            ns_tagkvs = append(ns_tagkvs, tagkv)
+            tmp_tagkvs = append(tmp_tagkvs, tagkv)
         }else{
         //用户默认全选, 需要过滤机器到对应的 ns 下面
             httpport := beego.AppConfig.String("httpport")
@@ -80,6 +81,7 @@ func replace_host(tagkvs []Tagkvs, ns string) []Tagkvs {
             }
             ns_tagkvs = append(ns_tagkvs, tagkv)
         }
+        ns_tagkvs  = append(ns_tagkvs, tmp_tagkvs...)
     } 
     return ns_tagkvs
 }
