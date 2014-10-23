@@ -7,9 +7,9 @@ import (
        )
 
 type Resource struct {
-    SysId int `json:"sys_id"`
-    ResourceId int `json:"resource_id"`
-    Name string `json:"-"`
+    SysId int `json:"SysId"`
+    ResourceId int `json:"ResourceId"`
+    Name string `json:"Name"`
     Tags string `json:"-"`
 }
 

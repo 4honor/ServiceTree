@@ -25,17 +25,17 @@ func (this *TaggingController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (this *TaggingController) Post() {
-	var v []models.Tagging
+	var taggings []models.Tagging
     var result libs.Result 
 
-	json.Unmarshal(this.Ctx.Input.RequestBody, &v)
-    fmt.Printf("start add tagging, with input : %+v\n", v)
-	if id := models.AddTagging(v); id != -1 {
+	json.Unmarshal(this.Ctx.Input.RequestBody, &taggings)
+    fmt.Printf("start add tagging, with input : %+v\n", taggings)
+	if id := models.AddTagging(taggings); id != -1 {
         result.Success = true
         result.Msg = "打 Tag成功"
 		this.Data["json"] = result
 	} else {
-        result.Msg = "failed"
+        result.Msg = "打 tag 失败"
         result.Success = false
 		this.Data["json"] = result
 	}
