@@ -51,6 +51,14 @@
                 <div class="odin_check_outer">
                     
                     <div class="odin_check_inner">
+                    	<div class="overflow-hid mt20">
+                        	<div class="" style="width:400px;">
+                                <select class="form-control" id="sys_sel">
+                                    <option value="2">机器管理</option>
+                                    <option value="3">监控系统</option>
+                                </select>
+                            </div>
+                        </div>
                     	<textarea class="form-control tag_textarea left" id="old_machine" placeholder="机器列表，一行一台机器(需验证！)"></textarea><!--  1111&#10;2222  -->
                         <a class="btn btn-default left ml10 mr10" id="btn_check_result" style="margin-top:130px;" title="验证">
                             <span class="glyphicon glyphicon-arrow-right"></span>
@@ -273,6 +281,11 @@
 								isloading: true,
 								callback: function(da){
 									if(da.Success){
+										//清空所有输入
+										$('.tag_select_outer input').val('');
+										$('#add_machine').val('');
+										$('#old_machine').val('');
+										$('#sys_sel option').eq(0)[0].selected = true;
 										alert(da.Msg);	
 									}	
 								}
@@ -287,10 +300,10 @@
 					$('#btn_check_result').bind('click',function(){
 						var checVal = $('#old_machine').val().split('\n'),
 							postArray = [],
-							sysId = 2;//
+							sysId = $('#sys_sel').val();//
 						for(var i = 0; i < checVal.length; i++){
 							var json = {
-								SysId: sysId,
+								SysId: parseInt(sysId),
 								Name: checVal[i]	
 							};
 							postArray.push(json);	
