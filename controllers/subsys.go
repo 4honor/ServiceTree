@@ -145,7 +145,7 @@ func (this *SubsysController) Put() {
 }
 
 // @Title Update
-// @Description update Subsys Hierarchy
+// @Description 更新系统层次接口
 // @Param	name		query 	string	true		"系统名称"
 // @Param	hierarchy		query 	models.Subsys	true		"更新层次结构"
 // @Success 200 {object} models.Subsys
