@@ -63,7 +63,7 @@
 				allInputHtml += inputHtml;	
 			}
 			
-			var divHtml = '<div class="btn-group" style="margin-right:5px;"><button type="button" style="width:77px;" class="btn btn-default dropdown-toggle" data-toggle="dropdown">' + inputName + '<span class="caret" style="margin-left:5px;"></span></button><div class="dropdown-menu" style="width:135px;" role="menu">' + allInputHtml + '</div></div>';
+			var divHtml = '<div class="btn-group" style="margin-right:5px;"><button type="button" style="width:77px;" isshow="no" class="btn btn-default dropdown-toggle" data-toggle="dropdown">' + inputName + '<span class="caret" style="margin-left:5px;"></span></button><div class="dropdown-menu" style="width:135px;" role="menu">' + allInputHtml + '</div></div>';
 			allHtml += divHtml;
 		}
 		
@@ -76,57 +76,7 @@
 			name = name.replace('@','');
 		}
 		$(obj).attr('valflag',flag);
-		/*var highOptions = {
-				chart: { 
-					zoomType: 'xy'
-				},
-				title: {
-					text: name,
-					x: -20 //center
-				},
-				subtitle: {
-					text: '',
-					x: -20
-				},
-				xAxis: {
-					categories: x,
-					lineWidth :0,
-					tickWidth:0,
-					tickInterval: 3600 * 1000,
-					labels:{
-						enabled:false
-					}
-				},
-				yAxis: {
-					title: {
-						text: '单位 (' + uni + ')'
-					},
-					plotLines: [{
-						value: 0,
-						width: 1,
-						color: '#808080'
-					}]
-				},
-				tooltip: {
-					shared: true,
-          			crosshairs: true
-				},
-				legend: {
-					layout: 'vertical',
-					align: 'right',
-					verticalAlign: 'middle',
-					borderWidth: 0
-				},
-				exporting: {
-					enabled: false	
-				},
-				series: [
-				{
-					name: attr,
-					data: num
-				}]
-			}*/
-		Highcharts.setOptions({
+		Highcharts.setOptions({//转换时间区
 			global: {
 				useUTC: false
 			}
@@ -153,7 +103,7 @@
                 },
 				labels: {
 					formatter: function () {
-						return (this.value > 0 ? ' + ' : '') + this.value + '%';
+						return (this.value > 0 ? ' + ' : '') + this.value;
 					}
 				}            
 			},
@@ -176,15 +126,13 @@
 			
 			tooltip: {
 				xDateFormat: '%Y-%m-%d %H:%M:%S',
-				pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+				pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b>',
 				valueDecimals: 2
 			},            
 			
 			series: data
 		};
 		
-		
-		console.log(data);
 		obj.attr('highchart',JSON.stringify(highOptions));//把属于自己的曲线属性保存下来，方便以后的操作
 		obj.highcharts('StockChart',highOptions);
 		
@@ -220,7 +168,7 @@
 			}else {
 				tags_condition = '@host='
 			}
-			objHighChart.series = [];
+			//objHighChart.series = [];
 			var compare ='';//处理同比和环比
 			that.parents('.cont-mess').find('.more_checked input:checked').each(function(){
 				if(this.checked){
@@ -232,41 +180,16 @@
 			var aggregate = that.parents('.cont-mess').find('.aggregate').val();
 			$.ajax({
 				type: 'GET',
-				url: 'http://10.231.146.171/api/ts?metric=' + thisMetric + tags_condition + '&stime=' + thisBeginTime + '&etime=' + thisEndTime + '&compare=' + compare +'&aggregate=' + aggregate,
+				url: 'http://10.231.146.171/api/ts2?metric=' + thisMetric + tags_condition + '&stime=' + thisBeginTime + '&etime=' + thisEndTime + '&compare=' + compare +'&aggregate=' + aggregate,
 				data: null,
 				dataType: "jsonp",
 				success: function(da){
 					if(da){
 						var loading = that.parents('.drag_cont').find('.progress');
 						endLoading(loading);
-						var xTime = [];//x轴坐标解析
-						for(var l = 0; l < da[0].data.length; l++){
-							var n = da[0].data[l];
-							for(var i in n){
-								xTime.push(getLocalTime(parseInt(i)));//处理坐标
-							}
-						}
-						for(var n = 0; n < da.length; n++){
-							var yNum = [];
-								for(var i = 0; i < da[n].data.length; i++){
-									var j = da[n].data[i];
-									for(var attr in j){
-										yNum.push(j[attr]);//处理每个点的值
-									}
-								}
-								var thisDivHighChar = that.parents('.drag_cont').find('cont_box').attr('valflag');
-								if(!thisDivHighChar){
-									var lineName = da[n].name.split('@');
-								}
-								var	newLine = {
-											name: lineName[1] == '' ? thisMetric : lineName[1],
-											data: yNum
-										};
-								//alert(xTime);
-								objHighChart.series.push(newLine);
-							}
-							objHighChart.xAxis.categories = xTime;
+							objHighChart.series = da;
 							newHighCharts(thisChart,objHighChart);
+							
 					}
 				}
 			});
@@ -274,11 +197,7 @@
 	
 	//重新给HighCharts参数
 	function newHighCharts(obj,hop){
-		 //alert(hop);
 		 obj.highcharts('StockChart',hop);
-		 //hop.series.splice(1,hop.series.length-1);
-		 //var jsonStr = JSON.stringify(hop);
-		 ///obj.attr('highchart',jsonStr);//把属于自己的曲线属性保存下来，方便以后的操作
 	}
 
 	//启动left-btn动画
