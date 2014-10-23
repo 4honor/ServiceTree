@@ -23,6 +23,24 @@ func (this *MachineController) URLMapping() {
 	this.Mapping("Delete", this.Delete)
 }
 
+// @Title Get
+// @Description 通过机器 id 来获取机器信息
+// @Param      id              path    string  true            "查询机器 id"
+// @Success 200 {object} models.Machine
+// @Failure 403 :id is empty
+// @router /:id [get]
+func (this *MachineController) GetOne() {
+       idStr := this.Ctx.Input.Params[":id"]
+       id, _ := strconv.Atoi(idStr)
+       v, err := models.GetMachineById(id)
+       if err != nil {
+               this.Data["json"] = err.Error()
+       } else {
+               this.Data["json"] = v
+       }
+       this.ServeJson()
+}
+
 // @Title Post
 // @Description 新增机器
 // @Param	body		body 	models.Machine	true		"新增机器内容"
@@ -37,24 +55,6 @@ func (this *MachineController) Post() {
 		this.Data["json"] = map[string]int64{"id": id}
 	} else {
 		this.Data["json"] = err.Error()
-	}
-	this.ServeJson()
-}
-
-// @Title Get
-// @Description 通过tag 命名空间(ns)来获取机器信息
-// @Param	ns		path 	string	true		"查询机器的命名空间(ns), eg: corp:xiaoju,depart:dache"
-// @Success 200 {object} models.Machine
-// @Failure 403 :id is empty
-// @router /:id:int [get]
-func (this *MachineController) GetOne() {
-	idStr := this.Ctx.Input.Params[":id"]
-	id, _ := strconv.Atoi(idStr)
-	v, err := models.GetMachineById(id)
-	if err != nil {
-		this.Data["json"] = err.Error()
-	} else {
-		this.Data["json"] = v
 	}
 	this.ServeJson()
 }
