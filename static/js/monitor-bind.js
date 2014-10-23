@@ -5,15 +5,23 @@ define(["jquery", "milk", "datepicker", "allfunction", "highchart"], function($,
 		
 		/*点击下拉*/
 		$(document).on('click','.dropdown-toggle',function(ev){
-			$('.dropdown-menu').hide();
-			$(this).next('.dropdown-menu').show();	
+			if($(this).attr('isshow') === 'no'){
+				$('.dropdown-menu').hide();
+				$(this).next('.dropdown-menu').show();
+				$('.dropdown-toggle').attr('isshow','no');
+				$(this).attr('isshow','yes');	
+			}
+			else{
+				$('.dropdown-menu').hide();
+				$(this).attr('isshow','no');	
+			}
 		});
 		$(document).on('click','.btn-group',function(ev){
 			ev.stopPropagation();
 		});
 		$(document).click(function(ev){
 			$('.dropdown-menu').hide();
-			//$('.select_div').hide();
+			$('.dropdown-toggle').attr('isshow','no');
 		});
 		/*点击下拉end*/
 		
@@ -103,33 +111,11 @@ define(["jquery", "milk", "datepicker", "allfunction", "highchart"], function($,
 					$('.use_input').val('');
 					$.ajax({
 						type: 'GET',
-						//url: 'http://10.231.146.171/api/ts?metric=' + serVal + '@host=' + hostVal + '&stime=' + timeYearBeagin + '-' + timeStringBegin + '&etime=' + timeYearEnd + '-' + timeStringEnd +'&aggregate=sum',
-						url: 'http://10.231.146.171/api/ts2?metric=' + serVal + '@host=' + hostVal + '&stime=2014/10/19-18:39:07&etime=2014/10/22-18:39:07&aggregate=sum',
+						url: 'http://10.231.146.171/api/ts2?metric=' + serVal + '@host=' + hostVal + '&stime=' + timeYearBeagin + '-' + timeStringBegin + '&etime=' + timeYearEnd + '-' + timeStringEnd +'&aggregate=sum',
 						data: null,
 						dataType: "jsonp",
 						success: function(data){
 							if(data){
-								/*var xTime = [],
-									yNum = [],
-									serviceName = '',
-									serviceUnit = '';
-								serviceName = data[0].name;
-								serviceUnit = data[0].unit;
-								for(var i = 0; i < data[0].data.length; i++){
-									var j = data[0].data[i]
-									for(var attr in j){
-										//xTime.push(getLocalTime(parseInt(attr)));//处理坐标
-										xTime.push(attr);
-										yNum.push(j[attr]);//处理每个点的值
-									}	
-								}
-								xTime = xTime[0]
-								//console.log(xTime);
-								creatDiv(dataBegin,serVal,hostVal,thisClass,(timeYearBeagin + '-' + timeStringBegin),(timeYearEnd + '-' + timeStringEnd),xTime,yNum,serviceName,serviceUnit,dateArry,valFlag,aggregate,helpType,helpComment,helpName);
-								$('.mask_srch').find('.sumOrAvg option:eq(0)').attr('selected','true');
-								var ns = $('#machine_drop').html().split(",");
-								ns = ns.slice(0,ns.length);
-								ns.push("resource:machine");*/
 								var serviceName = '',
 									serviceUnit = data[0].unit;
 								
