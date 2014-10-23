@@ -90,7 +90,8 @@ define(["jquery", "milk", "datepicker", "allfunction", "highchart"], function($,
 					timeStringEnd = dateHours + ':' + dateMin + ':' + dateSec,//结束时间
 					timeYearBeagin = preYear + '/' + preMon + '/' + preDay,//起始年月
 					timeYearEnd = dateYear + '/' + dateMon + '/' + dateDay;//结束年月
-				var dateArry = [timeYearBeagin,timeYearEnd,timeStringBegin,timeStringEnd];
+				var dateArry = [timeYearBeagin,timeYearEnd,timeStringBegin,timeStringEnd],
+					dataBegin = preYear + ',' + preMon + ',' + preDay + ',' + preHours + ',' + preMin + ',' + preSec;
 				if(hostVal){
 					var valFlag = true;	
 				}else{
@@ -103,12 +104,12 @@ define(["jquery", "milk", "datepicker", "allfunction", "highchart"], function($,
 					$.ajax({
 						type: 'GET',
 						//url: 'http://10.231.146.171/api/ts?metric=' + serVal + '@host=' + hostVal + '&stime=' + timeYearBeagin + '-' + timeStringBegin + '&etime=' + timeYearEnd + '-' + timeStringEnd +'&aggregate=sum',
-						url: 'http://10.231.146.171/api/ts?metric=' + serVal + '@host=' + hostVal + '&stime=2014/10/21-18:39:07&etime=2014/10/22-18:39:07&aggregate=sum',
+						url: 'http://10.231.146.171/api/ts2?metric=' + serVal + '@host=' + hostVal + '&stime=2014/10/19-18:39:07&etime=2014/10/22-18:39:07&aggregate=sum',
 						data: null,
 						dataType: "jsonp",
 						success: function(data){
 							if(data){
-								var xTime = [],
+								/*var xTime = [],
 									yNum = [],
 									serviceName = '',
 									serviceUnit = '';
@@ -124,7 +125,15 @@ define(["jquery", "milk", "datepicker", "allfunction", "highchart"], function($,
 								}
 								xTime = xTime[0]
 								//console.log(xTime);
-								creatDiv(serVal,hostVal,thisClass,(timeYearBeagin + '-' + timeStringBegin),(timeYearEnd + '-' + timeStringEnd),xTime,yNum,serviceName,serviceUnit,dateArry,valFlag,aggregate,helpType,helpComment,helpName);
+								creatDiv(dataBegin,serVal,hostVal,thisClass,(timeYearBeagin + '-' + timeStringBegin),(timeYearEnd + '-' + timeStringEnd),xTime,yNum,serviceName,serviceUnit,dateArry,valFlag,aggregate,helpType,helpComment,helpName);
+								$('.mask_srch').find('.sumOrAvg option:eq(0)').attr('selected','true');
+								var ns = $('#machine_drop').html().split(",");
+								ns = ns.slice(0,ns.length);
+								ns.push("resource:machine");*/
+								var serviceName = '',
+									serviceUnit = data[0].unit;
+								
+								creatDiv(dataBegin,serVal,hostVal,thisClass,(timeYearBeagin + '-' + timeStringBegin),(timeYearEnd + '-' + timeStringEnd),data,serviceName,serviceUnit,dateArry,valFlag,aggregate,helpType,helpComment,helpName);
 								$('.mask_srch').find('.sumOrAvg option:eq(0)').attr('selected','true');
 								var ns = $('#machine_drop').html().split(",");
 								ns = ns.slice(0,ns.length);

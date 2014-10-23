@@ -5,7 +5,7 @@
 	}  
 	
 	//创建div
-	function creatDiv(ser,host,myid,stime,etime,x,num,name,uni,arry,flag,aggr,motype,mocom,moname){
+	function creatDiv(time,ser,host,myid,stime,etime,data,name,uni,arry,flag,aggr,motype,mocom,moname){
 		var newDiv = $('#outer .drag_cont:eq(0)').clone();
 		newDiv.attr('id',myid);
 		$('#outer').append(newDiv);
@@ -31,7 +31,7 @@
 		datePicker(dateInput1,arry[0],arry[2]);
 		datePicker(dateInput2,arry[1],arry[3]);
 		var oChart = newDiv.find('.cont_box');
-		creatHighcharts(oChart,ser,x,num,name,uni,flag);
+		creatHighcharts(time,oChart,ser,data,name,uni,flag);
 	}
 	
 	//时间选择
@@ -71,7 +71,7 @@
 	}
 	
 	//创建Highcharts
-	function creatHighcharts(obj,attr,x,num,name,uni,flag){//初始化时创建数据表
+	function creatHighcharts(time,obj,attr,data,name,uni,flag){//初始化时创建数据表
 		if(!flag){
 			name = name.replace('@','');
 		}
@@ -126,24 +126,38 @@
 					data: num
 				}]
 			}*/
+		Highcharts.setOptions({
+			global: {
+				useUTC: false
+			}
+		});
+
 		var highOptions = {
 			chart: {
-                events: {
-                    load: function () {
-                        this.setTitle(null, {
-                            text: ''
-                        });
-                    }
-                },
                 zoomType: 'x'
             },
+			
+			line: {
+				pointInterval: 10 * 1000
+			},
+			
+			xAxis: {
+				labels:{
+					enabled:false // remove Xaxis
+				}
+			},
 
             yAxis: {
                 title: {
                     text: '单位 (' + uni + ')'
-                }
-            },
-
+                },
+				labels: {
+					formatter: function () {
+						return (this.value > 0 ? ' + ' : '') + this.value + '%';
+					}
+				}            
+			},
+			
             title: {
                 text: name
             },
@@ -151,28 +165,29 @@
             subtitle: {
                 text: '' // dummy text to reserve space for dynamic subtitle
             },
-
-            series: [{
-                name: attr,
-                data: num,
-                pointStart: x,
-                pointInterval: 1 * 1000,
-                tooltip: {
-                    valueDecimals: 1,
-                    valueSuffix: uni
-                },
-				name: attr,
-                data: num,
-                pointStart: x,
-                pointInterval: 1 * 1000,
-                tooltip: {
-                    valueDecimals: 1,
-                    valueSuffix: uni
-                }
-            }]	
-		}
+			
+			rangeSelector: {
+				enabled: false // remove all button
+			},
+			
+			exporting: {
+				enabled: false	 // remove right top btn
+			},
+			
+			tooltip: {
+				xDateFormat: '%Y-%m-%d %H:%M:%S',
+				pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+				valueDecimals: 2
+			},            
+			
+			series: data
+		};
+		
+		
+		console.log(data);
 		obj.attr('highchart',JSON.stringify(highOptions));//把属于自己的曲线属性保存下来，方便以后的操作
 		obj.highcharts('StockChart',highOptions);
+		
 	}
 	
 	//重新上传参数拿数据（核心方法）
@@ -260,7 +275,7 @@
 	//重新给HighCharts参数
 	function newHighCharts(obj,hop){
 		 //alert(hop);
-		 obj.highcharts(hop);
+		 obj.highcharts('StockChart',hop);
 		 //hop.series.splice(1,hop.series.length-1);
 		 //var jsonStr = JSON.stringify(hop);
 		 ///obj.attr('highchart',jsonStr);//把属于自己的曲线属性保存下来，方便以后的操作
