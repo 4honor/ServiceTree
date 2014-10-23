@@ -26,7 +26,6 @@ _testmain.go
 
 ServiceTree
 commentsRouter.go
-docs
 
 # exclude vim temp files
 *.swp
