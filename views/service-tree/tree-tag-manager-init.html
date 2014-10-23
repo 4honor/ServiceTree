@@ -264,8 +264,8 @@
 							var newJson = [];
 							for(var i = 0; i < globleJson.length; i++){
 								var eachJson = {
-									SysId: globleJson[i].SysId,
-									ResourceId: globleJson[i].ResourceId,
+									SysId: parseInt(globleJson[i].SysId),
+									ResourceId: parseInt(globleJson[i].ResourceId),
 									Tags: allJson
 								};
 								newJson.push(eachJson);	
