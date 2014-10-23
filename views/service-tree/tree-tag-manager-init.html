@@ -286,6 +286,8 @@
 										$('#add_machine').val('');
 										$('#old_machine').val('');
 										$('#sys_sel option').eq(0)[0].selected = true;
+                    //re empty it to avoid duplicate bug
+                    globleJson = []; 
 										alert(da.Msg);	
 									}
 									else{
