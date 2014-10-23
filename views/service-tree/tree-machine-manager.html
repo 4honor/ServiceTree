@@ -41,7 +41,7 @@
             
             <div class="tree_cont">
             	<!--  内容区域  -->
-                <div class="tree_cont_title"><div>节点坐标：</div><div id="machine_drop">corp:xiaoju</div></div>
+                <div class="tree_cont_title"><div>节点空间(ns)：</div><div id="machine_drop"></div></div>
                 
                 <p class="tree_cont_btn_outer">
                 	<a class="btn btn-default" id="bulk_import">批量导入</a>
@@ -66,6 +66,9 @@
             
         </div>
         
+        <input type="hidden" id="hierarchy" value="{{.Hierarchy}}">
+        <input type="hidden" id="resource" value="{{.Resource}}">
+        
         <!--<a class="btn_tree_open_close btn btn-default" id="tree_btn_falg">
         	<span class="glyphicon glyphicon-th-list"></span>
         </a>	
@@ -78,7 +81,11 @@
 			require.config({
 				paths: {
 					zTree: "zTree/js/jquery.ztree.core-3.5",
-					vtree: "../js/v-tree"
+					vtree: "../js/v-tree",
+					datepicker: "My97DatePicker/WdatePicker",
+					allfunction: "../js/monitor-functions",
+					monitorbind: "../js/monitor-bind",
+					highchart: "Highcharts/js/highcharts"
 				},
 				shim: {
 					"zTree": {
@@ -88,34 +95,12 @@
 				}
 			});
 			
-			require(['jquery', 'zTree', 'milk', 'vtree', 'datatables'],function($, zTree, mlik, vtree, datatables){
+			require(['jquery', 'zTree', 'milk', 'vtree', 'datatables', 'datepicker', 'allfunction', 'monitorbind', 'highchart'],function($, zTree, mlik, vtree, datatables, datepicker, allfunction, monitorbind, highchart){
 				$(document).ready(function(){
 					
 					vtree.init();
 					
 					var myDatatable;//datatable对象
-					
-					//拉取table
-					mlk.ajax({
-						method: 'GET',
-						url: '/v1/machine/' + $('#machine_drop').text(),
-						data: null, 
-						isloading: true,
-						callback: function(da){
-							if(da){
-								var tableTr = '';
-								for(var i = 0; i < da.length; i++){
-									var html = '<tr id="' + da[i].Id + '"><td><input type="checkbox"></td><td>' + da[i].Name + '</td><td><a class="mach_mess">机器详情</a></td><td><a class="mach_name">机器改名</a></td></tr>';
-									tableTr += html;	
-								}
-								$('#machine_table').html(tableTr);
-								myDatatable = $('.table').DataTable();
-								mlk.tableInverse({//启动table全选反选
-									dom: $('.table')	
-								});	
-							}	
-						}
-					});
 					
 					//批量导入
 					$('#bulk_import').bind('click',function(){
@@ -143,7 +128,28 @@
 					
 					//监听节点坐标的变化
 					$('#machine_drop').bind('DOMNodeInserted',function(e){
-						alert(0)
+						var thisText = $(this).text(),
+							resourceVal = $('#resource').val();
+						mlk.ajax({
+							method: 'GET',
+							url: '/v1/resource/' + thisText , 
+							data: null, 
+							isloading: true,
+							callback: function(da){
+								if(da){
+									var tableTr = '';
+									for(var i = 0; i < da.length; i++){
+										var html = '<tr id="' + da[i].Id + '"><td><input type="checkbox"></td><td>' + da[i].Name + '</td><td><a class="mach_mess">机器详情</a></td><td><a class="mach_name">机器改名</a></td></tr>';
+										tableTr += html;	
+									}
+									$('#machine_table').html(tableTr);
+									myDatatable = $('.table').DataTable();
+									mlk.tableInverse({//启动table全选反选
+										dom: $('.table')	
+									});	
+								}	
+							}
+						});
 					});
 					
 				});

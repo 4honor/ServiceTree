@@ -16,6 +16,7 @@ import (
 func init() {
     beego.Router("/", &controllers.MainController{})
     beego.Router("/:subsys", &controllers.PageController{})
+    beego.Router("/api/tagkv", &controllers.OdinController{})
 
 	ns := beego.NewNamespace("/v1",
 
@@ -49,11 +50,29 @@ func init() {
 			),
 		),
 
+        beego.NSNamespace("/ns",
+            beego.NSInclude(
+                &controllers.NsController{},         
+            ),
+        ),
+
+        beego.NSNamespace("/resource",
+            beego.NSInclude(
+                &controllers.ResourceController{},
+            ),
+        ),
+
 		beego.NSNamespace("/subsys",
 			beego.NSInclude(
 				&controllers.SubsysController{},
 			),
 		),
+
+        beego.NSNamespace("/tagging",
+            beego.NSInclude(
+                &controllers.TaggingController{},
+            ),
+        ),
 
 		beego.NSNamespace("/tag_meta",
 			beego.NSInclude(
@@ -67,6 +86,17 @@ func init() {
 			),
 		),
 
+		beego.NSNamespace("/tag_key",
+			beego.NSInclude(
+				&controllers.TagKeyController{},
+			),
+		),
+        beego.NSNamespace("/tree",
+            beego.NSInclude(
+                &controllers.TreeController{}, 
+            ),
+        ),
+
 		beego.NSNamespace("/user",
 			beego.NSInclude(
 				&controllers.UserController{},
@@ -78,17 +108,6 @@ func init() {
 				&controllers.ViewController{},
 			),
 		),
-
-		beego.NSNamespace("/tag_key",
-			beego.NSInclude(
-				&controllers.TagKeyController{},
-			),
-		),
-        beego.NSNamespace("/tree",
-            beego.NSInclude(
-                &controllers.TreeController{}, 
-            ),
-        ),
 	)
 	beego.AddNamespace(ns)
 }

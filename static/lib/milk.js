@@ -49,8 +49,8 @@
 				if(opts.isloading){
 					clearTimeout(timer);
 					loadHtml.remove();
-					opts.callback(da);
 				}
+				opts.callback(da);
 			}
 		});
 	}
@@ -285,7 +285,7 @@
 							inputMask = $('<div class="mlk-edit-mask"></div>'),
 							inputSpan = $('<span class="mlk-edit-down"></span>'),
 							inputDele = $('<span class="glyphicon glyphicon-remove mlk-edit-remove" title="删除该条选项"></span>'),
-							newInput = $('<input type="text" autocomplete="off">'),
+							newInput = $('<input type="text" autocomplete="off" placeholder="可选择，可新增">'),
 							newDatalist = $('<datalist style="display:none;"></datalist>');
 						newInput.attr({'id':oldId,'name':oldName,'list':oldId+'_list','class':oldClass});
 						newDatalist.attr('id',oldId+'_list').html(oldOption);
@@ -387,6 +387,90 @@
 				}    
 			});
 		}); 
+	}
+	
+	//{ele:./#,btn:./#,ischeckall:true/false}
+	mlk.dropdownSearch = function(opts){
+		var innerFunction = function(){};
+		innerFunction.prototype = {
+			constructor: innerFunction,
+			init: function(opts){
+				if(!opts){
+					return;	
+				}
+				this.creatSearch(opts,this);
+			},
+			creatSearch: function(opts,that){
+				$(opts.ele).each(function(){
+					$(opts.ele).css('padding','0px');
+					var searchDiv = $('<div class="mlk-dropdown-search"></div>'),
+						searchInput = $('<input placeholder="输入搜索" type="text" class="mlk-dropdowninput form-control">'),
+						outerDiv = $('<div class="mlk-dropdown-outer"></div>');
+					outerDiv.css({'width':'100%','height':($(opts.ele).height()-45),'overflow-y':'auto','padding':'0 3px'});
+					var myArray = [];
+					$(this).children().each(function(){
+						myArray.push($(this).text());	
+					});
+					$(this).attr('mychild',myArray);
+					//是否添加全选按钮
+					if(opts.ischeckall){
+						var checkAll = $('<input type="checkbox" class="mlk-check-all" title="全选">');	
+						searchDiv.append(checkAll);
+						that.bindCheckAll(opts,checkAll);
+					}
+					searchDiv.append(searchInput);
+					$(this).append(outerDiv);
+					outerDiv.append($(this).children());
+					searchDiv.insertBefore(outerDiv);
+					that.bindKeyUp(opts,searchInput);
+				});
+			},
+			bindKeyUp: function(opts,obj){
+				obj.keyup(function(){
+					var thisVal = $(this).val(),
+						thisAll = $(this).parents(opts.ele).attr('mychild').split(',');
+					if(thisVal){
+						var allHtml = '';
+						for(var i = 0; i < thisAll.length; i++){
+							if(thisAll[i].indexOf(thisVal) >= 0){
+								var thisName = $(this).parents(opts.ele).parent().find(opts.btn).text(),
+									inputHtml = '<label class="checkbox"><input type="checkbox" name="' + thisName + '" value="' + thisAll[i] + '">' + thisAll[i] + '</label>';
+								allHtml += inputHtml;
+							}	
+						}
+						//console.log(allHtml);
+						$(this).parents(opts.ele).find('.mlk-dropdown-outer').html(allHtml);
+					}
+					else{
+						var allHtml = '';
+						for(var i = 0; i < thisAll.length; i++){
+							var thisName = $(this).parents(opts.ele).parent().find(opts.btn).text(),
+								inputHtml = '<label class="checkbox"><input type="checkbox" name="' + thisName + '" value="' + thisAll[i] + '">' + thisAll[i] + '</label>';
+								allHtml += inputHtml;	
+						}
+						$(this).parents(opts.ele).find('.mlk-dropdown-outer').html(allHtml);	
+					}	
+				});	
+			},
+			bindCheckAll: function(opts,obj){
+				obj.change(function(){
+					if(this.checked){
+						$(this).parents('.mlk-dropdown-search').next('.mlk-dropdown-outer').find('input[type=checkbox]').each(function(){
+							this.checked = true;	
+						});	
+					}
+					else{
+						$(this).parents('.mlk-dropdown-search').next('.mlk-dropdown-outer').find('input[type=checkbox]').each(function(){
+							this.checked = false;	
+						});	
+						}	
+				});	
+			}
+				
+		}
+		
+		var newFunc = new innerFunction();
+		newFunc.init(opts);	
 	}
 	
 	

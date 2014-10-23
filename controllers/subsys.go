@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"fmt"
 	"ServiceTree/models"
+    "ServiceTree/libs"
 	"encoding/json"
 	"errors"
 	"strconv"
@@ -10,7 +12,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// oprations for Subsys
+// 第三方系统接口
 type SubsysController struct {
 	beego.Controller
 }
@@ -18,10 +20,11 @@ type SubsysController struct {
 func (this *SubsysController) URLMapping() {
 	this.Mapping("Post", this.Post)
 	this.Mapping("GetOne", this.GetOne)
-	this.Mapping("GetAll", this.GetAll)
+	this.Mapping("GetAll", this.SubsysList)
 	this.Mapping("Put", this.Put)
 	this.Mapping("Delete", this.Delete)
 	this.Mapping("Get", this.Get)
+    this.Mapping("Hierarchy", this.Hierarchy)
 }
 
 // @Title Post
@@ -141,6 +144,35 @@ func (this *SubsysController) Put() {
 	this.ServeJson()
 }
 
+// @Title Update
+// @Description update Subsys Hierarchy
+// @Param	name		query 	string	true		"系统名称"
+// @Param	hierarchy		query 	models.Subsys	true		"更新层次结构"
+// @Success 200 {object} models.Subsys
+// @Failure 403 :id is not int
+// @router /hierarchy [get]
+func (this *SubsysController) Hierarchy() {
+    var result libs.Result
+	name := this.GetString("name")
+    hierarchy := this.GetString("hierarchy")
+    if name == "" || hierarchy == "" {
+        result.Success = false 
+        result.Msg = "sys name and hierarchy not allow empty"
+        this.Data["json"] = result
+        this.ServeJson()
+    }
+    v := models.Subsys{Name: name, Hierarchy: hierarchy}
+	if err := models.UpdateHierarchyByName(&v); err == nil {
+        result.Success = true
+        result.Msg = "update success"
+	} else {
+        result.Success = false 
+        result.Msg = err.Error()
+	}
+	this.Data["json"] = result
+	this.ServeJson()
+}
+
 // @Title Delete
 // @Description delete the Subsys
 // @Param	id		path 	string	true		"The id you want to delete"
@@ -156,4 +188,32 @@ func (this *SubsysController) Delete() {
 		this.Data["json"] = err.Error()
 	}
 	this.ServeJson()
+}
+
+
+// @Title Get All
+// @Description get Subsys
+// @Success 200 {object} models.Subsys
+// @Failure 403
+// @router / [get]
+func (this *SubsysController) SubsysList() {
+    subsysList := models.SubsysList()
+    for index, sys := range subsysList {
+        state := sys["State"] 
+        switch state {
+            case "0": 
+                subsysList[index]["State"] = "审核中"
+            case "1":
+                subsysList[index]["State"] = "审核通过"
+            default:
+                subsysList[index]["State"] = "审核中"
+       }
+    }
+    fmt.Println("len of subsysList is : ", len(subsysList))
+    if subsysList == nil || len(subsysList) == 0 {
+        this.Data["json"]  = make([]int, 0)
+    }else{
+    	this.Data["json"]   = subsysList
+    }
+    this.ServeJson()
 }

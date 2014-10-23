@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"ServiceTree/models"
+    "ServiceTree/libs"
 	"encoding/json"
 	"errors"
 	"strconv"
@@ -42,6 +43,26 @@ func (this *UserController) Post() {
 	this.ServeJson()
 }
 
+// @Title Post
+// @Description create User
+// @Param	username		body 	models.User	true		"body for User content"
+// @Param	password		body 	models.User	true		"body for User content"
+// @Success 200 {int} models.User.Id
+// @Failure 403 body is empty
+// @router /login [post]
+func (this *UserController) Login() {
+    var result libs.Result
+	user := this.GetString("username")
+    password := this.GetString("password")
+    if user == password {
+        this.Redirect("/", 302)
+    } else {
+        this.Redirect("/login?error=block",302)
+    }
+	this.Data["json"] = result
+	this.ServeJson()
+}
+
 // @Title Get
 // @Description get User by id
 // @Param	id		path 	string	true		"The key for staticblock"
@@ -49,25 +70,6 @@ func (this *UserController) Post() {
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (this *UserController) GetOne() {
-	idStr := this.Ctx.Input.Params[":id"]
-	id, _ := strconv.Atoi(idStr)
-	v, err := models.GetUserById(id)
-	if err != nil {
-		this.Data["json"] = err.Error()
-	} else {
-		this.Data["json"] = v
-	}
-	this.ServeJson()
-}
-
-// @Title Get
-// @Description 用户登陆
-// @Param	username		query 	string	true		"登陆用户名"
-// @Param	password		query 	string	true		"登陆密码"
-// @Success 200 {object} models.User
-// @Failure 400 用户名密码不正确
-// @router /login [get]
-func (this *UserController) Login() {
 	idStr := this.Ctx.Input.Params[":id"]
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetUserById(id)

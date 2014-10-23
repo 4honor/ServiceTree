@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
+    "github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
 
@@ -13,9 +13,13 @@ type Subsys struct {
 	Id           int    `orm:"column(id);auto"`
 	Name         string `orm:"column(name);size(255)"`
 	AliasName    string `orm:"column(alias_name);size(255);null"`
-	Hierarychy   string `orm:"column(hierarychy);size(512)"`
+	Hierarchy   string `orm:"column(hierarchy);size(512)"`
 	AuthorId     int    `orm:"column(author_id)"`
+    Author       string `orm:"-"`
 	TreeInteract int8   `orm:"column(tree_interact);null"`
+    Token        string `orm:"column(token);null"`
+    State        int    `orm:"column(state)"`
+    Progress     string  `orm:"-"`
 	Comment      string `orm:"column(comment);null"`
 }
 
@@ -40,6 +44,19 @@ func GetSubsysById(id int) (v *Subsys, err error) {
 		return v, nil
 	}
 	return nil, err
+}
+
+// GetSubsysByName retrieves Subsys by Name. Returns error if
+// Id doesn't exist
+func GetSubsysByName(name string) (v *Subsys, err error) {
+    var subsys Subsys
+	o := orm.NewOrm()
+    qs := o.QueryTable("subsys")
+	err = qs.Filter("name", name).One(&subsys)
+    if err == orm.ErrNoRows {
+        return nil, err 
+    }
+	return &subsys, err
 }
 
 // GetAllSubsys retrieves all Subsys matches certain condition. Returns empty list if
@@ -125,10 +142,28 @@ func UpdateSubsysById(m *Subsys) (err error) {
 	if err = o.Read(&v); err == nil {
 		var num int64
 		if num, err = o.Update(m); err == nil {
-			fmt.Println("Number of records updated in database:", num)
+            beego.Debug("Number of records updated in database:", num)
 		}
 	}
 	return
+}
+
+// UpdateHierarchy updates Hierarchy by Name and return error if 
+// the subsys name is not exits
+func UpdateHierarchyByName(m *Subsys)(err error) {
+    o := orm.NewOrm()
+    num , err := o.QueryTable("subsys").Filter("name",m.Name).Update(orm.Params{
+        "hierarchy" : m.Hierarchy, 
+    })
+
+    if num == 0 {
+        err_msg := fmt.Sprintf("not subsys [%s] found", m.Name)
+        err = errors.New(err_msg)
+    }
+    if err == nil {
+        beego.Debug("Number of records updated in database:", num)
+    }
+    return 
 }
 
 // DeleteSubsys deletes Subsys by Id and returns error if
@@ -146,16 +181,44 @@ func DeleteSubsys(id int) (err error) {
 	return
 }
 
-// Get default sys hierarychy
-func  DefaultHierarchy() string{
+// Get default sys hierarchy
+func  GetHierarchy(subsys string) string{
     o := orm.NewOrm() 
     var  lists []orm.ParamsList
     // name = 'tag' for tag manage sys
-    num, err := o.Raw("SELECT hierarychy from subsys WHERE name = 'tag'").ValuesList(&lists)
+    num, err := o.Raw("SELECT hierarchy from subsys WHERE name = ?", subsys).ValuesList(&lists)
     if err == nil && num > 0 {
         if v, ok := lists[0][0].(string) ; ok {
+            beego.Debug("search hierarchy for subsys and got the result:", v)
             return v
         }
+    }else{
+        beego.Warn("search hierarchy  for subsys failed. err: ", err)
     }
     return ""
+}
+
+func DefaultHierarchy() string {
+    return GetHierarchy("tag") 
+}
+
+//获取应用列表
+func SubsysList() []orm.Params{
+    o := orm.NewOrm()
+    var maps []orm.Params
+    _, err := o.Raw(`
+            select subsys.id as Id, 
+            subsys.name as Name,
+            subsys.alias_name as AliasName,
+            subsys.hierarchy as Hierarchy,
+            subsys.author_id as AuthorId,
+            user.alias_name as Author,
+            subsys.comment as Comment,
+            subsys.state as State,
+            subsys.token as Token
+            from subsys, user where subsys.author_id = user.id`).Values(&maps)
+    if  err != nil {
+        fmt.Println("[warning] exec failed.")
+    }
+    return maps
 }

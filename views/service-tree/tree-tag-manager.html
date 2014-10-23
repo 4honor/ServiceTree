@@ -8,12 +8,10 @@
         <title>Tag管理</title>
     
         <!-- Bootstrap core CSS -->
-        <link href="../../static//css/bootcss/css/bootstrap.css" rel="stylesheet">
-        <link href="../../static/lib/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+        <link href="../../static/css/bootcss/css/bootstrap.css" rel="stylesheet">
         <link href="../../static/lib/DataTables/media/css/jquery.dataTables.css" rel="stylesheet">
         <link href="../../static/css/base.css" rel="stylesheet">
         <link href="../../static/css/page.css" rel="stylesheet">
-        <link href="../../static/css/forTree.css" rel="stylesheet">
         <!--[if lt IE 9]>
           <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
           <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -39,7 +37,7 @@
         
         <div class="cont_pad mt20" style="padding-bottom:5px; padding-top:5px;">
             
-            <div class="tree_cont">
+            <div class="tree_cont" style="width:100%; margin-left:0; height:auto;">
             	<!--  内容区域  -->
                 <!--<div class="btn-group">
                     <a class="btn btn-default active">Tag变更</a>
@@ -47,13 +45,13 @@
                 </div>-->
                 <ul class="tree_sec_menu">
                     <li class="active">Tag变更</li>
-                    <li><a href="">初始化Tag</a></li>
+                    <li><a href="/init">初始化Tag</a></li>
                 </ul>
                 
                 <div class="odin_check_outer">
                 	<!-- 第一部分 -->
                     <div class="odin_check_inner">
-                    	<div class="tree_cont_title"><div>服务树显示结构：</div><div id="tag_show">{{.Hierarchy}}</div></div>
+                    	<div class="tree_cont_title"><div>服务树全局结构：</div><div id="tag_show">{{.Hierarchy}}</div></div>
                         <p class="tree_cont_btn_outer">
                             <a class="btn btn-default" id="add_new_tag">新增tagk</a>
                             <a class="btn btn-default" id="remove_tag">批量删除</a>
@@ -90,21 +88,58 @@
         <script type="text/ecmascript">
 			require.config({
 				paths: {
-					zTree: "zTree/js/jquery.ztree.core-3.5",
-					vtree: "../js/v-tree"
-				},
-				shim: {
-					"zTree": {
-						deps: ["jquery"],
-						exports: 'jQuery.fn.zTree'
-					}
+					datepicker: "My97DatePicker/WdatePicker"
 				}
 			});
 			
-			require(['jquery', 'zTree', 'milk', 'vtree', 'datatables'],function($, zTree, mlik, vtree, datatables){
+			require(['jquery', 'milk', 'datatables'],function($, mlik, datatables){
 				$(document).ready(function(){
 					
-					vtree.init();
+					mlk.contant();
+					
+					mlk.edit({//启动编辑
+						ele: '#tag_show',
+						func: function(obj){}	
+					});
+					
+					//批量删除table tr
+					function removeTableTr( url ){
+						var tableEachTr = $('.table tbody tr input[type=checkbox]:checked'),
+							list = '';
+						if(tableEachTr.length > 0){//确保优选tag
+							tableEachTr.each(function(){
+								var thisId = $(this).parents('tr').attr('id');
+								list += thisId + ',';//拼接id	
+							});
+							list = list.substring(0,list.length-1);
+							mlk.ajax({
+								method: 'DELETE',
+								url: url + list,
+								data: null,
+								isloading: true,
+								callback: function(da){
+									if(da.Success){
+										var domArray = [];
+										tableEachTr.each(function(){
+											var thisTr = $(this).parents('tr');
+											domArray.push(thisTr);	
+										});
+										mlk.removeDom({//删除dom
+											dom: domArray	
+										});	
+									}	
+								}
+							});
+						}
+						else{
+							alert('请选择需要删除的内容！')	
+						}	
+					}
+					
+					//tag 页批量删除
+					$(document).on('click','#remove_tag',function(){
+						removeTableTr('/v1/tag_meta/');
+					});
 					
 					var myDatatable;//datatable对象
 					//拉取table
@@ -131,7 +166,7 @@
 					
 					//新增tag
 					$('#add_new_tag').bind('click',function(){
-						var alertHtml = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="tag_name" class="col-sm-3 control-label">tag key</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_name"></div></div><div class="form-group"><label for="tag_chinese" class="col-sm-3 control-label">tag名字</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_chinese" placeholder="tag中文名字，可留空"></div></div><div class="form-group"><label for="is_allow" class="col-sm-3 control-label">允许为空?</label><div class="col-sm-9"><input type="checkbox" id="is_allow" style="position:relative; top:7px;"></div></div><div class="form-group"><label for="tag_comment" class="col-sm-3 control-label">tag value范围</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_val" placeholder="tag对应多个值逗号分割，可留空"></div></div><div class="form-group"><label class="col-sm-3 control-label">tag key作用说明</label><div class="col-sm-9"><textarea style="height:120px;"  class="form-control" id="tag_comment"></textarea></div></div></form></div>';
+						var alertHtml = '<div style="padding:0 10px;"><form class="form-horizontal" role="form"><div class="form-group"><label for="tag_name" class="col-sm-3 control-label">tag key</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_name" placeholder="以字母开头，首字母不能为下划线"></div></div><div class="form-group"><label for="tag_chinese" class="col-sm-3 control-label">tag名字</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_chinese" placeholder="tag中文名字，可留空"></div></div><div class="form-group"><label for="is_allow" class="col-sm-3 control-label">允许为空?</label><div class="col-sm-9"><input type="checkbox" id="is_allow" style="position:relative; top:7px;"></div></div><div class="form-group"><label for="tag_comment" class="col-sm-3 control-label">tag value范围</label><div class="col-sm-9"><input type="text" class="form-control" id="tag_val" placeholder="tag对应多个值逗号分割，可留空"></div></div><div class="form-group"><label class="col-sm-3 control-label">tag key作用说明</label><div class="col-sm-9"><textarea style="height:120px;"  class="form-control" id="tag_comment"></textarea></div></div></form></div>';
 						mlk.alertBox({//启动弹窗
 							title: '新增 tagkey',
 							html: alertHtml,
@@ -145,6 +180,10 @@
 											Comment: $('#tag_comment').val(),
 											Values: $('#tag_val').val()	
 										};
+									if($('#tag_name').val()[0] == '_'){
+										alert('首字母不能为下划线！');
+										return false;	
+									}
 									mlk.ajax({//发送ajax
 										method: 'POST',
 										url: '/v1/tag_meta/',

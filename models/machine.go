@@ -38,6 +38,19 @@ func GetMachineById(id int) (v *Machine, err error) {
 	return nil, err
 }
 
+// GetMachineByName retrieves Machine by Name. Returns error if
+// Name doesn't exist
+func GetMachineByName(name string)(m Machine, err error) {
+    var machine Machine
+    o := orm.NewOrm() 
+    qs := o.QueryTable("Machine")
+    err = qs.Filter("name", name).One(&machine)
+    if err == orm.ErrNoRows {
+        return machine, err
+    }
+    return machine, err
+}
+
 // GetAllMachine retrieves all Machine matches certain condition. Returns empty list if
 // no records exist
 func GetAllMachine(query map[string]string, fields []string, sortby []string, order []string,

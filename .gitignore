@@ -30,3 +30,4 @@ docs
 
 # exclude vim temp files
 *.swp
+tree.log*

@@ -6,19 +6,25 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
 
+var type2name = map[int]string{0:"机器监控", 1:"业务监控"}
+
 type Monitor struct {
 	Id      int    `orm:"column(id);auto"`
-	Metric  string `orm:"column(metric);size(255)"`
+	Name  string `orm:"column(name);size(255)"`
 	Type    int    `orm:"column(type)"`
+    TypeName string `orm:"-"`
+    Class string `orm:"column(class);size(255)"`
 	Comment string `orm:"column(comment);null"`
 }
 
 func init() {
 	orm.RegisterModel(new(Monitor))
 }
+
 
 // AddMonitor insert a new Monitor into database and returns
 // last inserted Id on success.
@@ -34,9 +40,42 @@ func GetMonitorById(id int) (v *Monitor, err error) {
 	o := orm.NewOrm()
 	v = &Monitor{Id: id}
 	if err = o.Read(v); err == nil {
+        v.TypeName = type2name[v.Type]
 		return v, nil
 	}
 	return nil, err
+}
+
+//GetMonitoryByName retrieves Monitor by Name. Returns error if 
+//Name doesn't exit
+func GetMonitorByName(name string)(m Monitor, err error) {
+    var monitor Monitor  
+
+    o := orm.NewOrm()
+    qs := o.QueryTable("monitor")
+    beego.Debug("start query monitor to get info")
+    err = qs.Filter("name", name).One(&monitor)
+    if err == orm.ErrNoRows {
+        beego.Warn("no resource found")
+        return monitor, err
+    }
+    beego.Trace("get monitor resource:", monitor)
+    return monitor, err
+}
+
+
+//GetAllMachineMonitor 获取所有机器监控项
+func GetAllMachineMonitor() (ml []interface{}, err error) {
+    var querys map[string]string = make(map[string]string)
+    var fields []string
+    var sortby []string
+    var order  []string
+    var offset int64
+    var limit  int64
+
+    querys["type"] =  "0"
+
+    return GetAllMonitor(querys, fields, sortby, order, offset, limit)
 }
 
 // GetAllMonitor retrieves all Monitor matches certain condition. Returns empty list if
@@ -93,6 +132,13 @@ func GetAllMonitor(query map[string]string, fields []string, sortby []string, or
 	var l []Monitor
 	qs = qs.OrderBy(sortFields...)
 	if _, err := qs.Limit(limit, offset).All(&l, fields...); err == nil {
+        
+        for index, monitor := range l {
+            beego.Warn("type to name with monitor: ", monitor)
+            //直接修改 l 内的TypeName
+            l[index].TypeName = type2name[monitor.Type]        
+            beego.Warn("type to name with monitor: ", monitor)
+        }
 		if len(fields) == 0 {
 			for _, v := range l {
 				ml = append(ml, v)

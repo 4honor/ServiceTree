@@ -8,12 +8,10 @@
         <title>系统注册</title>
     
         <!-- Bootstrap core CSS -->
-        <link href="../../static//css/bootcss/css/bootstrap.css" rel="stylesheet">
-        <link href="../../static/lib/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+        <link href="../../static/css/bootcss/css/bootstrap.css" rel="stylesheet">
         <link href="../../static/lib/DataTables/media/css/jquery.dataTables.css" rel="stylesheet">
         <link href="../../static/css/base.css" rel="stylesheet">
         <link href="../../static/css/page.css" rel="stylesheet">
-        <link href="../../static/css/forTree.css" rel="stylesheet">
         <!--[if lt IE 9]>
           <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
           <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -43,7 +41,7 @@
         
         <div class="cont_pad mt20" style="padding-bottom:5px; padding-top:5px;">
             
-            <div class="tree_cont">
+            <div class="tree_cont" style="width:100%; margin-left:0; height:auto;">
             	<!--  内容区域  -->
             	<div class="show_formation">
                 </div>
@@ -54,6 +52,7 @@
                             <th>app名称</th>
                             <th>中文名</th>
                             <th>负责人</th>
+                            <th>服务树结构</th>
                             <th>app token</th>
                             <th width="10%">是否联动服务树</th>
                             <th>申请状态</th>
@@ -61,15 +60,7 @@
                         </tr>
                     </thead>
                     <tbody id="register_list">
-                        <tr>
-                            <td>系统监控</td>
-                            <td>系统监控</td>
-                            <td>俞进秋</td>
-                            <td>xxxx</td>
-                            <td>是</td>
-                            <td>审批中</td>
-                            <td>监控线上业务</td>
-                        </tr>
+                        
                     </tbody>
                 </table>
             </div>
@@ -80,39 +71,73 @@
         <script type="text/ecmascript">
 			require.config({
 				paths: {
-					zTree: "zTree/js/jquery.ztree.core-3.5",
-					vtree: "../js/v-tree"
-				},
-				shim: {
-					"zTree": {
-						deps: ["jquery"],
-						exports: 'jQuery.fn.zTree'
-					}
+					datepicker: "My97DatePicker/WdatePicker"
 				}
 			});
 			
-			require(['jquery', 'zTree', 'milk', 'vtree', 'datatables'],function($, zTree, mlik, vtree, datatables){
+			require(['jquery', 'milk', 'datatables'],function($, mlik, datatables){
 				$(document).ready(function(){
 					
-					vtree.init();
-					var myDatatable = $('.table').DataTable();
+					mlk.contant();
 					
+					//存储datatable对象
+					var myDatatable = '';
+					
+					//掉取系统负责人，弹出中使用
+					var registerUser = '';
+					mlk.ajax({//发送ajax
+						method: 'GET',
+						url: '/v1/user/',
+						data: null,
+						isloading: false,
+						callback: function(da){
+							if(da){
+								var allOpion = '';
+								for(var i = 0; i < da.length; i++){
+									var html = '<option value="' + da[i].Id + '">' + da[i].AliasName + '</option>';	
+									allOpion += html;
+								}
+								registerUser = allOpion
+							}
+						}
+					});
+					
+					//掉取table
+					mlk.ajax({//发送ajax
+						method: 'GET',
+						url: '/v1/subsys/',
+						data: null,
+						isloading: true,
+						callback: function(da){
+							if(da){
+								var tableTr = '';
+								for(var i = 0; i < da.length; i++){
+                  var html = '<tr id="' + da[i].Id + '"><td>' + da[i].Name + '</td><td>' + da[i].AliasName + '</td><td>' + da[i].Author + '</td><td>'+da[i].Hierarchy+'</td><td>' + da[i].Token + '</td><td>' + (da[i].TreeInteract == 1 ? '是' : '否') + '</td><td>' + da[i].State + '</td><td>' + da[i].Comment + '</td></tr>';	
+									tableTr += html;
+								}
+								$('#register_list').html(tableTr);
+								myDatatable = $('.table').DataTable();
+							}
+						}
+					});
+					
+					//注册应用
                     $('#alert-btn').click(function(){
                         mlk.alertBox({
                             title: '应用注册',
-                            html: '<div class="alertBox" style="padding-right: 20px ;padding-left: 5px"><form class="form-horizontal" role="form"><div class="form-group"><label for="Name" class="col-sm-3 control-label">app名称</label><div class="col-sm-9"><input type="text" class="form-control" id="Name" placeholder=""></div></div><div class="form-group"><label for="AliasName" class="col-sm-3 control-label">中文名</label><div class="col-sm-9"><input type="text" class="form-control" id="AliasName" placeholder=""></div></div><div class="form-group"><label for="TreeInteract" class="col-sm-3 control-label">是否联动服务树</label><div class="col-sm-9"><input type="checkbox" id="TreeInteract" style="position:relative; top:7px;"></div></div><div class="form-group"><label for="AuthorId" class="col-sm-3 control-label">系统负责人</label><div class="col-sm-9"><input type="text" class="form-control" id="AuthorId" placeholder=""></div></div><div class="form-group"><label for="Hierarchy" class="col-sm-3 control-label">服务树层次结构</label><div class="col-sm-9"><input type="text" class="form-control" id="Hierarchy" placeholder="" value="{{.Hierarchy}}"></div></div><div class="form-group"> <label for="Comment" class="col-sm-3 control-label">系统说明</label><div class="col-sm-9"><textarea class="form-control" rows="3" id="Comment" style="height:100px;"></textarea></div></div></form></div>',
+                            html: '<div class="alertBox" style="padding-right: 20px ;padding-left: 5px"><form class="form-horizontal" role="form"><div class="form-group"><label for="Name" class="col-sm-3 control-label">app名称</label><div class="col-sm-9"><input type="text" class="form-control" id="Name" placeholder=""></div></div><div class="form-group"><label for="AliasName" class="col-sm-3 control-label">中文名</label><div class="col-sm-9"><input type="text" class="form-control" id="AliasName" placeholder=""></div></div><div class="form-group"><label for="TreeInteract" class="col-sm-3 control-label">是否联动服务树</label><div class="col-sm-9"><input type="checkbox" id="TreeInteract" style="position:relative; top:7px;"></div></div><div class="form-group"><label for="AuthorId" class="col-sm-3 control-label">系统负责人</label><div class="col-sm-9"><select class="form-control" id="AuthorId">' + registerUser + '</select></div></div><div class="form-group"><label for="Hierarchy" class="col-sm-3 control-label">服务树层次结构</label><div class="col-sm-9"><input type="text" class="form-control" id="Hierarchy" placeholder="" value="{{.Hierarchy}}"></div></div><div class="form-group"> <label for="Comment" class="col-sm-3 control-label">系统说明</label><div class="col-sm-9"><textarea class="form-control" rows="3" id="Comment" style="height:100px;"></textarea></div></div></form></div>',
                             btnfunc: function(obj){
 								if($('#Name').val() && $('#AuthorId').val()){
 									var isTree = $('#TreeInteract')[0].checked ? 1 : 0,
 										myDta = {
 											AliasName: $('#AliasName').val(),
-											AuthorId: $('#AuthorId').val(),
+											AuthorId: parseInt($('#AuthorId').val()),
 											Comment: $('#Comment').val(),
 											Hierarchy: $('#Hierarchy').val(),
 											Name: $('#Name').val(),
 											TreeInteract: isTree
 										};
-									console.log(myDta);
+									
 									mlk.ajax({//发送ajax
 										method: 'POST',
 										url: '/v1/subsys/',
@@ -125,7 +150,7 @@
 												var newTr = myDatatable.row.add([
 													$('#Name').val(),
 													$('#AliasName').val(),
-													$('#AuthorId').val(),
+													$('#AuthorId').text(),
 													' ',
 													(isTree == 1 ? '是' : '否'),
 													'审批中',

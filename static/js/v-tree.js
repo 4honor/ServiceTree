@@ -1,4 +1,4 @@
-define(["jquery", "milk", "zTree"], function($, milk, zTree) {
+define(["jquery", "milk", "zTree", "datepicker"], function($, milk, zTree, datepicker) {
 	var o = {};
 	
 	o.init = function(){
@@ -16,18 +16,26 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 					var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
 					var sNodes = treeObj.getSelectedNodes();
 					if (sNodes.length > 0) {
-						var my = sNodes[0];
-						var node = sNodes[0].getParentNode();
-						var nodeType = sNodes[0].getParentNode().ename;
-						//var parent = sNodes[0].getParentNode().getParentNode();
-						var level = sNodes[0].level;
-						console.log(node);
+						var thisStr = (sNodes[0].meta + ':' + sNodes[0].name),//查找自己tre上的属性
+							thisparent = sNodes[0].getParentNode(),//查找父级
+							allArray = [];
+						var resourceVal = $('#resource').val(),
+							resourStr = 'resource:' + resourceVal;
+						allArray.push(resourStr);//把每页的标记放入数组并展示
+						allArray.push(thisStr);//把自己放入数组
+						while(thisparent){
+							var each = (thisparent.meta + ':' + thisparent.name);
+							allArray.push(each);//把父级放入数组
+							thisparent = thisparent	.getParentNode();
+						}
+						allArray.reverse();
+						$('#machine_drop').text(allArray.join(','));
 					}	
 				} 	
 			}
 		};
 
-		var zNodes =[
+		/*var zNodes =[
 			{ id:1, pId:0, name:"父节点1 - 展开", open:false, iconSkin:"pIcon01"},
 			{ id:11, pId:1, name:"父节点11 - 折叠", iconSkin:"pIcon01", ename:"nimei", A:"abc"},
 			{ id:111, pId:11, name:"叶子节点111", iconSkin:"icon01"},
@@ -57,23 +65,32 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 			{ id:233, pId:23, name:"叶子节点233", iconSkin:"icon01"},
 			{ id:234, pId:23, name:"叶子节点234", iconSkin:"icon01"},
 			{ id:3, pId:0, name:"父节点3 - 没有子节点", isParent:true, iconSkin:"pIcon01"}
-		];
+		];*/
 		
-		var windowHeight = $(window).height();
-		mlk.tree({//启动服务树
-			node: zNodes, 
-			set: setting, 
-			movement: '.tree_cont', 
-			func: function(){}, 
-			style:{
-				width: 300,
-				height: windowHeight-130
-			}	
-		});
-		
-		mlk.edit({//启动编辑
-			ele: '#tag_show',
-			func: function(obj){}	
+		//获取tree 数据
+		var hierarchy = $('#hierarchy').val();
+		var resource = $('#resource').val();
+		mlk.ajax({
+			method: 'GET',
+			url: '/v1/tree/?hierarchy=' + hierarchy + '&resource=' + resource,
+			data: null, 
+			isloading: false,
+			callback: function(da){
+				if(da){
+					var zNodes = da.children,
+						windowHeight = $(window).height();
+					mlk.tree({//启动服务树
+						node: zNodes, 
+						set: setting, 
+						movement: '.tree_cont', 
+						func: function(){}, 
+						style:{
+							width: 200,
+							height: windowHeight-130
+						}	
+					});
+				}	
+			}
 		});
 		
 		
@@ -81,7 +98,7 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 			var thisIndex = $(this).index();
 			$(this).addClass('active').siblings().removeClass('active');
 			$('.odin_check_outer .odin_check_inner').eq(thisIndex).show()
-			.attr('isshow','yes').siblings()
+			.attr('isshow','yes').siblings('.odin_check_inner')
 			.hide().attr('isshow','no');	
 		});
 		
@@ -115,14 +132,9 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 				});
 			}
 			else{
-				alert('请选择需要删除的机器！')	
+				alert('请选择需要删除的内容！')	
 			}	
 		}
-		
-		//tag 页批量删除
-		$(document).on('click','#remove_tag',function(){
-			removeTableTr('/v1/tag_meta/');
-		});
 		
 		//machine 页批量删除
 		$(document).on('click','#bulk_production',function(){
@@ -132,6 +144,28 @@ define(["jquery", "milk", "zTree"], function($, milk, zTree) {
 		//sys 页批量删除
 		$(document).on('click','#remove_sys',function(){
 			removeTableTr('/v1/monitor/');
+		});
+		
+		//help提示
+		$('.tree_cont').on('mouseover','.for_help',function(){
+			var thisOffset = $(this).offset();
+			$('#monitor_help .myname').text($(this).attr('name'));
+			$('#monitor_help .mytype').text($(this).attr('type'));
+			$('#monitor_help .mycomment').text($(this).attr('comment'));
+			$('#monitor_help').show().css({'top':thisOffset.top-15,'left':thisOffset.left+25});	
+		});
+		
+		$('.tree_cont').on('mouseout','.for_help',function(){
+			$('#monitor_help').hide();	
+		});
+		
+		//下拉
+		$('.monitor_inner').on('click','h3',function(){
+			$(this).parents('.monitor_inner').find('h3').removeClass('active');
+			$(this).parents('.monitor_inner').find('h3 em').removeClass('glyphicon-minus').addClass('glyphicon-plus');
+			$(this).addClass('active').find('em').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+			$(this).parents('.monitor_inner').find('.each_div').slideUp();
+			$(this).next('.each_div').slideDown();	
 		});
 		
 	}

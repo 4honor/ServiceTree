@@ -13,7 +13,7 @@ type User struct {
 	Id        int    `orm:"column(id);auto"`
 	Name      string `orm:"column(name);size(255)"`
 	AliasName string `orm:"column(alias_name);size(255)"`
-	Email     int    `orm:"column(email);null"`
+	Email     string `orm:"column(email);null"`
 	Password  string `orm:"column(password);size(128)"`
 	Comment   string `orm:"column(comment);null"`
 }
