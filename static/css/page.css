@@ -448,27 +448,34 @@ textarea.form-control{
 	height:240px;
 	float:left;
 	margin-right:50px;
-	border:1px solid #d4d4d4;
-	overflow-y:auto;}
+	border:1px solid #E1E1E1;
+	overflow-y:auto;
+	background:#fff;}
 .monitor_inner h3{
 	width:100%;
 	line-height:30px;
-	color:#000;
+	color:#333;
 	margin:0;
-	border-bottom:1px solid #d4d4d4;
+	border-bottom:1px solid #E1E1E1;
 	font-size:14px;
 	padding-left:5px;
 	cursor:pointer;
-	background:#F6F6F6;}
+	background:#fff;}
+.monitor_inner h3 span{
+	font-size:12px;
+	margin-right:5px;
+	font-weight:normal;}
 .monitor_inner h3.active{
-	background:#3071a9;
-	color:#fff;}
+	background:rgb(246,246,246);
+	color:#000;
+	font-weight:bold;}
 .monitor_inner .each_div:last-child{
 	border-bottom:none;}
 .each_div{
 	display:none;
 	padding:10px 0;
-	border-bottom:1px solid #d4d4d4;}
+	border-bottom:1px solid #E1E1E1;
+	background:rgb(251,251,251);}
 .each_div p:hover{
 	background:#F6F6F6;}
 .each_div p{
@@ -482,7 +489,7 @@ textarea.form-control{
 	position:relative;
 	top:3px;
 	margin-right:10px;}	
-.each_div p span{
+.for_help{
 	display:inline-block;
 	float:right;
 	color:#f0ad4e;
@@ -501,7 +508,7 @@ textarea.form-control{
 	top:10px;
 	left:10px;
 	z-index:100;
-	width:240px;
+	width:280px;
 	display:none;
 	}	
 .help_inner{
@@ -527,9 +534,14 @@ textarea.form-control{
 	padding:10px;}	
 .monitor_btn_title{
 	font-size:16px;
-	line-height:25px;}	
+	line-height:25px;
+	margin-bottom:5px;
+	font-size:14px;
+	color:#999;}
+.monitor_btn_title span{
+	padding-left:5px;}	
 .monitor_btn_title span:last-child{
-	margin-left:330px;}	
+	margin-left:335px;}	
 	
 /*  监控图表  */
 .cont_outer{
@@ -578,8 +590,10 @@ textarea.form-control{
 .dropdown-menu{
 	padding-left:20px;
 	padding-right:20px;
+	width:135px;
 	height:300px;
 	overflow:hidden;
+	min-width:inherit;
 	overflow-y:auto;}
 .select-button{
 	position:absolute;
@@ -591,7 +605,7 @@ textarea.form-control{
 .select_outer{
 	position:absolute;
 	top:120px;
-	right:12px;}
+	right:55px;}
 .block_div{
 	cursor:pointer;
 	color:#D9D9D9;

@@ -9,11 +9,9 @@
     
         <!-- Bootstrap core CSS -->
         <link href="../../static//css/bootcss/css/bootstrap.css" rel="stylesheet">
-        <link href="../../static/lib/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
         <link href="../../static/lib/DataTables/media/css/jquery.dataTables.css" rel="stylesheet">
         <link href="../../static/css/base.css" rel="stylesheet">
         <link href="../../static/css/page.css" rel="stylesheet">
-        <link href="../../static/css/forTree.css" rel="stylesheet">
         <!--[if lt IE 9]>
           <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
           <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -39,7 +37,7 @@
         
         <div class="cont_pad mt20" style="padding-bottom:5px; padding-top:5px;">
             
-            <div class="tree_cont">
+            <div class="tree_cont" style="width:100%; margin-left:0; height:auto;">
             	<!--  内容区域  -->
                 <!--<div class="btn-group">
                     <a class="btn btn-default active">Tag变更</a>
@@ -123,25 +121,14 @@
         <script type="text/ecmascript">
 			require.config({
 				paths: {
-					zTree: "zTree/js/jquery.ztree.core-3.5",
-					vtree: "../js/v-tree",
-					datepicker: "My97DatePicker/WdatePicker",
-					allfunction: "../js/monitor-functions",
-					monitorbind: "../js/monitor-bind",
-					highchart: "Highcharts/js/highcharts"
-				},
-				shim: {
-					"zTree": {
-						deps: ["jquery"],
-						exports: 'jQuery.fn.zTree'
-					}
+					datepicker: "My97DatePicker/WdatePicker"
 				}
 			});
 			
-			require(['jquery', 'zTree', 'milk', 'vtree', 'datatables', 'datepicker', 'allfunction', 'monitorbind', 'highchart'],function($, zTree, mlik, vtree, datatables, datepicker, allfunction, monitorbind, highchart){
+			require(['jquery', 'milk', 'datatables'],function($, mlik, datatables){
 				$(document).ready(function(){
 					
-					vtree.init();
+					mlk.contant();
 					
 					mlk.editSelect({//开启下拉可编辑
 						dom: [$('.my_select')],

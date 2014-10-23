@@ -9,11 +9,9 @@
     
         <!-- Bootstrap core CSS -->
         <link href="../../static/css/bootcss/css/bootstrap.css" rel="stylesheet">
-        <link href="../../static/lib/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
         <link href="../../static/lib/DataTables/media/css/jquery.dataTables.css" rel="stylesheet">
         <link href="../../static/css/base.css" rel="stylesheet">
         <link href="../../static/css/page.css" rel="stylesheet">
-        <link href="../../static/css/forTree.css" rel="stylesheet">
         <!--[if lt IE 9]>
           <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
           <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -39,7 +37,7 @@
         
         <div class="cont_pad mt20" style="padding-bottom:5px; padding-top:5px;">
             
-            <div class="tree_cont">
+            <div class="tree_cont" style="width:100%; margin-left:0; height:auto;">
             	<!--  内容区域  -->
                 <!--<div class="btn-group">
                     <a class="btn btn-default active">Tag变更</a>
@@ -90,25 +88,58 @@
         <script type="text/ecmascript">
 			require.config({
 				paths: {
-					zTree: "zTree/js/jquery.ztree.core-3.5",
-					vtree: "../js/v-tree",
-					datepicker: "My97DatePicker/WdatePicker",
-					allfunction: "../js/monitor-functions",
-					monitorbind: "../js/monitor-bind",
-					highchart: "Highcharts/js/highcharts"
-				},
-				shim: {
-					"zTree": {
-						deps: ["jquery"],
-						exports: 'jQuery.fn.zTree'
-					}
+					datepicker: "My97DatePicker/WdatePicker"
 				}
 			});
 			
-			require(['jquery', 'zTree', 'milk', 'vtree', 'datatables', 'datepicker', 'allfunction', 'monitorbind', 'highchart'],function($, zTree, mlik, vtree, datatables, datepicker, allfunction, monitorbind, highchart){
+			require(['jquery', 'milk', 'datatables'],function($, mlik, datatables){
 				$(document).ready(function(){
 					
-					vtree.init();
+					mlk.contant();
+					
+					mlk.edit({//启动编辑
+						ele: '#tag_show',
+						func: function(obj){}	
+					});
+					
+					//批量删除table tr
+					function removeTableTr( url ){
+						var tableEachTr = $('.table tbody tr input[type=checkbox]:checked'),
+							list = '';
+						if(tableEachTr.length > 0){//确保优选tag
+							tableEachTr.each(function(){
+								var thisId = $(this).parents('tr').attr('id');
+								list += thisId + ',';//拼接id	
+							});
+							list = list.substring(0,list.length-1);
+							mlk.ajax({
+								method: 'DELETE',
+								url: url + list,
+								data: null,
+								isloading: true,
+								callback: function(da){
+									if(da.Success){
+										var domArray = [];
+										tableEachTr.each(function(){
+											var thisTr = $(this).parents('tr');
+											domArray.push(thisTr);	
+										});
+										mlk.removeDom({//删除dom
+											dom: domArray	
+										});	
+									}	
+								}
+							});
+						}
+						else{
+							alert('请选择需要删除的内容！')	
+						}	
+					}
+					
+					//tag 页批量删除
+					$(document).on('click','#remove_tag',function(){
+						removeTableTr('/v1/tag_meta/');
+					});
 					
 					var myDatatable;//datatable对象
 					//拉取table

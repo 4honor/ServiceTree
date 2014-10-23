@@ -5,7 +5,7 @@
 	}  
 	
 	//创建div
-	function creatDiv(ser,host,myid,stime,etime,x,num,name,uni,arry,flag,aggr){
+	function creatDiv(ser,host,myid,stime,etime,x,num,name,uni,arry,flag,aggr,motype,mocom,moname){
 		var newDiv = $('#outer .drag_cont:eq(0)').clone();
 		newDiv.attr('id',myid);
 		$('#outer').append(newDiv);
@@ -13,6 +13,9 @@
 		newDiv.find('h3 span').attr('host',host);
 		newDiv.find('input.time-search:eq(0)').val(stime);
 		newDiv.find('input.time-search:eq(1)').val(etime);
+		newDiv.find('.for_help').attr('type',motype);
+		newDiv.find('.for_help').attr('comment',mocom);
+		newDiv.find('.for_help').attr('name',moname);
 		newDiv.slideDown(500,function(){
 			var newDivTop = newDiv.offset().top;
 			$('.tree_cont').animate({'scrollTop':newDivTop},500);
@@ -56,11 +59,11 @@
 				checked = (inputCheck == true ? 'checked' : '');
 			
 			for(var j = 0; j < inputValue.length; j++){//遍历input
-				var inputHtml = '<label class="checkbox"><input type="checkbox" name="' + inputName + '"' + checked + ' value="' + inputValue[j] + '">' + inputValue[j] + '</label>';
+				var inputHtml = '<label class="checkbox"><input type="checkbox" class="check_input" name="' + inputName + '"' + checked + ' value="' + inputValue[j] + '">' + inputValue[j] + '</label>';
 				allInputHtml += inputHtml;	
 			}
 			
-			var divHtml = '<div class="btn-group" style="margin-right:5px;"><button type="button" style="width:77px;" class="btn btn-default dropdown-toggle" data-toggle="dropdown">' + inputName + '<span class="caret" style="margin-left:5px;"></span></button><div class="dropdown-menu" role="menu">' + allInputHtml + '</div></div>';
+			var divHtml = '<div class="btn-group" style="margin-right:5px;"><button type="button" style="width:77px;" class="btn btn-default dropdown-toggle" data-toggle="dropdown">' + inputName + '<span class="caret" style="margin-left:5px;"></span></button><div class="dropdown-menu" style="width:135px;" role="menu">' + allInputHtml + '</div></div>';
 			allHtml += divHtml;
 		}
 		
@@ -73,7 +76,7 @@
 			name = name.replace('@','');
 		}
 		$(obj).attr('valflag',flag);
-		var highOptions = {
+		/*var highOptions = {
 				chart: { 
 					zoomType: 'xy'
 				},
@@ -122,9 +125,54 @@
 					name: attr,
 					data: num
 				}]
-			}
+			}*/
+		var highOptions = {
+			chart: {
+                events: {
+                    load: function () {
+                        this.setTitle(null, {
+                            text: ''
+                        });
+                    }
+                },
+                zoomType: 'x'
+            },
+
+            yAxis: {
+                title: {
+                    text: '单位 (' + uni + ')'
+                }
+            },
+
+            title: {
+                text: name
+            },
+
+            subtitle: {
+                text: '' // dummy text to reserve space for dynamic subtitle
+            },
+
+            series: [{
+                name: attr,
+                data: num,
+                pointStart: x,
+                pointInterval: 1 * 1000,
+                tooltip: {
+                    valueDecimals: 1,
+                    valueSuffix: uni
+                },
+				name: attr,
+                data: num,
+                pointStart: x,
+                pointInterval: 1 * 1000,
+                tooltip: {
+                    valueDecimals: 1,
+                    valueSuffix: uni
+                }
+            }]	
+		}
 		obj.attr('highchart',JSON.stringify(highOptions));//把属于自己的曲线属性保存下来，方便以后的操作
-		obj.highcharts(highOptions);
+		obj.highcharts('StockChart',highOptions);
 	}
 	
 	//重新上传参数拿数据（核心方法）
@@ -135,13 +183,15 @@
 			//var thatHost = that.parents('.drag_cont').find('h3 span').attr('host')
             var tags = '';
 			that.parents('.cont-mess').find('.dropdown-menu input[type=checkbox]').each(function(){
-				if(this.checked){
-					var thisName = $(this).attr('name'),
-						thisVal = $(this).val();
-                    if (tags.indexOf(thisName + '=') == -1 ) {
-                        tags += ':' + thisName + '=';
-                    }
-                    tags +=  thisVal + ',';
+				if(!$(this).hasClass('mlk-check-all')){
+					if(this.checked){
+						var thisName = $(this).attr('name'),
+							thisVal = $(this).val();
+						if (tags.indexOf(thisName + '=') == -1 ) {
+							tags += ':' + thisName + '=';
+						}
+						tags +=  thisVal + ',';
+					}
 				}
 			});
             tags = tags.substr(1,tags.length);

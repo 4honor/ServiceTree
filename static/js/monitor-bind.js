@@ -1,4 +1,4 @@
-define(["jquery", "datepicker", "allfunction", "highchart"], function($, datepicker, allfunction, highchart) {
+define(["jquery", "milk", "datepicker", "allfunction", "highchart"], function($, milk, datepicker, allfunction, highchart) {
 	var o = {};
 	  
   	o.init = function(){
@@ -55,6 +55,11 @@ define(["jquery", "datepicker", "allfunction", "highchart"], function($, datepic
 					thisClass = $(this).attr('class'),
 					hostVal = '';
 					
+				var thisHelp = $(this).parents('p').find('.for_help'),
+					helpName = thisHelp.attr('name'),
+					helpType = thisHelp.attr('type'),
+					helpComment = thisHelp.attr('comment');
+					
 				var dateNow = new Date(),
 					dateHours = dateNow.getHours(),
 					dateMin = dateNow.getMinutes(),
@@ -97,7 +102,8 @@ define(["jquery", "datepicker", "allfunction", "highchart"], function($, datepic
 					$('.use_input').val('');
 					$.ajax({
 						type: 'GET',
-						url: 'http://10.231.146.171/api/ts?metric=' + serVal + '@host=' + hostVal + '&stime=' + timeYearBeagin + '-' + timeStringBegin + '&etime=' + timeYearEnd + '-' + timeStringEnd +'&aggregate=sum',
+						//url: 'http://10.231.146.171/api/ts?metric=' + serVal + '@host=' + hostVal + '&stime=' + timeYearBeagin + '-' + timeStringBegin + '&etime=' + timeYearEnd + '-' + timeStringEnd +'&aggregate=sum',
+						url: 'http://10.231.146.171/api/ts?metric=' + serVal + '@host=' + hostVal + '&stime=2014/10/21-18:39:07&etime=2014/10/22-18:39:07&aggregate=sum',
 						data: null,
 						dataType: "jsonp",
 						success: function(data){
@@ -111,15 +117,18 @@ define(["jquery", "datepicker", "allfunction", "highchart"], function($, datepic
 								for(var i = 0; i < data[0].data.length; i++){
 									var j = data[0].data[i]
 									for(var attr in j){
-										xTime.push(getLocalTime(parseInt(attr)));//处理坐标
+										//xTime.push(getLocalTime(parseInt(attr)));//处理坐标
+										xTime.push(attr);
 										yNum.push(j[attr]);//处理每个点的值
 									}	
 								}
-								creatDiv(serVal,hostVal,thisClass,(timeYearBeagin + '-' + timeStringBegin),(timeYearEnd + '-' + timeStringEnd),xTime,yNum,serviceName,serviceUnit,dateArry,valFlag,aggregate);
+								xTime = xTime[0]
+								//console.log(xTime);
+								creatDiv(serVal,hostVal,thisClass,(timeYearBeagin + '-' + timeStringBegin),(timeYearEnd + '-' + timeStringEnd),xTime,yNum,serviceName,serviceUnit,dateArry,valFlag,aggregate,helpType,helpComment,helpName);
 								$('.mask_srch').find('.sumOrAvg option:eq(0)').attr('selected','true');
-							  var ns = $('#machine_drop').html().split(",")
-                ns = ns.slice(0,ns.length)
-                ns.push("resource:machine")
+								var ns = $('#machine_drop').html().split(",");
+								ns = ns.slice(0,ns.length);
+								ns.push("resource:machine");
 									
 								//当第一步完成后进行第二步ajax请求
 								$.ajax({
@@ -130,6 +139,11 @@ define(["jquery", "datepicker", "allfunction", "highchart"], function($, datepic
 									success: function(data){
 										if(data){
 											creatInput(data);
+											mlk.dropdownSearch({
+												ele: '.dropdown-menu',
+												btn: '.btn',
+												ischeckall: true
+											});
 										}
 									}
 								});
@@ -155,14 +169,24 @@ define(["jquery", "datepicker", "allfunction", "highchart"], function($, datepic
 		
 		/*点击查询状态end*/
 		
+		/*全选*/
+		$(document).on('change','.mlk-check-all',function(){
+			  var obj = $(this).parents('.mlk-dropdown-search').next('.mlk-dropdown-outer').find('input[type=checkbox]').eq(0);
+			  var loading = $(this).parents('.drag_cont').find('.progress');
+			  loadingBar(loading,200,'70%');
+			  seachNext(obj);
+		});
+		
 		/*点选下拉*/
-		$(document).on('change','.dropdown-menu input',function(){
-			var obj = $(this),
-				that = this;
-			var loading = $(this).parents('.drag_cont').find('.progress');
-			loadingBar(loading,200,'70%');
-			seachNext(obj);
-			clcikHostData(obj,that);
+		$(document).on('change','.dropdown-menu input[type=checkbox]',function(){
+			if(!$(this).hasClass('mlk-check-all')){//排除全选按钮
+				var obj = $(this),
+					that = this;
+				var loading = $(this).parents('.drag_cont').find('.progress');
+				loadingBar(loading,200,'70%');
+				seachNext(obj);
+				clcikHostData(obj,that);
+			}
 		});
 		
 		/*end点选下拉*/

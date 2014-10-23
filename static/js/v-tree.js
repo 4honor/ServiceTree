@@ -69,7 +69,7 @@ define(["jquery", "milk", "zTree", "datepicker"], function($, milk, zTree, datep
 		
 		//获取tree 数据
 		var hierarchy = $('#hierarchy').val();
-    var resource = $('#resource').val();
+		var resource = $('#resource').val();
 		mlk.ajax({
 			method: 'GET',
 			url: '/v1/tree/?hierarchy=' + hierarchy + '&resource=' + resource,
@@ -85,19 +85,12 @@ define(["jquery", "milk", "zTree", "datepicker"], function($, milk, zTree, datep
 						movement: '.tree_cont', 
 						func: function(){}, 
 						style:{
-							width: 300,
+							width: 200,
 							height: windowHeight-130
 						}	
 					});
 				}	
 			}
-		});
-		
-		
-		
-		mlk.edit({//启动编辑
-			ele: '#tag_show',
-			func: function(obj){}	
 		});
 		
 		
@@ -143,11 +136,6 @@ define(["jquery", "milk", "zTree", "datepicker"], function($, milk, zTree, datep
 			}	
 		}
 		
-		//tag 页批量删除
-		$(document).on('click','#remove_tag',function(){
-			removeTableTr('/v1/tag_meta/');
-		});
-		
 		//machine 页批量删除
 		$(document).on('click','#bulk_production',function(){
 			removeTableTr('/v1/machine/');
@@ -159,7 +147,7 @@ define(["jquery", "milk", "zTree", "datepicker"], function($, milk, zTree, datep
 		});
 		
 		//help提示
-		$('.monitor_btn_outer').on('mouseover','.for_help',function(){
+		$('.tree_cont').on('mouseover','.for_help',function(){
 			var thisOffset = $(this).offset();
 			$('#monitor_help .myname').text($(this).attr('name'));
 			$('#monitor_help .mytype').text($(this).attr('type'));
@@ -167,14 +155,15 @@ define(["jquery", "milk", "zTree", "datepicker"], function($, milk, zTree, datep
 			$('#monitor_help').show().css({'top':thisOffset.top-15,'left':thisOffset.left+25});	
 		});
 		
-		$('.monitor_btn_outer').on('mouseout','.for_help',function(){
+		$('.tree_cont').on('mouseout','.for_help',function(){
 			$('#monitor_help').hide();	
 		});
 		
 		//下拉
 		$('.monitor_inner').on('click','h3',function(){
 			$(this).parents('.monitor_inner').find('h3').removeClass('active');
-			$(this).addClass('active');
+			$(this).parents('.monitor_inner').find('h3 em').removeClass('glyphicon-minus').addClass('glyphicon-plus');
+			$(this).addClass('active').find('em').removeClass('glyphicon-plus').addClass('glyphicon-minus');
 			$(this).parents('.monitor_inner').find('.each_div').slideUp();
 			$(this).next('.each_div').slideDown();	
 		});
