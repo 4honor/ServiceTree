@@ -126,6 +126,27 @@
 						});	
 					});
 					
+					//详情
+					$('.table').on('click','.mach_mess',function(){
+						var thisId = $(this).parents('tr').attr('id');
+						mlk.ajax({
+							method: 'GET',
+							url: '/v1/machine/' + thisId,
+							data: null, 
+							isloading: false,
+							callback: function(da){
+								if(da){
+									var alertHtml = '<div style="padding:0 10px; margin-bottom:10px;"><table class="table table-bordered"><thead><tr class="active"><th>ID</th><th>机器名</th><th>IP</th></tr></thead><tbody><tr><td>' + da.Id + '</td><td>' + da.Name + '</td><td>' + da.Ip + '</td></tr></tbody></table></div>';
+									mlk.alertBox({
+										title: '详情',
+										html: alertHtml,
+										btnfunc: function(obj){}
+									});
+								}
+							}
+						});
+					});
+					
 					//监听节点坐标的变化
 					$('#machine_drop').bind('DOMNodeInserted',function(e){
 						var thisText = $(this).text(),
