@@ -126,8 +126,10 @@
 			
 			tooltip: {
 				xDateFormat: '%Y-%m-%d %H:%M:%S',
-				pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b>',
-				valueDecimals: 2
+				pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>',
+				valueDecimals: 2,
+                shared: true,
+                crosshairs: true
 			},            
 			
 			series: data

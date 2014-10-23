@@ -99,7 +99,23 @@
 					
 					mlk.edit({//启动编辑
 						ele: '#tag_show',
-						func: function(obj){}	
+						func: function(obj){
+							var thisVal = obj.parents('#tag_show').find('.edit-input').val();
+							mlk.ajax({
+								method: 'GET',
+								url: '/v1/subsys/hierarchy?name=tag&hierarchy=' + thisVal,
+								data: null, 
+								isloading: true,
+								callback: function(da){	
+									if(da.Success){
+										$('#tag_show')[0].childNodes[0].nodeValue = thisVal;	
+									}
+									else{
+										alert(da.Msg);	
+									}
+								}
+							});
+						}	
 					});
 					
 					//批量删除table tr

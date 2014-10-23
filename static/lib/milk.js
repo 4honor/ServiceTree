@@ -398,31 +398,38 @@
 				if(!opts){
 					return;	
 				}
+				
 				this.creatSearch(opts,this);
 			},
 			creatSearch: function(opts,that){
 				$(opts.ele).each(function(){
-					$(opts.ele).css('padding','0px');
-					var searchDiv = $('<div class="mlk-dropdown-search"></div>'),
-						searchInput = $('<input placeholder="输入搜索" type="text" class="mlk-dropdowninput form-control">'),
-						outerDiv = $('<div class="mlk-dropdown-outer"></div>');
-					outerDiv.css({'width':'100%','height':($(opts.ele).height()-45),'overflow-y':'auto','padding':'0 3px'});
-					var myArray = [];
-					$(this).children().each(function(){
-						myArray.push($(this).text());	
-					});
-					$(this).attr('mychild',myArray);
-					//是否添加全选按钮
-					if(opts.ischeckall){
-						var checkAll = $('<input type="checkbox" class="mlk-check-all" title="全选">');	
-						searchDiv.append(checkAll);
-						that.bindCheckAll(opts,checkAll);
+					if(!$(this).parent().find(opts.btn).attr('ischange')){
+						$(this).parent().find(opts.btn).attr('ischange','ok');
+						$(opts.ele).css('padding','0px');
+						var searchDiv = $('<div class="mlk-dropdown-search"></div>'),
+							searchInput = $('<input placeholder="输入搜索" type="text" class="mlk-dropdowninput form-control">'),
+							outerDiv = $('<div class="mlk-dropdown-outer"></div>');
+						outerDiv.css({'width':'100%','height':($(opts.ele).height()-45),'overflow-y':'auto','padding':'0 3px'});
+						var myArray = [];
+						$(this).children().each(function(){
+							myArray.push($(this).text());	
+						});
+						$(this).attr('mychild',myArray);
+						//是否添加全选按钮
+						if(opts.ischeckall){
+							var checkAll = $('<input type="checkbox" class="mlk-check-all" title="全选">');	
+							searchDiv.append(checkAll);
+							that.bindCheckAll(opts,checkAll);
+						}
+						searchDiv.append(searchInput);
+						$(this).append(outerDiv);
+						outerDiv.append($(this).children());
+						searchDiv.insertBefore(outerDiv);
+						that.bindKeyUp(opts,searchInput);
 					}
-					searchDiv.append(searchInput);
-					$(this).append(outerDiv);
-					outerDiv.append($(this).children());
-					searchDiv.insertBefore(outerDiv);
-					that.bindKeyUp(opts,searchInput);
+					else{
+						return;	
+					}
 				});
 			},
 			bindKeyUp: function(opts,obj){
